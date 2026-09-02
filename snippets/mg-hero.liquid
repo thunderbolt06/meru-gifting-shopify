@@ -15,7 +15,8 @@
   .mg-hero__media img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 12px; border: 1px solid #C9A22755; background: #fff; }
   .mg-hero__media figure { margin: 0; }
   .mg-hero__media figcaption { color: #C9A227; font-size: 0.8rem; margin-top: 0.5rem; text-align: center; }
-  @media (max-width: 749px) { .mg-hero { grid-template-columns: 1fr; padding: 2.5rem 1.25rem; } }
+  .mg-hero__btn:focus-visible { outline: 2px solid #C9A227; outline-offset: 3px; }
+  @media (max-width: 749px) { .mg-hero { grid-template-columns: 1fr; padding: 2.5rem 1.25rem; } .mg-hero__btn { padding: 0.8rem 1.4rem; } }
 </style>
 <div class="mg-hero">
   <div>
@@ -29,7 +30,7 @@
     </div>
   </div>
   <div class="mg-hero__media">
-    {% if hero_img_1 %}<figure><img src="{{ hero_img_1 | image_url: width: 600 }}" alt="{{ hero_img_1.alt | default: 'Festive hampers' | escape }}" loading="eager"><figcaption>Festive Hampers</figcaption></figure>{% endif %}
-    {% if hero_img_2 %}<figure><img src="{{ hero_img_2 | image_url: width: 600 }}" alt="{{ hero_img_2.alt | default: 'Artisanal mementos' | escape }}" loading="eager"><figcaption>Artisanal Mementos</figcaption></figure>{% endif %}
+    {% if hero_img_1 %}<figure><img src="{{ hero_img_1 | image_url: width: 600 }}" srcset="{{ hero_img_1 | image_url: width: 300 }} 300w, {{ hero_img_1 | image_url: width: 450 }} 450w, {{ hero_img_1 | image_url: width: 600 }} 600w, {{ hero_img_1 | image_url: width: 900 }} 900w" sizes="(max-width: 749px) 45vw, 22vw" width="600" height="750" alt="{{ hero_img_1.alt | default: 'Festive hampers' | escape }}" loading="eager" fetchpriority="high" decoding="async"><figcaption>Festive Hampers</figcaption></figure>{% endif %}
+    {% if hero_img_2 %}<figure><img src="{{ hero_img_2 | image_url: width: 600 }}" srcset="{{ hero_img_2 | image_url: width: 300 }} 300w, {{ hero_img_2 | image_url: width: 450 }} 450w, {{ hero_img_2 | image_url: width: 600 }} 600w, {{ hero_img_2 | image_url: width: 900 }} 900w" sizes="(max-width: 749px) 45vw, 22vw" width="600" height="750" alt="{{ hero_img_2.alt | default: 'Artisanal mementos' | escape }}" loading="eager" decoding="async"><figcaption>Artisanal Mementos</figcaption></figure>{% endif %}
   </div>
 </div>

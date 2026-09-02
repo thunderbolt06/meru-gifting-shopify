@@ -1,0 +1,166 @@
+{% doc %}
+  Renders JSON-LD structured data for the whole site: Organization (with LocalBusiness
+  details, address and social profiles), WebSite + SearchAction on the home page, and
+  BreadcrumbList on product, collection, article and page templates.
+
+  Product structured data is emitted by the product sections via `structured_data`, and
+  article structured data by main-blog-post, so neither is duplicated here.
+{% enddoc %}
+
+{%- liquid
+  assign same_as = ''
+  if settings.social_facebook_link != blank
+    assign same_as = same_as | append: settings.social_facebook_link | append: '|'
+  endif
+  if settings.social_instagram_link != blank
+    assign same_as = same_as | append: settings.social_instagram_link | append: '|'
+  endif
+  if settings.social_youtube_link != blank
+    assign same_as = same_as | append: settings.social_youtube_link | append: '|'
+  endif
+  if settings.social_linkedin_link != blank
+    assign same_as = same_as | append: settings.social_linkedin_link | append: '|'
+  endif
+  if settings.social_twitter_link != blank
+    assign same_as = same_as | append: settings.social_twitter_link | append: '|'
+  endif
+  if settings.seo_google_maps_url != blank
+    assign same_as = same_as | append: settings.seo_google_maps_url | append: '|'
+  endif
+  assign same_as_list = same_as | split: '|'
+
+  if settings.logo != blank
+    assign org_logo = settings.logo | image_url: width: 600 | prepend: 'https:'
+  else
+    assign org_logo = 'icon-512.png' | asset_url
+    unless org_logo contains 'https:'
+      assign org_logo = org_logo | prepend: 'https:'
+    endunless
+  endif
+
+  assign org_description = settings.seo_default_description | default: shop.description | strip_html
+-%}
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["Organization", "Store"],
+    "@id": {{ request.origin | append: '/#organization' | json }},
+    "name": {{ shop.name | json }},
+    {%- if settings.seo_legal_name != blank %}
+    "legalName": {{ settings.seo_legal_name | json }},
+    "parentOrganization": { "@type": "Organization", "name": {{ settings.seo_legal_name | json }} },
+    {%- endif %}
+    "url": {{ request.origin | json }},
+    "logo": {{ org_logo | json }},
+    "image": {{ org_logo | json }},
+    {%- if org_description != blank %}
+    "description": {{ org_description | json }},
+    {%- endif %}
+    {%- if settings.seo_phone != blank %}
+    "telephone": {{ settings.seo_phone | json }},
+    {%- endif %}
+    {%- if settings.seo_email != blank %}
+    "email": {{ settings.seo_email | json }},
+    {%- endif %}
+    "currenciesAccepted": {{ shop.currency | json }},
+    "priceRange": "₹₹",
+    {%- if settings.seo_street != blank or settings.seo_city != blank %}
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": {{ settings.seo_street | json }},
+      "addressLocality": {{ settings.seo_city | json }},
+      "addressRegion": {{ settings.seo_region | json }},
+      "postalCode": {{ settings.seo_postal | json }},
+      "addressCountry": {{ settings.seo_country | default: 'IN' | json }}
+    },
+    "areaServed": { "@type": "Country", "name": "India" },
+    {%- endif %}
+    {%- if settings.seo_opening_hours != blank %}
+    "openingHours": {{ settings.seo_opening_hours | json }},
+    {%- endif %}
+    {%- if settings.seo_phone != blank %}
+    "contactPoint": [{
+      "@type": "ContactPoint",
+      "telephone": {{ settings.seo_phone | json }},
+      "contactType": "sales",
+      "availableLanguage": ["English", "Hindi", "Kannada"],
+      "areaServed": "IN"
+    }],
+    {%- endif %}
+    "sameAs": {{ same_as_list | json }}
+  }
+</script>
+
+{%- if request.page_type == 'index' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": {{ request.origin | append: '/#website' | json }},
+      "url": {{ request.origin | json }},
+      "name": {{ shop.name | json }},
+      "publisher": { "@id": {{ request.origin | append: '/#organization' | json }} },
+      "inLanguage": {{ request.locale.iso_code | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": {{ request.origin | append: '/search?q={search_term_string}' | json }}
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+{%- endif -%}
+
+{%- liquid
+  # Breadcrumbs
+  assign crumbs = ''
+  case request.page_type
+    when 'product'
+      if collection
+        assign crumbs = collection.title | append: '^' | append: collection.url | append: '|'
+      else
+        assign crumbs = 'Products^/collections/all|'
+      endif
+      assign crumbs = crumbs | append: product.title | append: '^' | append: product.url
+    when 'collection'
+      assign crumbs = 'Collections^/collections|' | append: collection.title | append: '^' | append: collection.url
+    when 'list-collections'
+      assign crumbs = 'Collections^/collections'
+    when 'article'
+      assign crumbs = blog.title | append: '^' | append: blog.url | append: '|' | append: article.title | append: '^' | append: article.url
+    when 'blog'
+      assign crumbs = blog.title | append: '^' | append: blog.url
+    when 'page'
+      assign crumbs = page.title | append: '^' | append: page.url
+  endcase
+  assign crumb_items = crumbs | split: '|'
+-%}
+
+{%- if crumbs != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": {{ request.origin | append: '/' | json }}
+        }
+        {%- for crumb in crumb_items -%}
+          {%- assign parts = crumb | split: '^' -%}
+          ,{
+            "@type": "ListItem",
+            "position": {{ forloop.index | plus: 1 }},
+            "name": {{ parts[0] | json }},
+            "item": {{ request.origin | append: parts[1] | json }}
+          }
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}

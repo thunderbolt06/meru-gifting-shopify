@@ -5,6 +5,8 @@
   .mg-brands__marquee { overflow: hidden; position: relative; }
   .mg-brands__track { display: inline-flex; gap: 2.5rem; white-space: nowrap; animation: mg-scroll 40s linear infinite; padding-block: 0.75rem; }
   .mg-brands__track span { font-weight: 700; color: #4a4536; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.95rem; }
+  .mg-brands__marquee:hover .mg-brands__track, .mg-brands__marquee:focus-within .mg-brands__track { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) { .mg-brands__track { animation: none; white-space: normal; flex-wrap: wrap; justify-content: center; } .mg-brands__track span[aria-hidden] { display: none; } }
   @keyframes mg-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 </style>
 {%- assign mg_brand_list = 'Tanishq,HDFC Bank,Amazon,ITC,Titan,Caratlane,Kalyan Jewellers,Maruti Suzuki,Mercedes Benz,Schneider Electric,Cadbury,Lifestyle,Indian Express,HCL,Infosys,Jio,SBI,Patanjali,Decathlon,KSCA,HAL,Indian Railways,RVCE,Foxconn,Mondelez,Coursera,Razorpay,CRED,Postman' | split: ',' -%}

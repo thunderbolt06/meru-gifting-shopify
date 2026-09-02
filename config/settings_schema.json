@@ -57,6 +57,121 @@
     ]
   },
   {
+    "name": "SEO & social sharing",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Used for Open Graph / Twitter cards, meta descriptions and Organization structured data. Page-level SEO titles and descriptions are still set per product, collection and page in the admin."
+      },
+      {
+        "type": "image_picker",
+        "id": "social_share_image",
+        "label": "Default social sharing image",
+        "info": "Shown when a page has no image of its own. Recommended 1200 × 630 px. Falls back to the bundled og-default.jpg."
+      },
+      {
+        "type": "textarea",
+        "id": "seo_default_description",
+        "label": "Default meta description",
+        "default": "Meru Gifting by Meru Trophy: corporate gifts, festive hampers, artisanal mementos and customised gifts handcrafted in India. Bulk orders from 50 pieces, GST invoicing, pan-India delivery.",
+        "info": "Used when a page has no description of its own. Keep under 160 characters."
+      },
+      {
+        "type": "header",
+        "content": "Business details (structured data)"
+      },
+      {
+        "type": "text",
+        "id": "seo_legal_name",
+        "label": "Legal / parent business name",
+        "default": "Meru Trophy"
+      },
+      {
+        "type": "text",
+        "id": "seo_phone",
+        "label": "Phone (international format)",
+        "default": "+917892255078"
+      },
+      {
+        "type": "text",
+        "id": "seo_email",
+        "label": "Contact email",
+        "default": "hi@merugifting.com"
+      },
+      {
+        "type": "text",
+        "id": "seo_street",
+        "label": "Street address",
+        "default": "#273/2, SC Road, 2nd Cross, Gandhinagar"
+      },
+      {
+        "type": "text",
+        "id": "seo_city",
+        "label": "City",
+        "default": "Bengaluru"
+      },
+      {
+        "type": "text",
+        "id": "seo_region",
+        "label": "State / region",
+        "default": "Karnataka"
+      },
+      {
+        "type": "text",
+        "id": "seo_postal",
+        "label": "Postal code",
+        "default": "560009"
+      },
+      {
+        "type": "text",
+        "id": "seo_country",
+        "label": "Country code",
+        "default": "IN"
+      },
+      {
+        "type": "text",
+        "id": "seo_opening_hours",
+        "label": "Opening hours (schema.org format)",
+        "default": "Mo-Sa 09:00-19:00"
+      },
+      {
+        "type": "text",
+        "id": "seo_google_maps_url",
+        "label": "Google Maps / reviews URL",
+        "default": "https://maps.app.goo.gl/i8tmRdXttcSA27UE6"
+      },
+      {
+        "type": "header",
+        "content": "Social profiles"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_link",
+        "label": "Facebook"
+      },
+      {
+        "type": "url",
+        "id": "social_instagram_link",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_link",
+        "label": "YouTube"
+      },
+      {
+        "type": "url",
+        "id": "social_linkedin_link",
+        "label": "LinkedIn"
+      },
+      {
+        "type": "url",
+        "id": "social_twitter_link",
+        "label": "X / Twitter"
+      }
+    ]
+  },
+  {
     "name": "t:names.colors",
     "settings": [
       {

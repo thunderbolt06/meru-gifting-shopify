@@ -6,17 +6,40 @@
   lang="{{ request.locale.iso_code }}"
 >
   <head>
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.shopify.com">
+
     {%- if settings.favicon != blank -%}
       <link
         rel="icon"
         type="image/png"
+        sizes="32x32"
         href="{{ settings.favicon | image_url: width: 32, height: 32 }}"
       >
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="192x192"
+        href="{{ settings.favicon | image_url: width: 192, height: 192 }}"
+      >
+      <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="{{ settings.favicon | image_url: width: 180, height: 180 }}"
+      >
+    {%- else -%}
+      <link rel="icon" href="{{ 'favicon.svg' | asset_url }}" type="image/svg+xml">
+      <link rel="icon" type="image/png" sizes="32x32" href="{{ 'favicon-32.png' | asset_url }}">
+      <link rel="icon" type="image/png" sizes="512x512" href="{{ 'icon-512.png' | asset_url }}">
+      <link rel="apple-touch-icon" sizes="180x180" href="{{ 'apple-touch-icon.png' | asset_url }}">
     {%- endif -%}
+    <meta name="apple-mobile-web-app-title" content="{{ shop.name | escape }}">
+    <meta name="application-name" content="{{ shop.name | escape }}">
 
     {%- render 'view-transition-opt-in' -%}
 
     {%- render 'meta-tags' -%}
+    {%- render 'structured-data' -%}
     {%- render 'stylesheets' -%}
     {%- render 'card-hover-effect-styles' -%}
     {%- render 'fonts' -%}
