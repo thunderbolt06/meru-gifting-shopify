@@ -1,0 +1,30 @@
+{%- assign mg_handles = 'corporate-gifts,festive-hampers,artisanal-mementos,customised-orders' | split: ',' -%}
+<style>
+  .mg-cols__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.25rem; }
+  .mg-cols__head h2 { margin: 0; font-size: 1.75rem; }
+  .mg-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .mg-cols a.mg-col-card { text-decoration: none; color: inherit; display: block; border-radius: 12px; overflow: hidden; border: 1px solid #e8e2d4; background: #fff; }
+  .mg-col-card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+  .mg-col-card__body { padding: 0.9rem 1rem 1.1rem; }
+  .mg-col-card__title { font-weight: 700; margin: 0 0 0.25rem; }
+  .mg-col-card__meta { font-size: 0.85rem; color: #6b6455; }
+  .mg-col-card__cta { color: #C9A227; font-weight: 600; font-size: 0.85rem; }
+  @media (max-width: 749px) { .mg-cols { grid-template-columns: repeat(2, 1fr); } }
+</style>
+<div class="mg-cols__head"><h2>Shop by collection</h2><a href="/collections" style="color:#C9A227;font-weight:600;text-decoration:none;">View all →</a></div>
+<div class="mg-cols">
+  {% for h in mg_handles %}
+    {%- assign c = collections[h] -%}
+    {% if c != blank %}
+    <a class="mg-col-card" href="{{ c.url }}">
+      {%- assign cimg = c.image | default: c.products.first.featured_image -%}
+      {% if cimg %}<img src="{{ cimg | image_url: width: 500 }}" alt="{{ c.title | escape }}" loading="lazy">{% endif %}
+      <div class="mg-col-card__body">
+        <p class="mg-col-card__title">{{ c.title }}</p>
+        <p class="mg-col-card__meta">{{ c.products_count }} products</p>
+        <span class="mg-col-card__cta">Explore →</span>
+      </div>
+    </a>
+    {% endif %}
+  {% endfor %}
+</div>

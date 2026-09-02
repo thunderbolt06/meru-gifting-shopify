@@ -1,0 +1,18 @@
+<style>
+  .mg-brands { text-align: center; padding: 1rem 0 0.5rem; }
+  .mg-brands h2 { font-size: 1.35rem; margin-bottom: 0.35rem; }
+  .mg-brands__sub { color: #6b6455; font-size: 0.9rem; margin-bottom: 1.25rem; }
+  .mg-brands__marquee { overflow: hidden; position: relative; }
+  .mg-brands__track { display: inline-flex; gap: 2.5rem; white-space: nowrap; animation: mg-scroll 40s linear infinite; padding-block: 0.75rem; }
+  .mg-brands__track span { font-weight: 700; color: #4a4536; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.95rem; }
+  @keyframes mg-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+{%- assign mg_brand_list = 'Tanishq,HDFC Bank,Amazon,ITC,Titan,Caratlane,Kalyan Jewellers,Maruti Suzuki,Mercedes Benz,Schneider Electric,Cadbury,Lifestyle,Indian Express,HCL,Infosys,Jio,SBI,Patanjali,Decathlon,KSCA,HAL,Indian Railways,RVCE,Foxconn,Mondelez,Coursera,Razorpay,CRED,Postman' | split: ',' -%}
+<div class="mg-brands">
+  <h2>Trusted by teams at</h2>
+  <p class="mg-brands__sub">150+ brands and 250+ institutions have celebrated their milestones with the Meru family</p>
+  <div class="mg-brands__marquee"><div class="mg-brands__track">
+    {% for b in mg_brand_list %}<span>{{ b }}</span>{% endfor %}
+    {% for b in mg_brand_list %}<span aria-hidden="true">{{ b }}</span>{% endfor %}
+  </div></div>
+</div>

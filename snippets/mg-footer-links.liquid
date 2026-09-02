@@ -1,0 +1,34 @@
+<style>
+  .mg-footer { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; padding: 2.5rem 0 1rem; }
+  .mg-footer h4 { font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 0.9rem; color: #111; }
+  .mg-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+  .mg-footer a { color: #6b6455; text-decoration: none; font-size: 0.9rem; }
+  .mg-footer a:hover { color: #C9A227; }
+  .mg-footer__contact li { color: #6b6455; font-size: 0.9rem; }
+  @media (max-width: 899px) { .mg-footer { grid-template-columns: repeat(2, 1fr); } }
+</style>
+<div class="mg-footer">
+  {% for link in linklists.footer.links %}
+    {% if link.links.size > 0 %}
+      <div>
+        <h4>{{ link.title }}</h4>
+        <ul>
+          {% for child in link.links limit: 10 %}<li><a href="{{ child.url }}">{{ child.title }}</a></li>{% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endfor %}
+  <div class="mg-footer__contact">
+    <h4>Contact Us</h4>
+    <ul>
+      <li><strong>Meru Gifting</strong> · by Meru Trophy</li>
+      <li>#273/2, SC Road, 2nd Cross,<br>Gandhinagar, Bangalore – 560 009</li>
+      <li><a href="tel:+917892255078">+91 78922 55078</a></li>
+      <li><a href="tel:+919110894452">+91 91108 94452</a></li>
+      <li><a href="mailto:hi@merugifting.com">hi@merugifting.com</a></li>
+      <li><a href="https://wa.me/917892255078" target="_blank" rel="noopener">WhatsApp Us</a></li>
+      <li>Mon–Sat · 9 AM–7 PM</li>
+      <li>GST registered · GeM vendor</li>
+    </ul>
+  </div>
+</div>

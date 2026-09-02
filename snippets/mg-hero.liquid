@@ -1,0 +1,35 @@
+{%- assign hero_img_1 = collections['festive-hampers'].products.first.featured_image -%}
+{%- assign hero_img_2 = collections['artisanal-mementos'].products.first.featured_image -%}
+<style>
+  .mg-hero { background: #111111; color: #FAF7F0; display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: center; padding: 4rem 2rem; border-radius: 0; }
+  .mg-hero__eyebrow { color: #C9A227; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 1rem; font-weight: 600; }
+  .mg-hero__title { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin: 0 0 1rem; color: #FAF7F0; }
+  .mg-hero__title em { color: #C9A227; font-style: normal; }
+  .mg-hero__sub { font-size: 1.05rem; color: #d9d4c8; max-width: 34rem; margin-bottom: 2rem; }
+  .mg-hero__ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .mg-hero__btn { display: inline-block; padding: 0.9rem 1.8rem; border-radius: 999px; font-weight: 600; text-decoration: none; font-size: 0.95rem; }
+  .mg-hero__btn--gold { background: #C9A227; color: #111111; }
+  .mg-hero__btn--ghost { border: 1px solid #C9A227; color: #C9A227; }
+  .mg-hero__btn--wa { background: #25D366; color: #ffffff; }
+  .mg-hero__media { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .mg-hero__media img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 12px; border: 1px solid #C9A22755; background: #fff; }
+  .mg-hero__media figure { margin: 0; }
+  .mg-hero__media figcaption { color: #C9A227; font-size: 0.8rem; margin-top: 0.5rem; text-align: center; }
+  @media (max-width: 749px) { .mg-hero { grid-template-columns: 1fr; padding: 2.5rem 1.25rem; } }
+</style>
+<div class="mg-hero">
+  <div>
+    <p class="mg-hero__eyebrow">Meru Gifting — by Meru Trophy · Est. 2012</p>
+    <h1 class="mg-hero__title">Thoughtful gifting, <em>handcrafted</em> in India</h1>
+    <p class="mg-hero__sub">Corporate gifts · Festive hampers · Artisanal mementos · Customised gifts. Crafted with 4,000+ artisan families across 25+ states, and delivered pan-India with GST invoicing for businesses.</p>
+    <div class="mg-hero__ctas">
+      <a class="mg-hero__btn mg-hero__btn--gold" href="/collections/corporate-gifts">Shop Corporate Gifts</a>
+      <a class="mg-hero__btn mg-hero__btn--ghost" href="/collections/festive-hampers">Festive Hampers</a>
+      <a class="mg-hero__btn mg-hero__btn--wa" href="https://wa.me/917892255078?text=Hi%20Meru%20Gifting%2C%20I%27d%20like%20to%20discuss%20a%20gifting%20requirement." target="_blank" rel="noopener">WhatsApp Us</a>
+    </div>
+  </div>
+  <div class="mg-hero__media">
+    {% if hero_img_1 %}<figure><img src="{{ hero_img_1 | image_url: width: 600 }}" alt="{{ hero_img_1.alt | default: 'Festive hampers' | escape }}" loading="eager"><figcaption>Festive Hampers</figcaption></figure>{% endif %}
+    {% if hero_img_2 %}<figure><img src="{{ hero_img_2 | image_url: width: 600 }}" alt="{{ hero_img_2.alt | default: 'Artisanal mementos' | escape }}" loading="eager"><figcaption>Artisanal Mementos</figcaption></figure>{% endif %}
+  </div>
+</div>
