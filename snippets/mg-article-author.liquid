@@ -1,0 +1,42 @@
+{% doc %}
+  Author box + Person structured data for Rahil Jain, founder of Meru Gifting.
+  Rendered below every article body (E-E-A-T signal for search and answer engines).
+{% enddoc %}
+<style>
+  .mg-author { display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; align-items: center; border: 1px solid #e8e2d4; background: #FAF7F0; border-radius: 16px; padding: 1.5rem; max-width: var(--normal-content-width); margin: 0 auto; }
+  .mg-author__avatar { width: 72px; height: 72px; border-radius: 50%; background: #111111; color: #C9A227; display: grid; place-items: center; font-weight: 800; font-size: 1.5rem; letter-spacing: 0.05em; }
+  .mg-author__eyebrow { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: #6b6455; margin: 0 0 0.2rem; font-weight: 700; }
+  .mg-author h3 { margin: 0 0 0.35rem; font-size: 1.15rem; }
+  .mg-author p { margin: 0; color: #6b6455; font-size: 0.95rem; }
+  .mg-author__links { margin-top: 0.6rem; display: flex; gap: 0.9rem; flex-wrap: wrap; font-size: 0.9rem; }
+  .mg-author__links a { color: #C9A227; font-weight: 600; text-decoration: none; }
+  @media (max-width: 749px) { .mg-author { grid-template-columns: 1fr; text-align: center; } .mg-author__avatar { margin: 0 auto; } .mg-author__links { justify-content: center; } }
+</style>
+<div class="mg-author" itemscope itemtype="https://schema.org/Person">
+  <div class="mg-author__avatar" aria-hidden="true">RJ</div>
+  <div>
+    <p class="mg-author__eyebrow">Written by</p>
+    <h3 itemprop="name">Rahil Jain</h3>
+    <p itemprop="description">Founder of Meru Gifting and the Meru Trophy group, Bangalore. Rahil has designed corporate gifting programmes for 150+ brands and 250+ institutions since 2012, and leads the Dharohar initiative that works with 4,000+ artisan families across 25+ Indian states.</p>
+    <div class="mg-author__links">
+      <a href="/blogs/founder-notes">More from Rahil</a>
+      <a href="/pages/about-us">About Meru Gifting</a>
+      <a href="https://wa.me/917892255078" target="_blank" rel="noopener">WhatsApp Rahil's team</a>
+    </div>
+  </div>
+</div>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": {{ request.origin | append: '/blogs/founder-notes#rahil-jain' | json }},
+  "name": "Rahil Jain",
+  "jobTitle": "Founder",
+  "worksFor": { "@type": "Organization", "@id": {{ request.origin | append: '/#organization' | json }}, "name": "Meru Gifting" },
+  "url": {{ request.origin | append: '/blogs/founder-notes' | json }},
+  "knowsAbout": ["Corporate gifting", "Employee gifting", "Diwali corporate hampers", "Indian handicrafts", "Custom branded merchandise", "Bulk gifting logistics"],
+  "email": "hi@merugifting.com",
+  "telephone": "+91 78922 55078",
+  "address": { "@type": "PostalAddress", "addressLocality": "Bengaluru", "addressRegion": "Karnataka", "postalCode": "560009", "addressCountry": "IN" }
+}
+</script>

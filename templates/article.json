@@ -40,7 +40,7 @@
           "name": "t:names.details",
           "settings": {
             "show_date": true,
-            "show_author": false,
+            "show_author": true,
             "alignment": "center",
             "show_alignment": true,
             "padding-block-start": 0,
@@ -86,11 +86,81 @@
         "gap": 32,
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 40,
-        "padding-block-end": 80
+        "padding-block-end": 32
+      }
+    },
+    "mg_styles": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-article-styles' %}",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mg_author": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-article-author' %}",
+        "section_width": "page-width",
+        "padding-block-start": 8,
+        "padding-block-end": 24
+      }
+    },
+    "mg_credbar": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-credbar' %}",
+        "section_width": "page-width",
+        "padding-block-start": 8,
+        "padding-block-end": 8
+      }
+    },
+    "mg_collections": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-collections' %}",
+        "section_width": "page-width",
+        "padding-block-start": 24,
+        "padding-block-end": 16
+      }
+    },
+    "mg_reviews": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-reviews' %}",
+        "section_width": "page-width",
+        "padding-block-start": 16,
+        "padding-block-end": 16
+      }
+    },
+    "mg_contact": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-contact' %}",
+        "section_width": "page-width",
+        "padding-block-start": 16,
+        "padding-block-end": 48
+      }
+    },
+    "mg_interactive": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-article-interactive' %}",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     }
   },
   "order": [
-    "section"
+    "mg_styles",
+    "mg_interactive",
+    "section",
+    "mg_author",
+    "mg_credbar",
+    "mg_collections",
+    "mg_reviews",
+    "mg_contact"
   ]
 }

@@ -1,0 +1,53 @@
+{% doc %}
+  Shared styles for the buyer-focused landing articles (SEO/AEO pages).
+  Article bodies use the .mg-* classes below so 200+ articles stay lean and consistent.
+  Rendered once on the article template via a custom-liquid section.
+{% enddoc %}
+<style>
+  .blog-post-content, .rte { --mg-gold: #C9A227; --mg-ink: #111111; --mg-cream: #FAF7F0; --mg-line: #e8e2d4; --mg-muted: #6b6455; }
+  .mg-answer { border-left: 4px solid var(--mg-gold); background: var(--mg-cream); padding: 1.1rem 1.25rem; margin: 0 0 1.75rem; border-radius: 0 12px 12px 0; }
+  .mg-answer p { margin: 0; font-size: 1.05rem; }
+  .mg-answer strong { color: var(--mg-ink); }
+  .mg-toc { border: 1px solid var(--mg-line); border-radius: 12px; padding: 1rem 1.25rem; margin: 0 0 2rem; background: #fff; }
+  .mg-toc p { margin: 0 0 0.5rem; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mg-muted); font-weight: 700; }
+  .mg-toc ol { margin: 0; padding-left: 1.25rem; columns: 2; column-gap: 2rem; }
+  .mg-toc li { break-inside: avoid; margin-bottom: 0.3rem; }
+  .mg-toc a { color: var(--mg-ink); text-decoration: none; border-bottom: 1px solid var(--mg-line); }
+  .mg-toc a:hover { color: var(--mg-gold); border-color: var(--mg-gold); }
+  .mg-kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
+  .mg-kv div { border: 1px solid var(--mg-line); border-radius: 12px; background: var(--mg-cream); padding: 0.9rem 1rem; }
+  .mg-kv strong { display: block; font-size: 1.25rem; color: var(--mg-ink); }
+  .mg-kv span { font-size: 0.85rem; color: var(--mg-muted); }
+  .mg-table { overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--mg-line); border-radius: 12px; }
+  .mg-table table { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin: 0; }
+  .mg-table th { background: var(--mg-ink); color: var(--mg-cream); text-align: left; padding: 0.7rem 0.9rem; font-weight: 600; }
+  .mg-table td { padding: 0.7rem 0.9rem; border-top: 1px solid var(--mg-line); vertical-align: top; }
+  .mg-table tr:nth-child(even) td { background: var(--mg-cream); }
+  .mg-steps { counter-reset: mgstep; list-style: none; padding: 0; margin: 1.5rem 0; }
+  .mg-steps li { counter-increment: mgstep; position: relative; padding-left: 3rem; margin-bottom: 1rem; }
+  .mg-steps li::before { content: counter(mgstep); position: absolute; left: 0; top: 0; width: 2.1rem; height: 2.1rem; border-radius: 50%; background: var(--mg-gold); color: var(--mg-ink); font-weight: 700; display: grid; place-items: center; }
+  .mg-faq { margin: 1.5rem 0; }
+  .mg-faq details { border: 1px solid var(--mg-line); border-radius: 12px; padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; background: #fff; }
+  .mg-faq summary { cursor: pointer; font-weight: 700; color: var(--mg-ink); list-style: none; }
+  .mg-faq summary::-webkit-details-marker { display: none; }
+  .mg-faq summary::after { content: '+'; float: right; color: var(--mg-gold); font-weight: 700; }
+  .mg-faq details[open] summary::after { content: '–'; }
+  .mg-faq details p { margin: 0.6rem 0 0; }
+  .mg-cta { background: var(--mg-ink); color: var(--mg-cream); border-radius: 16px; padding: 1.75rem 1.5rem; margin: 2rem 0; display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; }
+  .mg-cta h3, .mg-cta p { color: var(--mg-cream); margin: 0 0 0.35rem; }
+  .mg-cta p { color: #d9d4c8; font-size: 0.95rem; }
+  .mg-cta__btns { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .mg-btn { display: inline-block; padding: 0.7rem 1.3rem; border-radius: 999px; font-weight: 600; text-decoration: none; font-size: 0.9rem; }
+  .mg-btn--gold { background: var(--mg-gold); color: var(--mg-ink); }
+  .mg-btn--wa { background: #25D366; color: #fff; }
+  .mg-btn--ghost { border: 1px solid var(--mg-gold); color: var(--mg-gold); }
+  .mg-callout { border: 1px dashed var(--mg-gold); border-radius: 12px; padding: 0.9rem 1.1rem; margin: 1.25rem 0; background: #fff; }
+  .mg-verdict { background: var(--mg-cream); border: 1px solid var(--mg-line); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+  .mg-verdict strong { color: var(--mg-gold); }
+  .mg-related { border-top: 1px solid var(--mg-line); margin-top: 2rem; padding-top: 1.25rem; }
+  .mg-related h3 { font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mg-muted); margin-bottom: 0.5rem; }
+  .mg-related ul { margin: 0; padding-left: 1.2rem; }
+  .mg-glossary dt { font-weight: 700; margin-top: 1rem; color: var(--mg-ink); }
+  .mg-glossary dd { margin: 0.25rem 0 0; }
+  @media (max-width: 749px) { .mg-toc ol { columns: 1; } .mg-cta { grid-template-columns: 1fr; } }
+</style>
