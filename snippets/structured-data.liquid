@@ -33,7 +33,7 @@
     assign org_logo = settings.logo | image_url: width: 600 | prepend: 'https:'
   else
     assign org_logo = 'icon-512.png' | asset_url
-    unless org_logo contains 'https:'
+    unless org_logo contains 'https://'
       assign org_logo = org_logo | prepend: 'https:'
     endunless
   endif

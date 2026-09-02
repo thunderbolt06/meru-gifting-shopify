@@ -55,11 +55,9 @@
     assign og_image_height = 630
   endif
   assign og_image_url = og_image_url | replace: 'http://', 'https://'
-  if og_image_url contains '//cdn'
-    unless og_image_url contains 'https:'
-      assign og_image_url = og_image_url | prepend: 'https:'
-    endunless
-  endif
+  unless og_image_url contains 'https://'
+    assign og_image_url = og_image_url | prepend: 'https:'
+  endunless
 
   # Locale for Open Graph (en -> en_IN for an India-based store)
   assign og_locale = request.locale.iso_code | replace: '-', '_'
