@@ -32,7 +32,7 @@
   if settings.logo != blank
     assign org_logo = settings.logo | image_url: width: 600 | prepend: 'https:'
   else
-    assign org_logo = 'icon-512.png' | asset_url
+    assign org_logo = 'mg-logo.png' | asset_url
     unless org_logo contains 'https://'
       assign org_logo = org_logo | prepend: 'https:'
     endunless

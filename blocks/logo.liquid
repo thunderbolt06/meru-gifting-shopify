@@ -9,6 +9,10 @@
   endif
 %}
 
+{%- if image == blank -%}
+  {%- assign mg_logo = true -%}
+  {% capture logo_image %}<img src="{{ 'mg-logo.png' | asset_url }}" class="logo-block__image" alt="{{ shop.name | escape }}" width="1730" height="1043" loading="lazy">{% endcapture %}
+{%- endif -%}
 {%- if image -%}
   {% capture logo_image %}
     {{-
@@ -34,7 +38,9 @@
     {% if block_settings.unit == 'percent' %}
       --logo-width: {{ block_settings.percent_width }}%;
     {% else %}
-      {% if image %}
+      {% if mg_logo %}
+        --logo-width: {{ block_settings.pixel_height | times: 1.66 | ceil }}px;
+      {% elsif image %}
         --logo-width: {{ image.width | times: 1.00 | divided_by: image.height | times: block_settings.pixel_height }}px;
       {% else %}
         --logo-width: {{ shop.name.size | times: 0.65 }}em;
@@ -47,7 +53,9 @@
         --logo-width-mobile: {{ block_settings.percent_width_mobile }}%;
         --logo-height-mobile: auto;
       {% else %}
-        {% if image %}
+        {% if mg_logo %}
+          --logo-width-mobile: {{ block_settings.pixel_height_mobile | times: 1.66 | ceil }}px;
+        {% elsif image %}
           --logo-width-mobile: {{ image.width | times: 1.00 | divided_by: image.height | times: block_settings.pixel_height_mobile }}px;
           {% else %}
             --logo-width-mobile: {{ shop.name.size | times: 0.65 }}em;

@@ -16,7 +16,7 @@
         "section_width": "full-width",
         "padding-block-start": 0,
         "padding-block-end": 0,
-        "background_color": "#111111"
+        "background_color": "#0b0b0b"
       }
     },
     "mg_credbar": {
@@ -435,6 +435,16 @@
         "padding-block-start": 16,
         "padding-block-end": 48
       }
+    },
+    "mg_cover": {
+      "type": "custom-liquid",
+      "name": "Brand cover",
+      "settings": {
+        "custom_liquid": "{% render 'mg-cover-banner' %}",
+        "section_width": "page-width",
+        "padding-block-start": 16,
+        "padding-block-end": 16
+      }
     }
   },
   "order": [
@@ -444,6 +454,7 @@
     "pl_corporate",
     "mg_brands",
     "pl_festive",
+    "mg_cover",
     "mg_reviews",
     "mg_contact"
   ]

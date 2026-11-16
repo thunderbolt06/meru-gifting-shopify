@@ -261,9 +261,19 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "mg_404_logo": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div style=\"text-align:center;padding-top:2rem\"><a href=\"/\"><img src=\"{{ 'mg-logo.png' | asset_url }}\" alt=\"Meru Gifting\" width=\"1730\" height=\"1043\" style=\"width:220px;height:auto;display:inline-block\"></a></div>",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
+    "mg_404_logo",
     "main",
     "product_list_iA96Tq"
   ]

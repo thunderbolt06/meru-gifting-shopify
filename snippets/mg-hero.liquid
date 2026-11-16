@@ -1,7 +1,8 @@
 {%- assign hero_img_1 = collections['festive-hampers'].products.first.featured_image -%}
 {%- assign hero_img_2 = collections['artisanal-mementos'].products.first.featured_image -%}
 <style>
-  .mg-hero { background: #111111; color: #FAF7F0; display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: center; padding: 4rem 2rem; border-radius: 0; }
+  .mg-hero { background: radial-gradient(120% 120% at 0% 0%, #1d1910 0%, #0b0b0b 55%); border-bottom: 1px solid #C9A22733; color: #FAF7F0; display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: center; padding: 4rem 2rem; border-radius: 0; }
+  .mg-hero__logo { display: block; width: clamp(180px, 22vw, 280px); height: auto; margin: 0 0 1.5rem; }
   .mg-hero__eyebrow { color: #C9A227; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 1rem; font-weight: 600; }
   .mg-hero__title { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin: 0 0 1rem; color: #FAF7F0; }
   .mg-hero__title em { color: #C9A227; font-style: normal; }
@@ -12,7 +13,7 @@
   .mg-hero__btn--ghost { border: 1px solid #C9A227; color: #C9A227; }
   .mg-hero__btn--wa { background: #25D366; color: #ffffff; }
   .mg-hero__media { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .mg-hero__media img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 12px; border: 1px solid #C9A22755; background: #fff; }
+  .mg-hero__media img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 12px; border: 1px solid #C9A22755; background: #15130f; }
   .mg-hero__media figure { margin: 0; }
   .mg-hero__media figcaption { color: #C9A227; font-size: 0.8rem; margin-top: 0.5rem; text-align: center; }
   .mg-hero__btn:focus-visible { outline: 2px solid #C9A227; outline-offset: 3px; }
@@ -20,7 +21,8 @@
 </style>
 <div class="mg-hero">
   <div>
-    <p class="mg-hero__eyebrow">Meru Gifting · Est. 2012</p>
+    <img class="mg-hero__logo" src="{{ 'mg-logo.png' | asset_url }}" alt="Meru Gifting" width="1730" height="1043" loading="eager" fetchpriority="high">
+    <p class="mg-hero__eyebrow">Est. 2012 · Bangalore</p>
     <h1 class="mg-hero__title">Thoughtful gifting, <em>handcrafted</em> in India</h1>
     <p class="mg-hero__sub">Corporate gifts · Festive hampers · Artisanal mementos · Customised gifts. Crafted with 4,000+ artisan families across 25+ states, and delivered pan-India with GST invoicing for businesses.</p>
     <div class="mg-hero__ctas">

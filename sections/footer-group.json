@@ -17,7 +17,7 @@
       "settings": {
         "custom_liquid": "{% render 'mg-footer-links' %}",
         "section_width": "page-width",
-        "background_color": "#FAF7F0",
+        "background_color": "#0b0b0b",
         "padding-block-start": 10,
         "padding-block-end": 10
       }
