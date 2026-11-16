@@ -1,0 +1,77 @@
+{%- comment -%} Festive (Diwali) hamper hero banner with WhatsApp + Catalog CTAs {%- endcomment -%}
+{%- assign dh = collections['diwali-hampers'] -%}
+{%- if dh == blank or dh.products_count == 0 -%}{%- assign dh = collections['festive-hampers'] -%}{%- endif -%}
+{%- assign ch = collections['corporate-gift-hampers'] -%}
+{%- if ch == blank or ch.products_count == 0 -%}{%- assign ch = collections['corporate-gifts'] -%}{%- endif -%}
+{%- assign h1 = dh.image | default: dh.products.first.featured_image -%}
+{%- assign h2 = dh.products[1].featured_image | default: h1 -%}
+{%- assign h3 = ch.image | default: ch.products.first.featured_image -%}
+{%- capture wa -%}https://wa.me/917892255078?text={{ 'Hi Meru Gifting, I would like to know about your Diwali & corporate hampers (quantity, budget, delivery date).' | url_encode }}{%- endcapture -%}
+<style>
+  .mgd-hero { position: relative; overflow: hidden; color: #FAF7F0; background:
+      radial-gradient(60% 80% at 85% 20%, rgba(232,119,46,0.28) 0%, transparent 60%),
+      radial-gradient(50% 70% at 10% 90%, rgba(201,162,39,0.22) 0%, transparent 60%),
+      linear-gradient(135deg, #2a0a10 0%, #120708 45%, #0b0b0b 100%);
+    border-bottom: 1px solid #C9A22744; }
+  .mgd-hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .14;
+    background-image: radial-gradient(circle at 50% 50%, #C9A227 1.5px, transparent 2px), radial-gradient(circle at 0 0, #C9A227 1px, transparent 1.5px);
+    background-size: 46px 46px, 23px 23px; }
+  .mgd-hero__toran { position: relative; height: 28px; background:
+      radial-gradient(circle at 14px 0, #E8772E 9px, transparent 10px) 0 0/28px 28px repeat-x,
+      radial-gradient(circle at 14px 2px, #C9A227 12px, transparent 13px) 0 0/28px 28px repeat-x; opacity: .9; }
+  .mgd-hero__inner { position: relative; display: grid; grid-template-columns: 1.05fr 1fr; gap: 2.5rem; align-items: center; max-width: 1280px; margin: 0 auto; padding: 2.75rem 2rem 3.25rem; }
+  .mgd-hero__logo { width: clamp(150px, 16vw, 210px); height: auto; display: block; margin-bottom: 1.25rem; }
+  .mgd-hero__eyebrow { display: inline-flex; align-items: center; gap: .5rem; color: #F3C969; letter-spacing: .18em; text-transform: uppercase; font-size: .78rem; font-weight: 700; margin: 0 0 1rem; padding: .4rem .9rem; border: 1px solid #C9A22766; border-radius: 999px; background: #C9A2270f; }
+  .mgd-hero__title { font-size: clamp(2rem, 4vw, 3.1rem); line-height: 1.08; margin: 0 0 1.1rem; color: #FAF7F0; font-weight: 800; }
+  .mgd-hero__title em { font-style: normal; background: linear-gradient(90deg, #F3C969, #C9A227 60%, #E8772E); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .mgd-hero__sub { font-size: 1.08rem; color: #e4dccb; max-width: 36rem; margin: 0 0 1.75rem; line-height: 1.6; }
+  .mgd-hero__ctas { display: flex; gap: .85rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+  .mgd-btn { display: inline-flex; align-items: center; gap: .55rem; padding: 1rem 1.7rem; border-radius: 999px; font-weight: 700; text-decoration: none; font-size: 1rem; transition: transform .15s ease, box-shadow .15s ease; }
+  .mgd-btn:hover { transform: translateY(-2px); }
+  .mgd-btn:focus-visible { outline: 2px solid #F3C969; outline-offset: 3px; }
+  .mgd-btn--wa { background: #25D366; color: #fff; box-shadow: 0 8px 24px rgba(37,211,102,.28); }
+  .mgd-btn--gold { background: linear-gradient(90deg, #F3C969, #C9A227); color: #1a1205; box-shadow: 0 8px 24px rgba(201,162,39,.3); }
+  .mgd-btn--ghost { border: 1px solid #C9A227aa; color: #F3C969; }
+  .mgd-btn svg { width: 20px; height: 20px; flex: none; }
+  .mgd-hero__trust { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; font-size: .88rem; color: #cfc6b2; list-style: none; padding: 0; margin: 0; }
+  .mgd-hero__trust li::before { content: "✦ "; color: #C9A227; }
+  .mgd-hero__media { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; grid-template-rows: 1fr 1fr; gap: .9rem; min-height: 440px; max-height: 520px; }
+  .mgd-hero__media figure { margin: 0; position: relative; overflow: hidden; border-radius: 16px; border: 1px solid #C9A22766; background: #1a1010; box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+  .mgd-hero__media figure:first-child { grid-row: span 2; }
+  .mgd-hero__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mgd-hero__media figcaption { position: absolute; left: .75rem; bottom: .75rem; background: rgba(11,11,11,.78); color: #F3C969; font-size: .78rem; font-weight: 700; letter-spacing: .06em; padding: .35rem .7rem; border-radius: 999px; text-transform: uppercase; }
+  .mgd-diya { position: absolute; width: 14px; height: 20px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: radial-gradient(circle at 50% 70%, #fff6d0 0, #F3C969 35%, #E8772E 70%, transparent 72%); filter: drop-shadow(0 0 10px #E8772E); animation: mgd-flicker 2.4s ease-in-out infinite; }
+  @keyframes mgd-flicker { 0%,100% { transform: scale(1) rotate(-2deg); opacity: 1; } 50% { transform: scale(1.12) rotate(2deg); opacity: .85; } }
+  @media (prefers-reduced-motion: reduce) { .mgd-diya { animation: none; } .mgd-btn { transition: none; } }
+  @media (max-width: 899px) {
+    .mgd-hero__inner { grid-template-columns: 1fr; padding: 2.25rem 1rem 2.75rem; gap: 1.75rem; }
+    .mgd-hero__media { min-height: 320px; }
+    .mgd-btn { padding: .85rem 1.3rem; font-size: .95rem; }
+  }
+</style>
+<section class="mgd-hero" aria-label="Diwali and corporate gift hampers">
+  <div class="mgd-hero__toran" aria-hidden="true"></div>
+  <span class="mgd-diya" style="top:70px;left:6%" aria-hidden="true"></span>
+  <span class="mgd-diya" style="top:42%;left:48%;animation-delay:.6s" aria-hidden="true"></span>
+  <span class="mgd-diya" style="bottom:28px;right:5%;animation-delay:1.2s" aria-hidden="true"></span>
+  <div class="mgd-hero__inner">
+    <div>
+      <p class="mgd-hero__eyebrow">🪔 Festive Season 2026 · Bulk orders open</p>
+      <h1 class="mgd-hero__title">Diwali &amp; Corporate <em>Gift Hampers</em> that light up every desk</h1>
+      <p class="mgd-hero__sub">Curated festive hampers for employees, clients and partners — dry fruits, candles, brass, bamboo &amp; desk essentials in premium rigid boxes. Custom branding, GST invoicing and pan-India delivery from Bengaluru.</p>
+      <div class="mgd-hero__ctas">
+        <a class="mgd-btn mgd-btn--wa" href="{{ wa }}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 1.9 17.7L.3 23.7l6.2-1.6a11.8 11.8 0 0 0 5.6 1.4c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.4-8.2Zm-8.4 18.1c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.8 9.8 0 1 1 8.3 4.6Zm5.4-7.3c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.1.2 2 3.1 4.9 4.4 2.4 1 2.9.8 3.4.8.5-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4Z"/></svg>WhatsApp for Quote</a>
+        <a class="mgd-btn mgd-btn--gold" href="/pages/catalog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v3h16v-3"/></svg>Download Catalog</a>
+        <a class="mgd-btn mgd-btn--ghost" href="#mg-hampers">Explore Hampers ↓</a>
+      </div>
+      <ul class="mgd-hero__trust">
+        <li>150+ brands served</li><li>Custom logo branding</li><li>GST invoicing</li><li>Pan-India delivery</li>
+      </ul>
+    </div>
+    <div class="mgd-hero__media">
+      {%- if h1 -%}<figure><img src="{{ h1 | image_url: width: 900 }}" srcset="{{ h1 | image_url: width: 500 }} 500w, {{ h1 | image_url: width: 900 }} 900w, {{ h1 | image_url: width: 1200 }} 1200w" sizes="(max-width: 899px) 55vw, 30vw" width="900" height="1100" alt="{{ h1.alt | default: 'Diwali gift hamper' | escape }}" loading="eager" fetchpriority="high"><figcaption>Diwali Hampers</figcaption></figure>{%- endif -%}
+      {%- if h2 -%}<figure><img src="{{ h2 | image_url: width: 600 }}" width="600" height="600" alt="{{ h2.alt | default: 'Festive hamper' | escape }}" loading="eager"><figcaption>Festive Kits</figcaption></figure>{%- endif -%}
+      {%- if h3 -%}<figure><img src="{{ h3 | image_url: width: 600 }}" width="600" height="600" alt="{{ h3.alt | default: 'Corporate gift hamper' | escape }}" loading="eager"><figcaption>Corporate</figcaption></figure>{%- endif -%}
+    </div>
+  </div>
+</section>

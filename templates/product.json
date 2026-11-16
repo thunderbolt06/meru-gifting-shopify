@@ -298,6 +298,12 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "mg_wa_cta": {
+              "type": "custom-liquid",
+              "settings": {
+                "custom_liquid": "{% render 'mg-product-wa' %}"
+              }
             }
           },
           "block_order": [
@@ -305,6 +311,7 @@
             "divider_VJhene",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
+            "mg_wa_cta",
             "text_aEtTtq"
           ]
         }

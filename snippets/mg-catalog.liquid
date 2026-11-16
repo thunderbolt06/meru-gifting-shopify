@@ -1,0 +1,53 @@
+{%- comment -%}
+  Catalog download page. PDFs live in Shopify admin > Content > Files, referenced with file_url.
+  Row format: collection-handle|Title|Description|pdf filename
+{%- endcomment -%}
+{%- assign rows = 'diwali-hampers|Diwali Hampers Catalog 2026|Festive hampers with dry fruits, diyas, scented candles, brass décor, bamboo desk sets and drinkware in premium rigid boxes.|meru-gifting-diwali-hampers-catalog-2026.pdf~~corporate-gift-hampers|Corporate Gift Hampers Catalog 2026|Onboarding kits, client gifts and employee hampers — flasks, mugs, notebooks, tech and desk essentials with custom logo branding.|meru-gifting-corporate-gift-hampers-catalog-2026.pdf~~christmas-hampers|Christmas Hampers Catalog 2026|Year-end and Christmas hampers — treats, festive mugs, candles, gift tins and red & green gift boxes.|meru-gifting-christmas-hampers-catalog-2026.pdf~~customer-works|Custom Branded Kits — Case Studies|Kits we have crafted for universities and companies: co-branded welcome kits, logo-printed Diwali boxes and bulk dispatch.|meru-gifting-custom-branded-kits-case-studies.pdf' | split: '~~' -%}
+<style>
+  .mgcat__hero { text-align: center; padding: 2.5rem 1rem 2rem; border-radius: 20px; border: 1px solid #C9A22744; background: radial-gradient(60% 90% at 50% 0%, rgba(232,119,46,.2), transparent 65%), linear-gradient(135deg, #2a0a10, #0b0b0b); margin-bottom: 2rem; }
+  .mgcat__hero img { width: 170px; height: auto; margin: 0 auto 1rem; display: block; }
+  .mgcat__hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); margin: 0 0 .6rem; color: #FAF7F0; }
+  .mgcat__hero p { color: #d9d4c8; max-width: 40rem; margin: 0 auto 1.25rem; }
+  .mgcat__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+  .mgcat__card { display: grid; grid-template-columns: 180px 1fr; border: 1px solid #2e2920; border-radius: 16px; overflow: hidden; background: #15130f; }
+  .mgcat__card img { width: 100%; height: 100%; object-fit: cover; min-height: 220px; display: block; }
+  .mgcat__body { padding: 1.4rem 1.3rem; display: flex; flex-direction: column; }
+  .mgcat__body h2 { font-size: 1.2rem; margin: 0 0 .5rem; color: #FAF7F0; }
+  .mgcat__body p { color: #a8a090; font-size: .9rem; line-height: 1.5; margin: 0 0 1rem; flex: 1; }
+  .mgcat__meta { font-size: .78rem; color: #C9A227; margin-bottom: .8rem; }
+  .mgcat__ctas { display: flex; gap: .55rem; flex-wrap: wrap; }
+  .mgcat__btn { display: inline-flex; align-items: center; gap: .4rem; padding: .7rem 1.15rem; border-radius: 999px; font-weight: 700; font-size: .88rem; text-decoration: none; }
+  .mgcat__btn--gold { background: #C9A227; color: #111; }
+  .mgcat__btn--ghost { border: 1px solid #C9A227aa; color: #F3C969; }
+  .mgcat__btn--wa { background: #25D366; color: #fff; }
+  .mgcat__btn:focus-visible { outline: 2px solid #C9A227; outline-offset: 3px; }
+  @media (max-width: 899px) { .mgcat__grid { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .mgcat__card { grid-template-columns: 1fr; } .mgcat__card img { min-height: 0; aspect-ratio: 16/10; } }
+</style>
+<section class="mgcat">
+  <div class="mgcat__hero">
+    <img src="{{ 'mg-logo.png' | asset_url }}" alt="Meru Gifting" width="1730" height="1043">
+    <h1>Download our Hamper Catalogs</h1>
+    <p>Browse every hamper design offline or share with your team. For pricing, customisation and bulk orders, WhatsApp us — we reply within working hours, Mon–Sat 9 AM–7 PM.</p>
+    <a class="mgcat__btn mgcat__btn--wa" href="https://wa.me/917892255078?text={{ 'Hi Meru Gifting, please share your latest hamper catalog and pricing.' | url_encode }}" target="_blank" rel="noopener">WhatsApp +91 78922 55078</a>
+  </div>
+  <div class="mgcat__grid">
+    {%- for row in rows -%}
+      {%- assign r = row | split: '|' -%}
+      {%- assign c = collections[r[0]] -%}
+      {%- assign cimg = c.image | default: c.products.first.featured_image -%}
+      <article class="mgcat__card">
+        {%- if cimg -%}<img src="{{ cimg | image_url: width: 500 }}" width="500" height="600" alt="{{ r[1] | escape }}" loading="lazy">{%- else -%}<div style="background:#2a0a10"></div>{%- endif -%}
+        <div class="mgcat__body">
+          <h2>{{ r[1] }}</h2>
+          {%- if c.products_count > 0 -%}<div class="mgcat__meta">{{ c.products_count }} designs · PDF</div>{%- endif -%}
+          <p>{{ r[2] }}</p>
+          <div class="mgcat__ctas">
+            <a class="mgcat__btn mgcat__btn--gold" href="{{ r[3] | file_url }}" download target="_blank" rel="noopener">⬇ Download PDF</a>
+            <a class="mgcat__btn mgcat__btn--ghost" href="/collections/{{ r[0] }}">View online</a>
+          </div>
+        </div>
+      </article>
+    {%- endfor -%}
+  </div>
+</section>

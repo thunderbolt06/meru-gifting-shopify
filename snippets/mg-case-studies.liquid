@@ -1,0 +1,68 @@
+{%- comment -%} Case studies with past customers. Images come from the matching products in the customer-works collection. {%- endcomment -%}
+{%- assign cases = 'bits-pilani-welcome-kit|BITS Pilani|University · Mumbai Campus|Custom University Welcome Kit|Matte-black welcome kit with the BITS Pilani crest on every piece — insulated flask, wine-style tumbler, A5 notebook, pen and dog-tag keychain — delivered in a co-branded printed gift bag. Packed and shipped in bulk.|Flask · Tumbler · Notebook · Pen · Keychain · Printed bag~~bounteous-diwali-gift-kit|Bounteous|Corporate client|Branded Diwali Gift Kit|A lilac rigid box printed with hanging diyas and the Bounteous logo, filled with a brass diya, brass bottle, four dry-fruit & sweet jars, a potli and a "Happy Diwali" card. Packed, stacked and stretch-wrapped for dispatch.|Logo box · Brass diya · Dry-fruit jars · Potli · Card' | split: '~~' -%}
+<style>
+  .mgcs__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+  .mgcs__eyebrow { color: #C9A227; letter-spacing: .2em; text-transform: uppercase; font-size: .78rem; font-weight: 700; margin: 0 0 .5rem; }
+  .mgcs__head h2 { font-size: clamp(1.6rem, 3.4vw, 2.4rem); margin: 0; }
+  .mgcs__head a { color: #C9A227; font-weight: 700; text-decoration: none; }
+  .mgcs__list { display: grid; gap: 1.5rem; }
+  .mgcs__item { display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; border: 1px solid #C9A22744; border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, #1a1210, #0f0d0b); }
+  .mgcs__item:nth-child(even) { grid-template-columns: 1fr 1.1fr; }
+  .mgcs__item:nth-child(even) .mgcs__media { order: 2; }
+  .mgcs__media { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px; height: 420px; background: #0b0b0b; }
+  .mgcs__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mgcs__media img:first-child { grid-row: span 2; }
+  .mgcs__body { padding: 2.25rem 2rem; display: flex; flex-direction: column; justify-content: center; }
+  .mgcs__client { display: inline-block; font-size: 1.6rem; font-weight: 800; color: #FAF7F0; margin: 0; }
+  .mgcs__sector { color: #a8a090; font-size: .85rem; margin: .2rem 0 1rem; }
+  .mgcs__kit { color: #F3C969; font-weight: 700; margin: 0 0 .6rem; font-size: 1.05rem; }
+  .mgcs__desc { color: #d9d4c8; line-height: 1.6; margin: 0 0 1rem; }
+  .mgcs__chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 1.4rem; padding: 0; list-style: none; }
+  .mgcs__chips li { font-size: .78rem; border: 1px solid #C9A22755; color: #e8dfc9; padding: .3rem .65rem; border-radius: 999px; }
+  .mgcs__ctas { display: flex; gap: .7rem; flex-wrap: wrap; }
+  .mgcs__btn { display: inline-block; padding: .75rem 1.3rem; border-radius: 999px; font-weight: 700; text-decoration: none; font-size: .9rem; }
+  .mgcs__btn--gold { background: #C9A227; color: #111; }
+  .mgcs__btn--wa { border: 1px solid #25D366; color: #25D366; }
+  .mgcs__btn:focus-visible { outline: 2px solid #C9A227; outline-offset: 3px; }
+  @media (max-width: 899px) {
+    .mgcs__item, .mgcs__item:nth-child(even) { grid-template-columns: 1fr; }
+    .mgcs__item:nth-child(even) .mgcs__media { order: 0; }
+    .mgcs__media { height: 300px; }
+    .mgcs__body { padding: 1.5rem 1.25rem; }
+  }
+</style>
+<section class="mgcs" aria-labelledby="mgcs-title">
+  <div class="mgcs__head">
+    <div>
+      <p class="mgcs__eyebrow">Case Studies</p>
+      <h2 id="mgcs-title">Kits we've crafted for our clients</h2>
+    </div>
+    <a href="/collections/customer-works">See all customer work →</a>
+  </div>
+  <div class="mgcs__list">
+    {%- for row in cases -%}
+      {%- assign c = row | split: '|' -%}
+      {%- assign prod = all_products[c[0]] -%}
+      <article class="mgcs__item">
+        <div class="mgcs__media">
+          {%- if prod != blank -%}
+            {%- for m in prod.images limit: 3 -%}
+              <img src="{{ m | image_url: width: 800 }}" srcset="{{ m | image_url: width: 400 }} 400w, {{ m | image_url: width: 800 }} 800w" sizes="(max-width: 899px) 66vw, 36vw" width="800" height="800" alt="{{ m.alt | default: c[3] | escape }}" loading="lazy">
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        <div class="mgcs__body">
+          <p class="mgcs__client">{{ c[1] }}</p>
+          <p class="mgcs__sector">{{ c[2] }}</p>
+          <p class="mgcs__kit">{{ c[3] }}</p>
+          <p class="mgcs__desc">{{ c[4] }}</p>
+          <ul class="mgcs__chips">{%- assign chips = c[5] | split: ' · ' -%}{%- for ch in chips -%}<li>{{ ch }}</li>{%- endfor -%}</ul>
+          <div class="mgcs__ctas">
+            {%- if prod != blank -%}<a class="mgcs__btn mgcs__btn--gold" href="{{ prod.url }}">View this kit</a>{%- endif -%}
+            <a class="mgcs__btn mgcs__btn--wa" href="https://wa.me/917892255078?text={{ 'Hi Meru Gifting, I saw the ' | append: c[1] | append: ' kit and want something similar for my team.' | url_encode }}" target="_blank" rel="noopener">Get a similar kit</a>
+          </div>
+        </div>
+      </article>
+    {%- endfor -%}
+  </div>
+</section>

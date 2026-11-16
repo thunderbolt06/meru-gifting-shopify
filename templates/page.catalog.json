@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "mg_catalog": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-catalog' %}{% render 'whatsapp-button' %}",
+        "section_width": "page-width",
+        "padding-block-start": 24,
+        "padding-block-end": 48
+      }
+    }
+  },
+  "order": ["mg_catalog"]
+}

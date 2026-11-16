@@ -1,0 +1,38 @@
+{%- comment -%} How to order hampers + catalog CTA band {%- endcomment -%}
+<style>
+  .mghw { border: 1px solid #C9A22744; border-radius: 20px; padding: 2.5rem 2rem; background: radial-gradient(80% 120% at 100% 0%, rgba(232,119,46,.14), transparent 60%), #120e0b; }
+  .mghw__eyebrow { color: #C9A227; letter-spacing: .2em; text-transform: uppercase; font-size: .78rem; font-weight: 700; margin: 0 0 .5rem; text-align: center; }
+  .mghw h2 { text-align: center; font-size: clamp(1.5rem, 3vw, 2.2rem); margin: 0 0 2rem; }
+  .mghw__steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; list-style: none; padding: 0; margin: 0 0 2rem; counter-reset: s; }
+  .mghw__steps li { counter-increment: s; background: #0b0b0b; border: 1px solid #2e2920; border-radius: 14px; padding: 1.4rem 1.2rem; }
+  .mghw__steps li::before { content: counter(s); display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border-radius: 50%; background: #C9A227; color: #111; font-weight: 800; margin-bottom: .8rem; }
+  .mghw__steps strong { display: block; color: #FAF7F0; margin-bottom: .3rem; }
+  .mghw__steps span { color: #a8a090; font-size: .9rem; line-height: 1.5; }
+  .mghw__band { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; border-top: 1px solid #2e2920; padding-top: 1.75rem; }
+  .mghw__band p { margin: 0; color: #e4dccb; font-size: 1.05rem; }
+  .mghw__band p b { color: #F3C969; }
+  .mghw__ctas { display: flex; gap: .7rem; flex-wrap: wrap; }
+  .mghw__btn { display: inline-block; padding: .85rem 1.5rem; border-radius: 999px; font-weight: 700; text-decoration: none; }
+  .mghw__btn--wa { background: #25D366; color: #fff; }
+  .mghw__btn--gold { background: #C9A227; color: #111; }
+  .mghw__btn:focus-visible { outline: 2px solid #C9A227; outline-offset: 3px; }
+  @media (max-width: 899px) { .mghw { padding: 1.75rem 1.1rem; } .mghw__steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .mghw__steps { grid-template-columns: 1fr; } }
+</style>
+<section class="mghw" aria-labelledby="mghw-title">
+  <p class="mghw__eyebrow">How it works</p>
+  <h2 id="mghw-title">Bulk hampers in 4 simple steps</h2>
+  <ol class="mghw__steps">
+    <li><strong>Share your brief</strong><span>WhatsApp us the occasion, quantity, budget per hamper and delivery date.</span></li>
+    <li><strong>Pick &amp; customise</strong><span>Choose from our catalog or let us curate. Add your logo on box, card or products.</span></li>
+    <li><strong>Approve the mock-up</strong><span>We send a free mock-up and sample photos before bulk production.</span></li>
+    <li><strong>Packed &amp; delivered</strong><span>Hand-packed in Bengaluru, delivered pan-India — to one office or many addresses.</span></li>
+  </ol>
+  <div class="mghw__band">
+    <p>Prices depend on contents &amp; quantity — <b>WhatsApp us for the best quote</b>.</p>
+    <div class="mghw__ctas">
+      <a class="mghw__btn mghw__btn--wa" href="https://wa.me/917892255078?text={{ 'Hi Meru Gifting, please share hamper options and pricing.' | url_encode }}" target="_blank" rel="noopener">WhatsApp +91 78922 55078</a>
+      <a class="mghw__btn mghw__btn--gold" href="/pages/catalog">Download Catalogs</a>
+    </div>
+  </div>
+</section>

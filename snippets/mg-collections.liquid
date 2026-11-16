@@ -15,7 +15,7 @@
   @media (prefers-reduced-motion: reduce) { .mg-cols a.mg-col-card { transition: none; } .mg-cols a.mg-col-card:hover { transform: none; } }
   @media (max-width: 749px) { .mg-cols { grid-template-columns: repeat(2, 1fr); } }
 </style>
-<div class="mg-cols__head"><h2>Shop by collection</h2><a href="/collections" style="color:#C9A227;font-weight:600;text-decoration:none;">View all →</a></div>
+<div class="mg-cols__head"><h2>{{ heading | default: 'Shop by collection' }}</h2><a href="/collections" style="color:#C9A227;font-weight:600;text-decoration:none;">View all →</a></div>
 <div class="mg-cols">
   {% for h in mg_handles %}
     {%- assign c = collections[h] -%}

@@ -1,0 +1,49 @@
+{%- comment -%} Hamper category cards (homepage) {%- endcomment -%}
+{%- assign cats = 'diwali-hampers|Diwali Hampers|Dry fruits, diyas, candles & brass in festive rigid boxes|🪔~~corporate-gift-hampers|Corporate Gift Hampers|Desk, drinkware & tech kits for teams, clients & onboarding|💼~~christmas-hampers|Christmas Hampers|Year-end treats, mugs & goodies in red & green boxes|🎄~~customer-works|Custom Branded Kits|Logo-branded kits we have crafted for colleges & companies|✨' | split: '~~' -%}
+<style>
+  .mgh { scroll-margin-top: 90px; }
+  .mgh__head { text-align: center; max-width: 46rem; margin: 0 auto 2rem; }
+  .mgh__eyebrow { color: #C9A227; letter-spacing: .2em; text-transform: uppercase; font-size: .78rem; font-weight: 700; margin: 0 0 .5rem; }
+  .mgh__head h2 { font-size: clamp(1.6rem, 3.4vw, 2.4rem); margin: 0 0 .6rem; }
+  .mgh__head p { color: #a8a090; margin: 0; }
+  .mgh__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem; }
+  .mgh__card { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: 380px; border-radius: 18px; overflow: hidden; text-decoration: none; color: #FAF7F0; border: 1px solid #C9A22744; background: #1a1010; isolation: isolate; transition: transform .2s ease, box-shadow .2s ease; }
+  .mgh__card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform .5s ease; }
+  .mgh__card::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(11,11,11,0) 30%, rgba(11,11,11,.92) 85%); }
+  .mgh__card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(201,162,39,.22); }
+  .mgh__card:hover img { transform: scale(1.05); }
+  .mgh__card:focus-visible { outline: 3px solid #C9A227; outline-offset: 3px; }
+  .mgh__body { padding: 1.25rem 1.2rem 1.35rem; }
+  .mgh__icon { font-size: 1.5rem; display: block; margin-bottom: .35rem; }
+  .mgh__title { font-size: 1.25rem; font-weight: 800; margin: 0 0 .3rem; }
+  .mgh__desc { font-size: .88rem; color: #d9d4c8; margin: 0 0 .7rem; line-height: 1.45; }
+  .mgh__cta { color: #F3C969; font-weight: 700; font-size: .88rem; }
+  .mgh__count { position: absolute; top: .9rem; right: .9rem; background: rgba(11,11,11,.75); color: #F3C969; font-size: .75rem; font-weight: 700; padding: .3rem .65rem; border-radius: 999px; border: 1px solid #C9A22766; }
+  @media (prefers-reduced-motion: reduce) { .mgh__card, .mgh__card img { transition: none; } }
+  @media (max-width: 989px) { .mgh__grid { grid-template-columns: repeat(2, 1fr); } .mgh__card { min-height: 300px; } }
+  @media (max-width: 480px) { .mgh__grid { gap: .7rem; } .mgh__card { min-height: 240px; } .mgh__desc { display: none; } .mgh__title { font-size: 1.02rem; } }
+</style>
+<section class="mgh" id="mg-hampers" aria-labelledby="mgh-title">
+  <div class="mgh__head">
+    <p class="mgh__eyebrow">Hamper Collections</p>
+    <h2 id="mgh-title">Gift hampers for every celebration</h2>
+    <p>Pick a collection, then WhatsApp us your quantity &amp; budget — we customise contents, packaging and branding for you.</p>
+  </div>
+  <div class="mgh__grid">
+    {%- for row in cats -%}
+      {%- assign p = row | split: '|' -%}
+      {%- assign c = collections[p[0]] -%}
+      {%- assign cimg = c.image | default: c.products.first.featured_image -%}
+      <a class="mgh__card" href="/collections/{{ p[0] }}">
+        {%- if cimg -%}<img src="{{ cimg | image_url: width: 700 }}" srcset="{{ cimg | image_url: width: 400 }} 400w, {{ cimg | image_url: width: 700 }} 700w, {{ cimg | image_url: width: 1000 }} 1000w" sizes="(max-width: 989px) 48vw, 24vw" width="700" height="900" alt="{{ p[1] | escape }}" loading="lazy">{%- endif -%}
+        {%- if c.products_count > 0 -%}<span class="mgh__count">{{ c.products_count }} designs</span>{%- endif -%}
+        <div class="mgh__body">
+          <span class="mgh__icon" aria-hidden="true">{{ p[3] }}</span>
+          <p class="mgh__title">{{ p[1] }}</p>
+          <p class="mgh__desc">{{ p[2] }}</p>
+          <span class="mgh__cta">View hampers →</span>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
