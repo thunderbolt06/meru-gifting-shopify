@@ -29,6 +29,7 @@
     background: linear-gradient(90deg, rgba(11,11,11,.9) 0%, rgba(11,11,11,.55) 34%, rgba(11,11,11,0) 60%),
                 linear-gradient(0deg, rgba(11,11,11,.55) 0%, rgba(11,11,11,0) 30%); }
   .mgx__copy { position: absolute; z-index: 2; left: max(clamp(1rem, 4vw, 2rem), calc((100% - 1280px) / 2 + 2rem)); top: 50%; transform: translateY(-50%); max-width: min(34rem, 88%); }
+  .mgx__brand { display: block; width: clamp(150px, 13vw, 200px); height: auto; margin: 0 0 clamp(1.4rem, 3.2vh, 2.2rem); filter: drop-shadow(0 6px 18px rgba(0,0,0,.55)); animation: mgx-fade 1s ease .1s both; }
   .mgx__tag { display: inline-flex; align-items: center; gap: .55rem; margin: 0 0 1.1rem; color: #f3c969; font-size: .74rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
   .mgx__title { font-family: var(--mg-serif); font-size: clamp(2.3rem, 5.6vw, 4.6rem); line-height: 1.04; font-weight: 700; margin: 0 0 1.8rem; color: #faf7f0; letter-spacing: -.01em; }
   .mgx__title em { font-style: normal; color: #f3c969; }
@@ -65,6 +66,9 @@
     .mgx__slide::after { background: linear-gradient(0deg, rgba(11,11,11,.95) 0%, rgba(11,11,11,.75) 38%, rgba(11,11,11,0) 70%); }
     .mgx__copy { top: auto; bottom: 2rem; transform: none; right: 1rem; max-width: none; }
     .mgx__title { margin-bottom: 1.3rem; }
+    /* mobile header is a single row already, so keep its logo and skip the hero copy */
+    .mgx__brand { display: none; }
+    .header-logo[data-hidden-on-home-page] { display: flex; }
     .mgx__ctas { gap: .5rem; flex-wrap: nowrap; } .mgx__ctas .mg-btn { padding: .8rem .95rem; font-size: .82rem; white-space: nowrap; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -72,7 +76,7 @@
     @keyframes mgx-fadein { from { opacity: 0; } to { opacity: 1; } }
     .mgx__img, .mgx__slide .mgx__img { animation: none !important; transform: none; }
     .mgx__w > span { transform: none; animation: none !important; }
-    .mgx__tag, .mgx__ctas { opacity: 1; animation: none !important; }
+    .mgx__tag, .mgx__ctas, .mgx__brand { opacity: 1; animation: none !important; }
     .mgx-cur { display: none; }
   }
 </style>
@@ -88,6 +92,9 @@
         <img class="mgx__img" src="{{ 'mg-hero-' | append: p[0] | append: '.jpg' | asset_url }}" width="2400" height="1350" alt="" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
       </picture>
       <div class="mgx__copy">
+        {%- if template.name == 'index' -%}
+        <img class="mgx__brand" src="{{ 'mg-logo-original.png' | asset_url }}" width="768" height="459" alt="{% if forloop.first %}Meru Gifting{% endif %}"{% unless forloop.first %} aria-hidden="true"{% endunless %}{% if forloop.first %} fetchpriority="high"{% endif %}>
+        {%- endif -%}
         <p class="mgx__tag">{{ p[2] }}</p>
         <p class="mgx__title" aria-label="{{ p[1] | strip_html }}">
           {%- for w in words -%}

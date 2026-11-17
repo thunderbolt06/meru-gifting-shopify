@@ -164,7 +164,15 @@
 
   assign bottom_row_blocks = ''
 
-  if section.settings.menu_row == 'bottom'
+  # Home page: the logo lives in the hero, so collapse to one row (logo left, shown only once scrolled).
+  assign mg_menu_row = section.settings.menu_row
+  assign mg_logo_column = ''
+  if template.name == 'index'
+    assign mg_menu_row = 'top'
+    assign mg_logo_column = 'left'
+  endif
+
+  if mg_menu_row == 'bottom'
     assign bottom_row_blocks = bottom_row_blocks | append: 'menu,'
   endif
 
@@ -340,7 +348,7 @@
   {% endif %}
   data-skip-node-update
   data-scroll-direction="none"
-  {% if section.settings.menu_row == 'top' and bottom_row_blocks.size > 0 %}
+  {% if mg_menu_row == 'top' and bottom_row_blocks.size > 0 %}
     data-submenu-overlap-bottom-row
   {% endif %}
   {% if background_transparent_color_value %}
@@ -444,7 +452,9 @@
         actions: actions,
         localization: localization_markup,
         search: search,
-        drawer_search: drawer_search
+        drawer_search: drawer_search,
+        menu_row: mg_menu_row,
+        logo_column: mg_logo_column
       %}
     {% endcapture %}
 

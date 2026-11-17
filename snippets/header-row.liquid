@@ -12,6 +12,8 @@
   @param {string} [localization] - Captured HTML for language/country selector
   @param {string} [search] - Captured HTML for search input
   @param {string} [drawer_search] - Captured HTML for drawer-based search
+  @param {string} [menu_row] - Optional override for the menu row ('top' or 'bottom')
+  @param {string} [logo_column] - Optional override for the logo column
 {% enddoc %}
 
 {%- liquid
@@ -33,6 +35,14 @@
     case item
       when 'actions'
         assign item_column = 'right'
+      when 'menu'
+        if menu_row != blank
+          assign item_row = menu_row
+        endif
+      when 'logo'
+        if logo_column != blank
+          assign item_column = logo_column
+        endif
     endcase
 
     if item_row == row
