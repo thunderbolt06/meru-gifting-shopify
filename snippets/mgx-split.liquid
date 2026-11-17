@@ -1,0 +1,25 @@
+{%- doc -%}
+  Image + text split block.
+  @param {string} img - Image src for mgx-img
+  @param {string} title
+  @param {string} [eyebrow]
+  @param {string} [body] - HTML
+  @param {string} [points] - Pipe-separated ticks
+  @param {string} [badge] - "Big|small text" overlay on the image
+  @param {string} [cta] - "Label|/url"
+  @param {boolean} [rev] - Image on the right
+  @param {string} [alt]
+{%- enddoc -%}
+<div class="mgx-split{% if rev %} mgx-split--rev{% endif %}">
+  <div class="mgx-split__media mg-rv">
+    {% render 'mgx-img', src: img, w: 1100, alt: alt %}
+    {%- if badge != blank -%}{%- assign b = badge | split: '|' -%}<div class="mgx-split__badge"><b>{{ b[0] }}</b>{{ b[1] }}</div>{%- endif -%}
+  </div>
+  <div class="mg-rv" style="--d:.12s">
+    {%- if eyebrow != blank -%}<p class="mg-head__eyebrow">{{ eyebrow }}</p>{%- endif -%}
+    <h2>{{ title }}</h2>
+    {%- if body != blank -%}<div class="mgx-split__body">{{ body }}</div>{%- endif -%}
+    {%- if points != blank -%}<ul class="mgx-ticks">{%- assign ps = points | split: '|' -%}{%- for p in ps -%}<li>{{ p }}</li>{%- endfor -%}</ul>{%- endif -%}
+    {%- if cta != blank -%}{%- assign c = cta | split: '|' -%}<a class="mg-btn mg-btn--gold" href="{{ c[1] }}">{{ c[0] }}</a>{%- endif -%}
+  </div>
+</div>

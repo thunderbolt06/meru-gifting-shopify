@@ -1,0 +1,118 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "mgx_00": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-fx' %}{% render 'mgx-hero', eyebrow: 'Our story · Bengaluru since 2012', title: 'One home for <em>every kind of gift</em>', subtitle: 'Meru Gifting is the gifting arm of Meru Trophy, Bangalore: a design-led craft and gifting studio for corporate gifts, festive hampers, artisanal mementos and fully customised pieces, all under one roof.', bg: 'IMG_9366.jpg', collage: 'IMG_9346.jpg,MG-KLG-022.png,IMG_9936.jpg', chips: '150+ brands|250+ institutions|4.9★ on 442 Google reviews|GST and GeM registered', cta1: 'Explore our gifts|/collections/all', cta2: 'How we work|/pages/how-to-order' %}",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_01": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-stats' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_02": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-split', img: 'IMG_9368.jpg', eyebrow: 'Who we are', title: 'Gift with meaning, at any scale', body: '<p>Whether you are gifting a team of 500 or curating a single heirloom piece, we help you choose, brand and deliver something people actually keep.</p><p>Our studio in Gandhinagar, Bangalore handles <strong>design, engraving, printing, packing and dispatch in-house</strong>, so quality and timelines stay in our hands, not a middleman’s.</p>', points: 'In-house design team with free logo mock-ups|Laser engraving, UV print, foil and embossing|Own box-making unit for branded packaging|Dedicated relationship manager for every order', badge: 'Since 2012|in-house design and packing', cta: 'See our work|/pages/gallery', alt: 'Branded corporate welcome kit packed at the Meru Gifting studio' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_03": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-split', img: 'MG-DPT-001.png', rev: True, eyebrow: 'Dharohar, our artisanal soul', title: '4,000+ artisan families. 25+ states. One living legacy.', body: '<p>At the heart of Meru Gifting is <strong>Dharohar</strong>, our artisanal brand established in 2012. It has grown into a network of artisan families who keep heritage crafts alive while earning dignified, sustained livelihoods.</p>', points: 'Moradabad metal craft and Bidri-style inlay|Dhokra, Kagzi pottery and lacquerware|Hand-painted Chitrashala art and miniatures|Sold per piece, ready to frame or gift', badge: '4,000+|artisan families', cta: 'Shop artisanal mementos|/pages/artisanal-mementos', alt: 'Handcrafted Dharohar figurines' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_04": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'What we make', eyebrow: 'Four ways to gift', sub: 'Mix and match across categories on one order and one GST invoice.' %}{% render 'mgx-tiles', items: 'corporate-gifts|Corporate Gifts|Drinkware, diaries, tech and joining kits with your logo. MOQ 10 pieces.~festive-hampers|Festive Hampers|Dry fruit boxes, sweet trays and curated hampers for every celebration.~artisanal-mementos|Artisanal Mementos|Handcrafted heritage art from our Dharohar artisan network.~customised-orders|Customised Orders|Engraved, printed and fully bespoke pieces made to order.', cols: 4 %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_05": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'Recognised for craft and impact', eyebrow: 'Awards', sub: '' %}{% render 'mgx-cards', cols: 3, items: 'star|Sustainable Impact Craft Company|Awarded in 2024 for building livelihoods through heritage craft.~star|Most Iconic Handloom and Handicraft Works|Recognised in 2023 for the breadth and finish of our craft collections.~star|Social Entrepreneur Award|Art, Craft and Handicrafts category, 2023.' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_06": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-split', img: 'IMG_9371.jpg', eyebrow: 'Backed by Meru Trophy', title: 'The operational muscle behind every gift', body: '<p>Meru Gifting is built on Meru Trophy, Bangalore’s trusted name in trophies, awards and recognition. That heritage means engraving expertise, strict quality checks and the logistics of a studio trusted by <strong>150+ brands and 250+ institutions</strong>.</p>', points: 'GST-registered and GeM registered vendor|POs, B2B invoices and advance receipts handled routinely|Tracked delivery across India and worldwide', cta: 'Talk to our team|/pages/contact-us', alt: 'Corporate flask gift set' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_07": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec mg-sec--tight\">{% render 'mg-brands' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_08": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'Inside the studio', eyebrow: 'Real work, real photos', sub: 'A few of the kits and gifts that left our Bangalore studio recently.' %}{% render 'mgx-mosaic', id: 'about-wall', cols: 4, files: 'IMG_9332.jpg|Bamboo desk kit|~IMG_9386.jpg|Cork and bamboo eco kit|~CGI-1.jpg|Leather diary gift set|~IMG_9936.jpg|Insulated bottles in brand colours|~CGI-19.jpg|Retro Bluetooth speaker|~IMG_9355.jpg|Marble finish diary|~CGI-30.jpg|Perpetual desk calendar|~IMG_9758.jpg|Travel tumbler' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_09": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-cta', title: 'Visit us, call us, or just say hello', text: '#273/2, SC Road, 2nd Cross, Gandhinagar, Bangalore 560 009, a short walk from Majestic. Walk-ins and video-call shopping sessions are welcome.', cta: 'Contact us|/pages/contact-us' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    }
+  },
+  "order": [
+    "mgx_00",
+    "mgx_01",
+    "mgx_02",
+    "mgx_03",
+    "mgx_04",
+    "mgx_05",
+    "mgx_06",
+    "mgx_07",
+    "mgx_08",
+    "mgx_09"
+  ]
+}

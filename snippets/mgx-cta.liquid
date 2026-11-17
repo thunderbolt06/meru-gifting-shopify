@@ -1,0 +1,17 @@
+{%- doc -%}
+  Closing call to action.
+  @param {string} [title]
+  @param {string} [text]
+  @param {string} [cta] - "Label|/url" (default bulk enquiry)
+{%- enddoc -%}
+{%- assign c = cta | default: 'Send a bulk enquiry|/pages/bulk-enquiry' | split: '|' -%}
+<div class="mgx-cta mg-rv">
+  <p class="mg-head__eyebrow">Let's create something memorable</p>
+  <h2>{{ title | default: 'Tell us the occasion. We will handle the rest.' }}</h2>
+  <p>{{ text | default: 'Share your occasion, quantity and budget. We reply with a curated shortlist, a free logo mock-up and a clear quote, usually within the hour.' }}</p>
+  <div class="mgx-hero__ctas">
+    <a class="mg-btn mg-btn--gold" href="{{ c[1] }}">{{ c[0] }}</a>
+    <a class="mg-btn mg-btn--wa" href="https://wa.me/917892255078" target="_blank" rel="noopener">WhatsApp +91 78922 55078</a>
+    <a class="mg-btn mg-btn--outline" href="/pages/catalog">Download catalogues</a>
+  </div>
+</div>

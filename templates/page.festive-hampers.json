@@ -1,0 +1,119 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "mgx_00": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-fx' %}{% render 'mgx-hero', eyebrow: 'Christmas · New Year · Weddings · Diwali', title: 'Festive hampers that <em>feel personal</em>', subtitle: 'Handpicked dry fruit boxes, sweet trays, chocolate boxes and curated gift baskets, starting from ₹1,000. Add your company logo or a personal message to any hamper. GST-invoiced, bulk-ready and delivered pan-India.', bg: 'asset:mg-hero-festive.jpg', chips: 'From ₹1,000|Logo and message branding|Pan-India delivery|GST invoice', cta1: 'Shop festive hampers|/collections/festive-hampers', cta2: 'Download hamper catalogue|/pages/catalog' %}",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_01": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-product-grid', handle: 'christmas-hampers', title: 'Christmas and New Year hampers', eyebrow: 'Season’s greetings', subtitle: 'Year-end treats and goodies for teams, clients and family. Order early for December delivery.', limit: 8 %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_02": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'Shop by occasion', eyebrow: 'A hamper for every celebration', sub: '' %}{% render 'mgx-tiles', cols: 4, unit: 'hampers', items: 'christmas-hampers|Christmas Hampers|Year-end treats, mugs and goodies.~corporate-gift-hampers|Corporate Gift Hampers|Desk, drinkware and tech kits for teams and clients.~diwali-hampers|Diwali Hampers|Dry fruits, diyas, candles and brass in rigid boxes.~festive-hampers|All Festive Hampers|Jar boxes, sweet trays, baskets and more.' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_03": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-product-grid', handle: 'corporate-gift-hampers', title: 'Corporate gift hampers', eyebrow: 'For clients and teams', subtitle: 'Premium hampers you can order as they are or brand with your logo.', limit: 8 %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_04": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'Festive hamper price guide', eyebrow: 'Plan your budget', sub: '' %}<div class=\"mg-rv\" style=\"max-width:900px;margin:0 auto;overflow-x:auto\"><table class=\"mgx-table\"><thead><tr><th>Hamper</th><th>What is inside</th><th>From</th></tr></thead><tbody>\n<tr><td>Dry fruit jar boxes</td><td>2 to 8 jar sets in Mandir, Ganesha, suitcase, round and peacock styles</td><td>₹1,000</td></tr>\n<tr><td>Chocolate boxes</td><td>Assorted chocolate gift boxes in festive designs</td><td>₹1,000</td></tr>\n<tr><td>Hamper trays and baskets</td><td>Zari baskets, hamper trays, sweet trays and jumbo baskets</td><td>₹1,000</td></tr>\n<tr><td>Corporate gift hampers</td><td>Drinkware, diaries, tech and treats in a branded box</td><td>On request</td></tr>\n<tr><td>Custom-branded hamper</td><td>Any style with your logo or a personalised message</td><td>₹1,000 + branding</td></tr>\n</tbody></table><p class=\"mgx-note\">Indicative starting prices, GST extra as applicable. Final quote depends on style, contents and quantity.</p></div></div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_05": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-product-grid', handle: 'festive-hampers', title: 'Bestselling festive hampers', eyebrow: 'Ready to gift', subtitle: '', limit: 12 %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_06": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-split', img: 'asset:mg-hero-hamper.jpg', eyebrow: 'Why order from Meru Gifting', title: 'Hampers packed like they matter', body: '<p>Every hamper is assembled, checked and packed by our own team in Bangalore, so what you approve is exactly what arrives.</p>', points: 'Bulk-ready: from one gift to hundreds for corporate gifting|Your logo, colours or message on the box and card|Free digital mock-up before we pack|Bubble-wrapped, double-boxed, tracked delivery', cta: 'Get a hamper quote|/pages/bulk-enquiry', alt: 'Luxury festive hamper in a black and gold box' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_07": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-product-grid', handle: 'diwali-hampers', title: 'Diwali hampers', eyebrow: 'Plan ahead for Diwali', subtitle: 'Our Diwali range stays open year round for weddings, housewarmings and early corporate planning.', limit: 8 %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_08": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-case-studies' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_09": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-how-it-works' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    }
+  },
+  "order": [
+    "mgx_00",
+    "mgx_01",
+    "mgx_02",
+    "mgx_03",
+    "mgx_04",
+    "mgx_05",
+    "mgx_06",
+    "mgx_07",
+    "mgx_08",
+    "mgx_09"
+  ]
+}

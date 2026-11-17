@@ -1,0 +1,11 @@
+{%- doc -%}
+  Animated stats band.
+  @param {string} [items] - "~"-separated "pre|number|suffix|label". Defaults to the brand facts.
+{%- enddoc -%}
+{%- assign items = items | default: '|2012||Dharohar founded, over a decade of craft~|4000|+|artisan families across 25+ states~|2500|+|bespoke products designed in-house~|2|M+|handcrafted pieces delivered' -%}
+{%- assign rows = items | split: '~' -%}
+<div class="mgx-stats mg-rv" style="--n: {{ rows.size }}">
+  {%- for r in rows -%}{%- assign x = r | split: '|' -%}
+    {%- assign n = x[1] | plus: 0 -%}<div class="mgx-stat"><strong{% unless n > 1900 and n < 2100 %} data-count="{{ x[1] }}" data-pre="{{ x[0] }}" data-suf="{{ x[2] }}"{% endunless %}>{{ x[0] }}{{ x[1] }}{{ x[2] }}</strong><span>{{ x[3] }}</span></div>
+  {%- endfor -%}
+</div>

@@ -1,0 +1,87 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "mgx_00": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-fx' %}{% render 'mgx-hero', eyebrow: 'How to order', title: 'From idea to delivered gift, <em>in 9 simple steps</em>', subtitle: 'Whether you need one bespoke memento or 500 branded joining kits, here is exactly how we work: transparent, fast and built for India-wide delivery.', bg: 'IMG_9386.jpg', chips: 'Reply within the hour|Written quotes|GST invoices|Tracked delivery', cta1: 'Start with an enquiry|/pages/bulk-enquiry', cta2: 'Download catalogues|/pages/catalog' %}",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_01": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'The process', eyebrow: 'How it works', sub: 'Every order follows the same clear path, from the first message to gifting day.' %}{% render 'mgx-timeline', items: 'Step 1|Tell us what you need|WhatsApp, call or email with the occasion, quantity, budget and any reference images.~Step 2|Browse catalogues and photos|We send catalogues, product photos and past work that fit your brief, usually within an hour.~Step 3|Shortlist your favourites|Mix corporate gifts, artisanal mementos, festive hampers and customised pieces freely.~Step 4|Finalise quote and customisation|Branding, engraving text, colours, packaging and timeline confirmed in writing.~Step 5|Payment|50% advance to start, balance before dispatch. UPI, bank transfer and cards, with GST invoicing.~Step 6|Design and artwork preview|A digital mock-up of the branding and finish for your approval before production.~Step 7|Crafted in our studio|Laser engraving, UV printing, hand-finishing and final QC, with artisanal pieces made by our Dharohar network.~Step 8|Safe packing and dispatch|Bubble-wrapped, foam-cradled, double-boxed. BlueDart, DTDC or Delhivery in India, DHL or FedEx abroad.~Step 9|Gifting day|Hand them out and watch faces light up. Share a photo and we may feature your event.' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_02": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'Delivery timelines', eyebrow: 'How long it takes', sub: 'Production is 5 to 7 working days after artwork approval. Express options are available for urgent orders.' %}{% render 'mgx-cards', cols: 3, items: 'pin|Bengaluru|About 2 days after dispatch. Same-day pickup from our Gandhinagar studio on stock items.~truck|Karnataka|About 5 days after dispatch, fully tracked.~globe|Pan-India and worldwide|Up to 2 weeks across India. International shipping by DHL and FedEx.' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_03": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'Payments and paperwork', eyebrow: 'Built for business buyers', sub: '' %}{% render 'mgx-cards', cols: 4, items: 'card|Flexible payment|UPI, bank transfer and cards. SWIFT, Wise and PayPal for international orders.~shield|GST and GeM|GST-registered and a GeM registered vendor. B2B invoices and advance receipts.~box|Purchase orders|We work with POs and vendor onboarding for companies and institutions.~gift|MOQ 10 pieces|For branded corporate gifts. Artisanal mementos are available from a single piece.' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_04": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'Start here', eyebrow: 'Pick a category to browse', sub: '' %}{% render 'mgx-tiles', items: 'corporate-gifts|Corporate Gifts|Drinkware, diaries, tech and joining kits with your logo. MOQ 10 pieces.~festive-hampers|Festive Hampers|Dry fruit boxes, sweet trays and curated hampers for every celebration.~artisanal-mementos|Artisanal Mementos|Handcrafted heritage art from our Dharohar artisan network.~customised-orders|Customised Orders|Engraved, printed and fully bespoke pieces made to order.', cols: 4 %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_05": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-faq', title: 'Ordering questions', eyebrow: 'Before you order' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_06": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-cta', title: 'Ready to start?', text: 'Send us your occasion, quantity and budget. You will have a shortlist and a quote, usually within the hour.' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    }
+  },
+  "order": [
+    "mgx_00",
+    "mgx_01",
+    "mgx_02",
+    "mgx_03",
+    "mgx_04",
+    "mgx_05",
+    "mgx_06"
+  ]
+}

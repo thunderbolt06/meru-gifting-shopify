@@ -1,0 +1,21 @@
+{%- doc -%}
+  Collection tiles with photo, live product count and blurb.
+  @param {string} items - "~"-separated "handle|label|blurb[|image src override]"
+  @param {number} [cols] - Desktop columns (default 3)
+  @param {string} [unit] - Word after count (default "products")
+{%- enddoc -%}
+{%- assign rows = items | split: '~' -%}
+<div class="mgx-tiles" style="--cols: {{ cols | default: 3 }}">
+  {%- for r in rows -%}{%- assign x = r | split: '|' -%}{%- assign c = collections[x[0]] -%}
+    {%- assign src = x[3] | default: '' -%}{%- if src == '' -%}{%- assign src = 'col:' | append: x[0] -%}{%- endif -%}
+    <a class="mgx-tile mg-rv" style="--d: {{ forloop.index0 | times: 0.06 }}s" href="{{ c.url | default: '/collections/all' }}">
+      {% render 'mgx-img', src: src, w: 700, alt: '' %}
+      <div class="mgx-tile__body">
+        {%- if c.products_count > 0 -%}<span class="mgx-tile__count">{{ c.products_count }} {{ unit | default: 'products' }}</span>{%- endif -%}
+        <h3>{{ x[1] | default: c.title }}</h3>
+        {%- if x[2] != blank -%}<p>{{ x[2] }}</p>{%- endif -%}
+        <span class="mgx-tile__go">Explore →</span>
+      </div>
+    </a>
+  {%- endfor -%}
+</div>

@@ -1,0 +1,11 @@
+{%- doc -%}
+  Section heading.
+  @param {string} title
+  @param {string} [eyebrow]
+  @param {string} [sub]
+{%- enddoc -%}
+<div class="mg-head mg-rv">
+  {%- if eyebrow != blank -%}<p class="mg-head__eyebrow">{{ eyebrow }}</p>{%- endif -%}
+  <h2 class="mg-head__title">{{ title }}</h2>
+  {%- if sub != blank -%}<p class="mg-head__sub">{{ sub }}</p>{%- endif -%}
+</div>

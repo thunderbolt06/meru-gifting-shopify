@@ -1,0 +1,98 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "mgx_00": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-fx' %}{% render 'mgx-hero', eyebrow: 'Made to order · Designed in-house', title: 'Customised gifts, <em>built around your brand</em>', subtitle: 'Corporate gifts with your logo, mementos with personal messages, hampers in your brand colours and fully bespoke pieces designed from scratch. Free digital mock-up before anything is made.', bg: 'IMG_9332.jpg', collage: 'IMG_9346.jpg,IMG_9386.jpg,CGI-12.jpg', chips: 'Free mock-up in 24 hours|MOQ 10 for branded gifts|5 to 7 day production', cta1: 'Start a custom order|/pages/bulk-enquiry', cta2: 'Shop customised gifts|/collections/customised-orders' %}",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_01": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-product-grid', handle: 'customised-orders', title: 'Custom acrylic trophies and mementos', eyebrow: 'New: made to your design', subtitle: 'Laser-cut acrylic pieces with your logo, names and dates. Every one is made to order.', limit: 8 %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_02": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'What we can customise', eyebrow: 'Your brand, on almost anything', sub: '' %}{% render 'mgx-cards', cols: 3, items: 'logo|Logo branding|Laser engraving, UV print, full-colour print, foil stamping and embossing on drinkware, diaries, tech and bags.~pen|Names and messages|Personalised names, dates and notes on individual gifts, even across a 500-piece order.~box|Custom packaging|Branded boxes, sleeves and inserts made in our own box-making unit.~star|Bespoke design|2,500+ bespoke products designed so far. Share a reference and we build from there.~gift|Curated kits|Joining kits, event kits and festive sets assembled to your budget and headcount.~hand|Artisanal commissions|Heritage crafts from our Dharohar artisans, commissioned with your motif or crest.' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_03": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-split', img: 'IMG_9368.jpg', eyebrow: 'Joining kits and welcome boxes', title: 'Welcome kits your new hires will post about', body: '<p>Bottle, diary, pen, tech and a personal note, all carrying your brand and packed in a custom box. We source, brand, assemble and ship to one office or many homes.</p>', points: 'Pick from 80+ welcome kit items|Logo on every piece and on the box|Individual name personalisation available', cta: 'Browse welcome kit items|/collections/employee-welcome-kit-items', alt: 'Bamboo welcome kit with flask, diary and desk gadgets' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_04": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'How a customised order works', eyebrow: 'Five steps, no surprises', sub: '' %}{% render 'mgx-timeline', items: 'Day 0|Share your requirement|Occasion, quantity, budget and any reference images on WhatsApp, call or email.~Within 24 hours|Receive a mock-up|Our designers send a digital preview of the branding, engraving or design.~Approval|Confirm the details|Artwork, colours, packaging and timeline confirmed in writing.~5 to 7 working days|Production|A 50% advance starts production in our studio, with QC on every piece.~Dispatch|Delivered safely|Balance before dispatch, then tracked delivery across India or worldwide.' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_05": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-case-studies' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_06": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', title: 'Recent custom work', eyebrow: 'From our studio', sub: '' %}{% render 'mgx-mosaic', id: 'custom-wall', cols: 4, files: 'IMG_9346.jpg|Marble finish executive kit|~CGI-1.jpg|Leather diary, card holder and keychain set|~IMG_9316_2.jpg|Bamboo eco desk kit|~IMG_9942_ebc74b49-bf9f-4a7a-bafe-623e19e00aa2.jpg|Engraved insulated bottle|~CGI-12.jpg|Wireless charging diary set|~IMG_9371.jpg|Flask and cups gift set|~CGI-7.jpg|Bamboo and felt work kit|~IMG_9944.jpg|Bottle with custom label' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_07": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-cta', title: 'Have a design in mind?', text: 'Send us a sketch, a reference photo or just your logo. We will come back with a mock-up and a quote, free of charge.' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    }
+  },
+  "order": [
+    "mgx_00",
+    "mgx_01",
+    "mgx_02",
+    "mgx_03",
+    "mgx_04",
+    "mgx_05",
+    "mgx_06",
+    "mgx_07"
+  ]
+}
