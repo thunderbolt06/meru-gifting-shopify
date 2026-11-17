@@ -1,0 +1,77 @@
+{%- comment -%}
+  Landing page 4: Ready to Ship or Custom (/pages/ready-to-ship-or-custom).
+  Split hero with two doors: stocked hampers vs a kit built around your brand.
+{%- endcomment -%}
+{%- render 'mg-lp-ui' -%}
+<div class="mglp mglpd">
+  <div class="mglpd-split">
+    <section class="mglpd-door" aria-labelledby="mglpd-a">
+      <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-hamper-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-hamper.jpg' | asset_url }}" width="2400" height="1350" alt="" fetchpriority="high" style="object-position:75% 50%"></picture>
+      <div class="mglpd-in">
+        <p class="mglp-eyebrow">Ready to ship</p>
+        <h1 class="mglp-disp" id="mglpd-a">Pick a hamper. <em>We dispatch.</em></h1>
+        <p class="mglp-sub">Curated hampers and gift sets in stock, for onboarding, client thank-yous and last-minute festive orders.</p>
+        <ul class="mglpd-pts"><li>Fastest dispatch</li><li>Fixed pricing</li><li>From 10 pieces</li></ul>
+        <div class="mglp-ctas"><a class="mg-btn mg-btn--gold" href="#mglpd-ready">Shop ready hampers</a></div>
+      </div>
+    </section>
+    <section class="mglpd-door" aria-labelledby="mglpd-b">
+      <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-welcome-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-welcome.jpg' | asset_url }}" width="2400" height="1350" alt="" loading="lazy"></picture>
+      <div class="mglpd-in">
+        <p class="mglp-eyebrow">Made for your brand</p>
+        <h2 class="mglp-disp" id="mglpd-b">Your logo. <em>Every piece.</em></h2>
+        <p class="mglp-sub">Our gifting stylists build a kit around your brief, budget and brand, from product sourcing to printed packaging.</p>
+        <ul class="mglpd-pts"><li>Free mock-up</li><li>Dedicated stylist</li><li>Custom packaging</li></ul>
+        <div class="mglp-ctas"><a class="mg-btn mg-btn--ghost" href="#mglpd-custom">Talk to a stylist →</a></div>
+      </div>
+    </section>
+    <img class="mglpd-seal" src="{{ 'mg-logo-mark.png' | asset_url }}" width="120" height="120" alt="" aria-hidden="true">
+  </div>
+
+  <ol class="mglpd-steps">
+    <li><b>Step 1</b><span>Share your brief</span><small>Occasion, quantity, budget and date.</small></li>
+    <li><b>Step 2</b><span>Get a shortlist</span><small>Curated options with prices in a day.</small></li>
+    <li><b>Step 3</b><span>Approve the mock-up</span><small>See your logo on every piece first.</small></li>
+    <li><b>Step 4</b><span>We pack &amp; deliver</span><small>Bulk or door-to-door, across India.</small></li>
+  </ol>
+
+  <div class="mg-wrap mg-sec" id="mglpd-ready">{%- render 'mg-product-grid', handle: 'corporate-gift-hampers', title: 'Ready-to-ship hampers', eyebrow: 'Door 1', subtitle: 'In stock and ready for your logo. Dispatch in 5 to 7 working days after approval.', limit: 8 -%}</div>
+  <section class="mg-wrap mg-sec mg-sec--tight">
+    <div class="mg-head"><p class="mg-head__eyebrow">Or browse by category</p><h2 class="mg-head__title">Everything we can brand</h2></div>
+    {%- render 'mg-lp-cats', style: 'pills' -%}
+  </section>
+  <div class="mg-wrap mg-sec" id="mglpd-custom">{%- render 'mg-enquiry' -%}</div>
+</div>
+<style>
+  .mglpd-split { position: relative; display: grid; grid-template-columns: 1fr 1fr; min-height: 620px; }
+  .mglpd-door { position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 3rem var(--mglp-pad); }
+  .mglpd-door + .mglpd-door { border-left: 1px solid var(--mg-line-gold); }
+  .mglpd-door::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(11,11,11,.96), rgba(11,11,11,.4) 62%, rgba(11,11,11,.15)); }
+  .mglpd-door .mglp-media img { transition: transform .8s ease; }
+  .mglpd-door:hover .mglp-media img { transform: scale(1.03); }
+  .mglpd-in { position: relative; z-index: 1; display: flex; flex-direction: column; gap: .9rem; max-width: 30rem; }
+  .mglpd-in .mglp-disp { font-size: clamp(2rem, 3.8vw, 3.2rem); }
+  .mglpd-pts { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; list-style: none; padding: 0; margin: 0; font-size: .84rem; color: var(--mg-gold-soft); font-weight: 600; }
+  .mglpd-pts li::before { content: "✓ "; }
+  .mglpd-seal { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); z-index: 2; width: 112px; height: 112px; padding: 22px; border-radius: 50%; background: #0b0b0b; border: 1px solid var(--mg-line-gold); object-fit: contain; }
+  .mglpd-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid var(--mg-line); }
+  .mglpd-steps li { padding: 1.4rem clamp(1rem, 2.4vw, 2rem); border-right: 1px solid var(--mg-line); display: flex; flex-direction: column; gap: .2rem; }
+  .mglpd-steps li:last-child { border-right: 0; }
+  .mglpd-steps b { font-size: .7rem; color: var(--mg-gold); letter-spacing: .16em; text-transform: uppercase; }
+  .mglpd-steps span { font-weight: 700; }
+  .mglpd-steps small { color: var(--mg-muted); font-size: .82rem; }
+  #mglpd-ready, #mglpd-custom { scroll-margin-top: calc(var(--header-height, 0px) + 1rem); }
+  @media (max-width: 749px) {
+    .mglpd-split { grid-template-columns: 1fr; min-height: 0; }
+    .mglpd-door { min-height: 440px; padding: 2rem 1rem; }
+    .mglpd-door + .mglpd-door { border-left: 0; border-top: 1px solid var(--mg-line-gold); }
+    .mglpd-seal { top: 50%; width: 76px; height: 76px; padding: 14px; }
+    .mglpd-steps { grid-template-columns: 1fr 1fr; }
+    .mglpd-steps li:nth-child(2) { border-right: 0; }
+    .mglpd-steps li:nth-child(-n+2) { border-bottom: 1px solid var(--mg-line); }
+  }
+  @media (prefers-reduced-motion: reduce) { .mglpd-door .mglp-media img { transition: none; } }
+</style>
+{% schema %}
+{ "name": "MG landing: two doors", "settings": [], "presets": [{ "name": "MG landing: two doors" }] }
+{% endschema %}

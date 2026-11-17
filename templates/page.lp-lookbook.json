@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "mg-lp-lookbook",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

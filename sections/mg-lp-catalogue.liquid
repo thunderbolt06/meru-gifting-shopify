@@ -1,0 +1,165 @@
+{%- comment -%}
+  Landing page 5: Corporate Gift Catalogue (/pages/corporate-gift-catalogue).
+  B2B catalogue: category rail, search, budget filter and an "Add to quote" basket that
+  prefills the enquiry form on this page (and a WhatsApp message).
+{%- endcomment -%}
+{%- render 'mg-lp-ui' -%}
+{%- assign cats = 'sets|corporate-gift-hampers|Corporate Hampers|c~sets|diwali-hampers|Festive Gifts|c~sets|christmas-hampers|Christmas & New Year|c~sets|customer-works|Customer Works|c~items|corporate-drinkware|Drinkware|MGH-2224-lifestyle.jpg~items|corporate-diaries-notebooks|Diaries|IMG_9297.jpg~items|corporate-tech-gifts|Tech Gifts|mm8-hero-bamboo.jpg~items|awards-recognition-gifts|Awards & Mementos|MG-SMN-003.png~items|artisanal-mementos|Artisanal Decor|MG-DPT-169.png~items|customised-orders|Customised|c' | split: '~' -%}
+{%- assign shown_items_h = false -%}
+<div class="mglp mglpc" id="mglpc">
+  <div class="mglpc-top">
+    <form class="mglpc-search" action="/search" method="get" role="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <label class="visually-hidden" for="mglpc-q">Search gifts</label>
+      <input id="mglpc-q" type="search" name="q" placeholder="Search gifts: flask, diary, welcome kit, trophy…" autocomplete="off">
+      <input type="hidden" name="type" value="product">
+      <button class="mg-btn mg-btn--gold mg-btn--sm" type="submit">Search</button>
+    </form>
+  </div>
+  <div class="mglpc-body">
+    <aside class="mglpc-side" aria-label="Categories">
+      <p class="mglpc-h">Gift sets</p>
+      {%- for row in cats -%}
+        {%- assign r = row | split: '|' -%}
+        {%- assign c = collections[r[1]] -%}
+        {%- if c == blank or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+        {%- if r[0] == 'items' and shown_items_h == false -%}<p class="mglpc-h">Gift items</p>{%- assign shown_items_h = true -%}{%- endif -%}
+        {%- if r[3] == 'c' -%}{%- assign im = c.image | default: c.products.first.featured_image -%}{%- else -%}{%- assign im = images[r[3]] -%}{%- endif -%}
+        <button type="button" class="mglpc-cat" data-p="{{ r[1] }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">
+          <span class="mglp-ring">{%- if im -%}<img src="{{ im | image_url: width: 80, height: 80, crop: 'center' }}" width="80" height="80" alt="" loading="lazy">{%- endif -%}</span>
+          <span>{{ r[2] }}</span><small>{{ c.products_count }}</small>
+        </button>
+      {%- endfor -%}
+      <p class="mglpc-h">Budget per piece</p>
+      <div class="mglpc-bud" role="group" aria-label="Budget per piece">
+        <button type="button" class="mglp-chip" data-v="0-999999" aria-pressed="true">Any</button>
+        <button type="button" class="mglp-chip" data-v="0-499" aria-pressed="false">Under ₹500</button>
+        <button type="button" class="mglp-chip" data-v="500-1000" aria-pressed="false">₹500 to ₹1,000</button>
+        <button type="button" class="mglp-chip" data-v="1001-999999" aria-pressed="false">₹1,000+</button>
+      </div>
+    </aside>
+    <div class="mglpc-main">
+      <section class="mglpc-banner">
+        <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-hamper-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-hamper.jpg' | asset_url }}" width="2400" height="1350" alt="" fetchpriority="high"></picture>
+        <div class="mglpc-banner__in">
+          <p class="mglp-eyebrow">Corporate gift catalogue</p>
+          <h1 class="mglp-disp">Gifts they will <em>remember.</em></h1>
+          <p class="mglp-sub">Add gifts to your quote and we send prices with a free logo mock-up, usually within one working day.</p>
+        </div>
+      </section>
+      {%- for row in cats -%}
+        {%- assign r = row | split: '|' -%}
+        {%- assign c = collections[r[1]] -%}
+        {%- if c == blank or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+        <section class="mglpc-panel" data-panel="{{ r[1] }}"{% unless forloop.first %} hidden{% endunless %} aria-label="{{ r[2] }}">
+          <div class="mglpc-tools"><span><b>{{ r[2] }}</b> · {{ c.products_count }} gifts · prices per piece</span><a class="mg-link" href="{{ c.url }}">Open full collection →</a></div>
+          <ul class="mglp-grid">
+            {%- assign shown = 0 -%}
+            {%- for p in c.products limit: 40 -%}
+              {%- if shown >= 16 -%}{%- break -%}{%- endif -%}
+              {%- if p.featured_image -%}{%- render 'mg-lp-card', product: p, quote: true -%}{%- assign shown = shown | plus: 1 -%}{%- endif -%}
+            {%- endfor -%}
+          </ul>
+          <p class="mglp-empty" data-empty hidden>No gifts in this budget here. Try another band or <a class="mg-link" href="{{ c.url }}">see the full collection</a>.</p>
+        </section>
+      {%- endfor -%}
+    </div>
+  </div>
+  <div class="mg-wrap mg-sec" id="mglpc-enq">{%- render 'mg-enquiry' -%}</div>
+  <div class="mglpc-basket" data-basket hidden>
+    <div><b data-n>0</b><span>gifts in your quote</span></div>
+    <a class="mg-btn mg-btn--gold mg-btn--sm" href="#mglpc-enq" data-req>Request prices →</a>
+    <a class="mg-btn mg-btn--wa mg-btn--sm" href="https://wa.me/917892255078" target="_blank" rel="noopener" data-wa>WhatsApp</a>
+    <button type="button" class="mglpc-clear" data-clear aria-label="Clear quote">×</button>
+  </div>
+</div>
+<style>
+  .mglpc-top { border-bottom: 1px solid var(--mg-line); padding: .9rem clamp(1rem, 3vw, 2rem); }
+  .mglpc-search { max-width: 780px; margin: 0 auto; display: flex; align-items: center; gap: .6rem; background: var(--mg-surface); border: 1px solid var(--mg-line-gold); border-radius: 999px; padding: .35rem .4rem .35rem 1.1rem; }
+  .mglpc-search svg { width: 18px; height: 18px; stroke: var(--mg-muted); fill: none; stroke-width: 1.8; flex: none; }
+  .mglpc-search input[type="search"] { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--mg-text); font: inherit; font-size: .95rem; padding: .45rem 0; }
+  .mglpc-search input:focus { outline: none; }
+  .mglpc-search:focus-within { outline: 2px solid var(--mg-gold); outline-offset: 2px; }
+  .mglpc-body { display: grid; grid-template-columns: 270px minmax(0, 1fr); max-width: 1440px; margin: 0 auto; }
+  .mglpc-side { border-right: 1px solid var(--mg-line); padding: 1.4rem 1rem 2rem; display: flex; flex-direction: column; gap: .2rem; background: #0e0d0b; align-self: start; position: sticky; top: var(--header-height, 0px); max-height: calc(100vh - var(--header-height, 0px)); overflow-y: auto; }
+  .mglpc-h { font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--mg-gold); margin: 1.1rem .5rem .45rem; font-weight: 700; }
+  .mglpc-h:first-child { margin-top: 0; }
+  .mglpc-cat { display: flex; align-items: center; gap: .7rem; padding: .4rem .5rem; border-radius: 10px; border: 0; background: transparent; color: var(--mg-text); font: inherit; font-size: .9rem; font-weight: 600; text-align: left; cursor: pointer; width: 100%; }
+  .mglpc-cat .mglp-ring { width: 34px; height: 34px; padding: 2px; }
+  .mglpc-cat small { margin-left: auto; color: var(--mg-muted); font-weight: 500; font-size: .75rem; }
+  .mglpc-cat:hover { background: var(--mg-surface); }
+  .mglpc-cat[aria-pressed="true"] { background: var(--mg-surface-2); color: var(--mg-gold-soft); }
+  .mglpc-cat:focus-visible { outline: 2px solid var(--mg-gold-soft); outline-offset: 1px; }
+  .mglpc-bud { display: flex; flex-wrap: wrap; gap: .35rem; padding: 0 .5rem; }
+  .mglpc-bud .mglp-chip { padding: .4rem .75rem; font-size: .78rem; }
+  .mglpc-main { padding: 1.4rem clamp(1rem, 2.4vw, 2rem) 2.5rem; display: flex; flex-direction: column; gap: 1.4rem; min-width: 0; }
+  .mglpc-banner { position: relative; min-height: 250px; border-radius: 18px; overflow: hidden; display: flex; align-items: center; padding: 2rem clamp(1.25rem, 3vw, 2.75rem); }
+  .mglpc-banner .mglp-media img { object-position: 62% 50%; }
+  .mglpc-banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,11,11,.95) 15%, rgba(11,11,11,.15) 75%); }
+  .mglpc-banner__in { position: relative; z-index: 1; display: flex; flex-direction: column; gap: .8rem; max-width: 28rem; }
+  .mglpc-banner .mglp-disp { font-size: clamp(1.9rem, 3.4vw, 2.8rem); }
+  .mglpc-banner .mglp-sub { font-size: .92rem; }
+  .mglpc-tools { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: .86rem; color: var(--mg-muted); margin-bottom: 1rem; }
+  .mglpc-tools b { color: var(--mg-text); }
+  .mglpc .mglp-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  #mglpc-enq { scroll-margin-top: calc(var(--header-height, 0px) + 1rem); }
+  .mglpc-basket { position: fixed; z-index: 55; left: 50%; transform: translateX(-50%); bottom: max(1.25rem, calc(env(safe-area-inset-bottom) + 1rem)); display: flex; align-items: center; gap: .8rem; background: #14110a; border: 1px solid var(--mg-gold); border-radius: 16px; padding: .7rem .8rem .7rem 1.1rem; box-shadow: 0 14px 40px rgba(0,0,0,.6); max-width: calc(100vw - 7rem); }
+  .mglpc-basket b { font-family: var(--mg-serif); font-size: 1.7rem; color: var(--mg-gold-soft); line-height: 1; margin-right: .4rem; }
+  .mglpc-basket span { font-size: .8rem; color: var(--mg-muted); }
+  .mglpc-basket > div { display: flex; align-items: center; }
+  .mglpc-clear { background: none; border: 0; color: var(--mg-muted); font-size: 1.4rem; line-height: 1; cursor: pointer; padding: 0 .3rem; }
+  @media (max-width: 1199px) { .mglpc .mglp-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 849px) {
+    .mglpc-body { grid-template-columns: 1fr; }
+    .mglpc-side { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--mg-line); flex-direction: row; overflow-x: auto; padding: .8rem 1rem; gap: .4rem; scrollbar-width: none; }
+    .mglpc-h { display: none; }
+    .mglpc-cat { flex: none; width: auto; border: 1px solid var(--mg-line); border-radius: 999px; padding: .25rem .8rem .25rem .25rem; font-size: .8rem; white-space: nowrap; }
+    .mglpc-cat .mglp-ring { width: 28px; height: 28px; }
+    .mglpc-cat small { display: none; }
+    .mglpc-bud { flex-wrap: nowrap; padding: 0 0 0 .4rem; border-left: 1px solid var(--mg-line); }
+    .mglpc-bud .mglp-chip { white-space: nowrap; }
+    .mglpc .mglp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 749px) {
+    .mglpc-basket { left: 1rem; right: 5.25rem; transform: none; max-width: none; gap: .5rem; padding: .55rem .6rem .55rem .8rem; }
+    .mglpc-basket span, .mglpc-basket [data-wa] { display: none; }
+    .mglpc-basket [data-req] { flex: 1; }
+  }
+</style>
+<script>
+(function () {
+  var root = document.getElementById('mglpc'); if (!root) return;
+  var KEY = 'mg-quote', quote = [], bud = [0, 999999];
+  try { quote = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+  var panels = [].slice.call(root.querySelectorAll('.mglpc-panel')), basket = root.querySelector('[data-basket]');
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(quote)); } catch (e) {} }
+  function has(u) { return quote.some(function (q) { return q.u === u; }); }
+  function msg() { return 'Hi Meru Gifting, please quote with my logo for:\n' + quote.map(function (q, i) { return (i + 1) + '. ' + q.t + ' (' + location.origin + q.u + ')'; }).join('\n'); }
+  function paint() {
+    root.querySelectorAll('.mglp-item').forEach(function (li) { var b = li.querySelector('.mglp-add'), on = has(li.dataset.url); b.setAttribute('aria-pressed', on); b.textContent = on ? '✓ In quote' : '+ Add to quote'; });
+    basket.hidden = !quote.length;
+    root.querySelector('[data-n]').textContent = quote.length;
+    root.querySelector('[data-wa]').href = 'https://wa.me/917892255078?text=' + encodeURIComponent(msg());
+  }
+  function filter() {
+    panels.forEach(function (p) {
+      var n = 0; p.querySelectorAll('.mglp-item').forEach(function (li) { var v = +li.dataset.price, ok = v >= bud[0] && v <= bud[1]; li.hidden = !ok; if (ok) n++; });
+      p.querySelector('[data-empty]').hidden = n > 0;
+    });
+  }
+  root.addEventListener('click', function (e) {
+    var add = e.target.closest('.mglp-add');
+    if (add) { var li = add.closest('.mglp-item'), u = li.dataset.url; if (has(u)) quote = quote.filter(function (q) { return q.u !== u; }); else quote.push({ u: u, t: li.dataset.title }); save(); paint(); return; }
+    var cat = e.target.closest('.mglpc-cat');
+    if (cat) { root.querySelectorAll('.mglpc-cat').forEach(function (c) { c.setAttribute('aria-pressed', c === cat); }); panels.forEach(function (p) { p.hidden = p.dataset.panel !== cat.dataset.p; }); if (window.innerWidth < 850) cat.scrollIntoView({ block: 'nearest', inline: 'center' }); return; }
+    var chip = e.target.closest('.mglpc-bud .mglp-chip');
+    if (chip) { root.querySelectorAll('.mglpc-bud .mglp-chip').forEach(function (c) { c.setAttribute('aria-pressed', c === chip); }); bud = chip.dataset.v.split('-').map(Number); filter(); return; }
+    if (e.target.closest('[data-clear]')) { quote = []; save(); paint(); return; }
+    if (e.target.closest('[data-req]')) { var ta = document.getElementById('mge-body'); if (ta && quote.length) ta.value = msg().replace(/^Hi Meru Gifting, please quote with my logo for:\n/, 'Please quote with our logo for:\n'); }
+  });
+  paint();
+})();
+</script>
+{% schema %}
+{ "name": "MG landing: catalogue", "settings": [], "presets": [{ "name": "MG landing: catalogue" }] }
+{% endschema %}

@@ -1,0 +1,12 @@
+{%- doc -%}
+  mg-product-card wrapped with data for client-side filters, plus an optional "Add to quote" button.
+
+  @param {object} product - Product
+  @param {string} [tags] - Space-separated filter tags (e.g. occasion keys)
+  @param {boolean} [quote] - Show the Add to quote button
+{%- enddoc -%}
+{%- assign t = product.title | split: ' – MGH' | first | split: ' – MM' | first -%}
+<li class="mglp-item" data-price="{{ product.price_min | divided_by: 100 }}" data-tags="{{ tags }}" data-title="{{ t | escape }}" data-url="{{ product.url }}">
+  {%- render 'mg-product-card', product: product -%}
+  {%- if quote -%}<button type="button" class="mglp-add" aria-pressed="false">+ Add to quote</button>{%- endif -%}
+</li>

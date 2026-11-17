@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "mg-lp-budget",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

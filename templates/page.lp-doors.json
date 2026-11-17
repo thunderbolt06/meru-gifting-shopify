@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "mg-lp-doors",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

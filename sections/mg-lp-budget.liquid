@@ -1,0 +1,91 @@
+{%- comment -%}
+  Landing page 2: Corporate Gifts by Budget (/pages/corporate-gifts-by-budget).
+  Price shelves from the four budget collections, a sticky band switcher, categories below.
+{%- endcomment -%}
+{%- render 'mg-lp-ui' -%}
+{%- assign shelves = 'corporate-gifts-under-500|Under ₹500|Everyday essentials: drinkware, diaries and desk gifts~corporate-gifts-500-to-1000|₹500 to ₹1,000|Gift sets and hampers, our most ordered band~corporate-gifts-1000-to-2500|₹1,000 to ₹2,500|Premium sets, tech and welcome kits~premium-corporate-gifts|₹2,500+|Leadership, client and milestone gifts' | split: '~' -%}
+<div class="mglp mglpb">
+  <section class="mglpb-hero">
+    <div class="mglpb-copy">
+      <p class="mglp-eyebrow">Per-piece pricing, GST invoice</p>
+      <h1 class="mglp-disp">What is your budget <em>per gift?</em></h1>
+      <p class="mglp-sub">Pick a price band. Every gift below can carry your logo, from 10 pieces, delivered in 5 to 7 working days after approval.</p>
+    </div>
+    <div class="mglpb-pic">
+      <picture class="mglp-media">
+        <source media="(max-width: 749px)" srcset="{{ 'mg-hero-welcome-m.jpg' | asset_url }}">
+        <img src="{{ 'mg-hero-welcome.jpg' | asset_url }}" width="2400" height="1350" alt="" fetchpriority="high">
+      </picture>
+    </div>
+  </section>
+
+  <nav class="mglpb-tabs" aria-label="Budget bands">
+    <div class="mglpb-tabs__in">
+      {%- for s in shelves -%}{%- assign sp = s | split: '|' -%}<a href="#b-{{ sp[0] }}"{% if forloop.first %} class="is-on"{% endif %}>{{ sp[1] }}</a>{%- endfor -%}
+      <a href="/pages/bulk-enquiry">Custom budget</a>
+    </div>
+  </nav>
+
+  {%- for s in shelves -%}
+    {%- assign sp = s | split: '|' -%}
+    {%- assign c = collections[sp[0]] -%}
+    {%- if c != blank and c.products_count > 0 -%}
+    <section class="mglpb-shelf" id="b-{{ sp[0] }}" aria-label="{{ sp[1] }}">
+      <div class="mglpb-shelf__h">
+        <h2 class="mglpb-price">{{ sp[1] }}</h2>
+        <p>{{ sp[2] }} · {{ c.products_count }} gifts</p>
+        <a class="mg-link" href="{{ c.url }}">See all {{ sp[1] }} →</a>
+      </div>
+      <ul class="mglp-row">
+        {%- assign shown = 0 -%}
+        {%- for p in c.products limit: 30 -%}
+          {%- if shown >= 10 -%}{%- break -%}{%- endif -%}
+          {%- if p.featured_image -%}{%- render 'mg-lp-card', product: p -%}{%- assign shown = shown | plus: 1 -%}{%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </section>
+    {%- endif -%}
+  {%- endfor -%}
+
+  <section class="mg-wrap mg-sec">
+    <div class="mg-head"><p class="mg-head__eyebrow">Or start from a category</p><h2 class="mg-head__title">Shop by category</h2></div>
+    {%- render 'mg-lp-cats', style: 'rings' -%}
+  </section>
+  <div class="mg-wrap mg-sec mg-sec--tight">{%- render 'mg-cta-pair' -%}</div>
+</div>
+<style>
+  .mglpb-hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 400px; border-bottom: 1px solid var(--mg-line); }
+  .mglpb-copy { padding: 3rem var(--mglp-pad); display: flex; flex-direction: column; justify-content: center; gap: 1.1rem; }
+  .mglpb-copy .mglp-disp { font-size: clamp(2.2rem, 4.4vw, 3.6rem); }
+  .mglpb-pic { position: relative; overflow: hidden; }
+  .mglpb-pic img { object-position: 60% 50%; }
+  .mglpb-tabs { position: sticky; top: var(--header-height, 0px); z-index: 5; background: rgba(11,11,11,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--mg-line); }
+  .mglpb-tabs__in { max-width: var(--mg-page); margin: 0 auto; padding: .8rem clamp(1rem, 3vw, 2rem); display: flex; gap: .5rem; overflow-x: auto; scrollbar-width: none; }
+  .mglpb-tabs a { flex: none; padding: .6rem 1.2rem; border: 1px solid var(--mg-line-gold); border-radius: 999px; font-weight: 700; font-size: .88rem; color: var(--mg-gold-soft); text-decoration: none; white-space: nowrap; }
+  .mglpb-tabs a:hover { background: rgba(201,162,39,.1); }
+  .mglpb-tabs a.is-on { background: var(--mg-gold-soft); color: #17110a; border-color: var(--mg-gold); }
+  .mglpb-shelf { max-width: var(--mg-page); margin: 0 auto; padding: 2.4rem clamp(1rem, 3vw, 2rem) .5rem; scroll-margin-top: calc(var(--header-height, 0px) + 4.5rem); }
+  .mglpb-shelf__h { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .mglpb-price { font-family: var(--mg-serif); font-size: clamp(1.8rem, 3.6vw, 2.8rem); color: var(--mg-gold-soft); margin: 0; line-height: 1; }
+  .mglpb-shelf__h p { margin: 0; color: var(--mg-muted); font-size: .9rem; }
+  .mglpb-shelf__h .mg-link { margin-left: auto; }
+  @media (max-width: 749px) {
+    .mglpb-hero { grid-template-columns: 1fr; }
+    .mglpb-pic { height: 220px; order: -1; }
+    .mglpb-copy { padding-block: 1.75rem; }
+    .mglpb-shelf__h .mg-link { margin-left: 0; }
+  }
+</style>
+<script>
+(function () {
+  var tabs = [].slice.call(document.querySelectorAll('.mglpb-tabs a[href^="#"]'));
+  if (!('IntersectionObserver' in window) || !tabs.length) return;
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) tabs.forEach(function (t) { t.classList.toggle('is-on', t.getAttribute('href') === '#' + e.target.id); }); });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  tabs.forEach(function (t) { var s = document.querySelector(t.getAttribute('href')); if (s) io.observe(s); });
+})();
+</script>
+{% schema %}
+{ "name": "MG landing: by budget", "settings": [], "presets": [{ "name": "MG landing: by budget" }] }
+{% endschema %}

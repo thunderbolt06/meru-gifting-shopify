@@ -1,0 +1,40 @@
+{%- comment -%}
+  Landing page 6: Our Clients & Work (/pages/our-clients).
+  Trust first: metallic logo, headline, numbers and client names, then real kits we made.
+{%- endcomment -%}
+{%- render 'mg-lp-ui' -%}
+<div class="mglp mglpp">
+  <section class="mglpp-hero">
+    <img class="mglpp-mark" src="{{ 'mg-logo-original.png' | asset_url }}" width="768" height="459" alt="Meru Gifting" fetchpriority="high">
+    <h1 class="mglp-disp">Gifts they will <em>remember.</em></h1>
+    <p class="mglp-sub">The gifting partner behind 150+ brands and 250+ institutions, with your logo on every piece since 2012.</p>
+    <div class="mglp-ctas"><a class="mg-btn mg-btn--gold" href="/pages/bulk-enquiry">Get a bulk quote</a><a class="mg-btn mg-btn--ghost" href="#mglpp-work">See our client work →</a></div>
+  </section>
+  <div class="mg-wrap">
+    <div class="mglp-stats">
+      <div><b>150+</b><span>Brands served</span></div>
+      <div><b>250+</b><span>Institutions</span></div>
+      <div><b>2,500+</b><span>Bespoke designs</span></div>
+      <div><b>2012</b><span>Gifting since</span></div>
+    </div>
+  </div>
+  <div class="mg-wrap mg-sec mg-sec--tight">{%- render 'mg-brands' -%}</div>
+  <div class="mg-wrap mg-sec" id="mglpp-work">{%- render 'mg-case-studies' -%}</div>
+  <div class="mg-wrap mg-sec">{%- render 'mg-why' -%}</div>
+  <section class="mg-wrap mg-sec mg-sec--tight">
+    <div class="mg-head"><p class="mg-head__eyebrow">What we make</p><h2 class="mg-head__title">Shop by category</h2></div>
+    {%- render 'mg-lp-cats', style: 'rings' -%}
+  </section>
+  <div class="mg-wrap mg-sec">{%- render 'mg-enquiry' -%}</div>
+</div>
+<style>
+  .mglpp-hero { text-align: center; padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1rem, 3vw, 2rem) clamp(1.75rem, 4vw, 2.5rem); display: flex; flex-direction: column; align-items: center; gap: 1.2rem; background: radial-gradient(50% 80% at 50% 0%, rgba(201,162,39,.16), transparent 70%); }
+  .mglpp-mark { width: clamp(160px, 22vw, 240px); height: auto; }
+  .mglpp-hero .mglp-disp { font-size: clamp(2.6rem, 7vw, 5.2rem); }
+  .mglpp-hero .mglp-sub { font-size: clamp(1rem, 1.6vw, 1.1rem); color: var(--mg-muted); max-width: 38rem; }
+  .mglpp-hero .mglp-ctas { justify-content: center; }
+  #mglpp-work { scroll-margin-top: calc(var(--header-height, 0px) + 1rem); }
+</style>
+{% schema %}
+{ "name": "MG landing: clients", "settings": [], "presets": [{ "name": "MG landing: clients" }] }
+{% endschema %}

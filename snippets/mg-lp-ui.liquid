@@ -1,0 +1,73 @@
+{%- comment -%} Shared styles for the six landing pages (sections/mg-lp-*). Prefix mglp- so nothing clashes with mg-ui. {%- endcomment -%}
+<style>
+  .mglp { --mglp-pad: clamp(1rem, 4vw, 4rem); color: var(--mg-text); background: var(--mg-bg); }
+  .mglp *, .mglp *::before, .mglp *::after { box-sizing: border-box; }
+  .mglp-eyebrow { color: var(--mg-gold-soft); letter-spacing: .26em; text-transform: uppercase; font-size: .78rem; font-weight: 700; margin: 0; }
+  .mglp-disp { font-family: var(--mg-serif); font-weight: 700; line-height: 1.04; letter-spacing: -.01em; margin: 0; color: var(--mg-text); text-wrap: balance; }
+  .mglp-disp em { font-style: normal; color: var(--mg-gold-soft); }
+  .mglp-sub { color: #d9d1bf; line-height: 1.65; margin: 0; max-width: 34rem; }
+  .mglp-ctas { display: flex; flex-wrap: wrap; gap: .7rem; }
+  .mglp-ctas .mg-btn { padding: .95rem 1.6rem; font-size: .95rem; }
+  .mglp .mg-btn--ghost { border: 1.5px solid rgba(250,247,240,.55); color: var(--mg-text); background: rgba(11,11,11,.25); }
+  .mglp .mg-btn--ghost:hover { border-color: var(--mg-gold-soft); color: var(--mg-gold-soft); }
+  .mglp-media { position: absolute; inset: 0; }
+  .mglp-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* chips */
+  .mglp-chip { display: inline-flex; align-items: center; gap: .5rem; padding: .55rem 1rem; border: 1px solid var(--mg-line); border-radius: 999px; font: inherit; font-size: .86rem; font-weight: 600; color: #e6dfcf; background: var(--mg-surface); cursor: pointer; text-decoration: none; transition: border-color .2s, background .2s, color .2s; }
+  .mglp-chip:hover { border-color: var(--mg-line-gold); color: var(--mg-gold-soft); }
+  .mglp-chip[aria-pressed="true"], .mglp-chip.is-on { background: var(--mg-gold-soft); border-color: var(--mg-gold); color: #17110a; }
+  .mglp-chip:focus-visible { outline: 2px solid var(--mg-gold-soft); outline-offset: 2px; }
+
+  /* gold ring thumbnails */
+  .mglp-ring { display: block; flex: none; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, #f3c969, #8a6d14); }
+  .mglp-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 2px solid #0b0b0b; background: #1b1814; }
+
+  /* category list variants */
+  .mglp-cats { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+  .mglp-cats a { text-decoration: none; color: #e8e0cc; font-weight: 600; }
+  .mglp-cats a:hover { color: var(--mg-gold-soft); }
+  .mglp-cats--rings { justify-content: center; gap: clamp(.8rem, 2vw, 1.6rem); }
+  .mglp-cats--rings a { display: flex; flex-direction: column; align-items: center; gap: .5rem; width: 92px; text-align: center; font-size: .78rem; line-height: 1.25; }
+  .mglp-cats--rings .mglp-ring { width: 76px; height: 76px; transition: transform .2s ease, box-shadow .2s ease; }
+  .mglp-cats--rings a:hover .mglp-ring { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(201,162,39,.35); }
+  .mglp-cats--chips a, .mglp-cats--pills a { display: inline-flex; align-items: center; gap: .55rem; border: 1px solid var(--mg-line); background: var(--mg-surface); border-radius: 999px; font-size: .86rem; }
+  .mglp-cats--chips a { padding: .3rem .95rem .3rem .3rem; }
+  .mglp-cats--chips .mglp-ring { width: 30px; height: 30px; padding: 1.5px; }
+  .mglp-cats--pills { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .8rem; }
+  .mglp-cats--pills a { padding: .35rem 1rem .35rem .35rem; width: 100%; }
+  .mglp-cats--pills .mglp-ring { width: 46px; height: 46px; }
+  .mglp-cats--chips a:hover, .mglp-cats--pills a:hover { border-color: var(--mg-line-gold); }
+
+  /* product rows */
+  .mglp-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(.75rem, 1.6vw, 1.25rem); }
+  .mglp-item { display: flex; flex-direction: column; gap: .5rem; min-width: 0; }
+  .mglp-item .mg-card { flex: 1; }
+  .mglp-row { list-style: none; margin: 0; padding: 0 0 .75rem; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 230px); gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: #3a3326 transparent; }
+  .mglp-row > li { scroll-snap-align: start; }
+  .mglp-add { font: inherit; font-size: .8rem; font-weight: 700; color: var(--mg-gold-soft); background: transparent; border: 1px solid var(--mg-line-gold); border-radius: 999px; padding: .55rem; cursor: pointer; }
+  .mglp-add:hover { background: rgba(201,162,39,.1); }
+  .mglp-add[aria-pressed="true"] { background: var(--mg-gold-soft); color: #17110a; border-color: var(--mg-gold); }
+  .mglp-empty { color: var(--mg-muted); text-align: center; padding: 2rem 1rem; border: 1px dashed var(--mg-line); border-radius: var(--mg-radius); }
+
+  /* stats */
+  .mglp-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid var(--mg-line-gold); }
+  .mglp-stats > div { padding: 1.4rem .5rem; text-align: center; border-right: 1px solid var(--mg-line); }
+  .mglp-stats > div:last-child { border-right: 0; }
+  .mglp-stats b { display: block; font-family: var(--mg-serif); font-size: clamp(1.8rem, 3.6vw, 2.8rem); color: var(--mg-gold-soft); line-height: 1; margin-bottom: .35rem; }
+  .mglp-stats span { font-size: .82rem; color: var(--mg-muted); letter-spacing: .06em; }
+
+  @media (max-width: 989px) { .mglp-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 749px) {
+    .mglp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mglp-row { grid-auto-columns: 62%; }
+    .mglp-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mglp-stats > div:nth-child(2) { border-right: 0; }
+    .mglp-stats > div:nth-child(-n+2) { border-bottom: 1px solid var(--mg-line); }
+    .mglp-cats--rings { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: .25rem; }
+    .mglp-cats--rings a { width: 76px; font-size: .72rem; }
+    .mglp-cats--rings .mglp-ring { width: 62px; height: 62px; }
+    .mglp-ctas .mg-btn { padding: .8rem 1.1rem; font-size: .86rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .mglp-cats--rings .mglp-ring { transition: none; } }
+</style>
