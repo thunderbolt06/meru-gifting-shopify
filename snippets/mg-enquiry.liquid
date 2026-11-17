@@ -51,16 +51,20 @@
         <div class="mg-enq__err" role="alert">{{ form.errors | default_errors }}</div>
       {%- endif -%}
       <input type="hidden" name="contact[Enquiry type]" value="Corporate / bulk gifting">
+      <input type="hidden" name="contact[Traffic source]" id="mge-traffic" value="">
+      <input type="hidden" name="contact[Landing page]" id="mge-landing" value="">
       <div class="mg-enq__grid">
         <div class="mg-enq__f"><label for="mge-name">Name <abbr title="required">*</abbr></label><input id="mge-name" name="contact[name]" autocomplete="name" required></div>
         <div class="mg-enq__f"><label for="mge-phone">Phone <abbr title="required">*</abbr></label><input id="mge-phone" type="tel" name="contact[phone]" autocomplete="tel" inputmode="tel" pattern="[0-9+\s\-]{8,16}" required></div>
         <div class="mg-enq__f"><label for="mge-company">Company <abbr title="required">*</abbr></label><input id="mge-company" name="contact[Company]" autocomplete="organization" required></div>
         <div class="mg-enq__f"><label for="mge-email">Work email <abbr title="required">*</abbr></label><input id="mge-email" type="email" name="contact[email]" autocomplete="email" required></div>
         <div class="mg-enq__f"><label for="mge-qty">No. of gifts <abbr title="required">*</abbr></label>
-          <select id="mge-qty" name="contact[Quantity]" required><option value="">Select</option><option>Under 50</option><option>50 – 100</option><option>100 – 250</option><option>250 – 500</option><option>500 – 1,000</option><option>1,000+</option></select></div>
+          <select id="mge-qty" name="contact[Quantity]" required><option value="">Select</option><option>10 to 50</option><option>50 to 100</option><option>100 to 250</option><option>250 to 500</option><option>500 to 1,000</option><option>1,000+</option></select></div>
         <div class="mg-enq__f"><label for="mge-budget">Budget per gift <abbr title="required">*</abbr></label>
-          <select id="mge-budget" name="contact[Budget per gift]" required><option value="">Select</option><option>Under ₹500</option><option>₹500 – ₹1,000</option><option>₹1,000 – ₹2,500</option><option>₹2,500 – ₹5,000</option><option>Above ₹5,000</option></select></div>
-        <div class="mg-enq__f mg-enq__f--full"><label for="mge-date">Needed by</label><input id="mge-date" type="date" name="contact[Needed by]"></div>
+          <select id="mge-budget" name="contact[Budget per gift]" required><option value="">Select</option><option>Under ₹500</option><option>₹500 to ₹1,000</option><option>₹1,000 to ₹2,500</option><option>₹2,500 to ₹5,000</option><option>Above ₹5,000</option></select></div>
+        <div class="mg-enq__f"><label for="mge-date">Needed by</label><input id="mge-date" type="date" name="contact[Needed by]"></div>
+        <div class="mg-enq__f"><label for="mge-source">How did you hear about us? <abbr title="required">*</abbr></label>
+          <select id="mge-source" name="contact[How did you hear about us]" required><option value="">Select</option><option>ChatGPT</option><option>Google Gemini</option><option>Perplexity</option><option>Other AI assistant (Copilot, Claude, etc.)</option><option>Google Search</option><option>Google Ads</option><option>Google Maps</option><option>Instagram / Facebook</option><option>LinkedIn</option><option>Referral / word of mouth</option><option>Existing customer</option><option>Other</option></select></div>
         <div class="mg-enq__f mg-enq__f--full"><label for="mge-body">Tell us about the occasion</label><textarea id="mge-body" name="contact[body]" placeholder="e.g. New Year gifts for 200 employees, logo on box and bottle, delivery to 3 offices"></textarea></div>
       </div>
       <button class="mg-btn mg-btn--gold mg-enq__submit" type="submit">Get my proposal</button>
@@ -68,3 +72,20 @@
     {%- endform -%}
   </div>
 </section>
+<script>
+  /* Attribution for the enquiry inbox: first-touch referrer + UTM, so AI-assistant leads (chatgpt.com, perplexity.ai, gemini.google.com, copilot) are visible even if the dropdown is skipped. */
+  (function () {
+    var K = 'mg_first_touch', ft;
+    try { ft = JSON.parse(localStorage.getItem(K) || 'null'); } catch (e) { ft = null; }
+    if (!ft) {
+      var p = new URLSearchParams(location.search), ref = document.referrer || '';
+      if (ref.indexOf(location.hostname) > -1) ref = '';
+      ft = { src: p.get('utm_source') || '', med: p.get('utm_medium') || '', ref: ref ? new URL(ref).hostname : 'direct', page: location.pathname };
+      try { localStorage.setItem(K, JSON.stringify(ft)); } catch (e) {}
+    }
+    var ai = /chatgpt|openai|perplexity|gemini|bard|copilot|claude|deepseek|you\.com/i.test(ft.src + ' ' + ft.ref);
+    var t = document.getElementById('mge-traffic'), l = document.getElementById('mge-landing');
+    if (t) t.value = (ai ? '[AI] ' : '') + (ft.src ? 'utm=' + ft.src + (ft.med ? '/' + ft.med : '') + '; ' : '') + 'referrer=' + ft.ref;
+    if (l) l.value = ft.page + ' -> ' + location.pathname;
+  })();
+</script>
