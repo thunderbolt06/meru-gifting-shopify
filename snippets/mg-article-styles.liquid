@@ -50,4 +50,49 @@
   .mg-glossary dt { font-weight: 700; margin-top: 1rem; color: var(--mg-ink); }
   .mg-glossary dd { margin: 0.25rem 0 0; }
   @media (max-width: 749px) { .mg-toc ol { columns: 1; } .mg-cta { grid-template-columns: 1fr; } }
+  /* ---- Reading layout: calmer type scale, one readable column ---- */
+  .section-content-wrapper:has(.blog-post-content) { gap: 1.25rem !important; }
+  .section-content-wrapper:has(.blog-post-content) > .shopify-block { width: 100%; max-width: 760px; margin-inline: auto; }
+  .section-content-wrapper:has(.blog-post-content) .text-block:has(h1) { max-width: 760px; margin-inline: auto; padding-top: 1.5rem; }
+  .section-content-wrapper:has(.blog-post-content) h1 {
+    font-size: clamp(1.5rem, 3vw, 2.4rem) !important;
+    line-height: 1.22 !important;
+    font-weight: 600 !important;
+    letter-spacing: 0;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .section-content-wrapper:has(.blog-post-content) .blog-post-details { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mg-muted, #a8a090); }
+  /* The article body carries its own hero figure, so drop the theme's oversized featured image */
+  .section-content-wrapper:has(.mg-hero-img) > .image-block { display: none; }
+  .section-content-wrapper:has(.blog-post-content) .image-block img { aspect-ratio: 16 / 9; height: auto; max-height: 420px; object-fit: cover; border-radius: 14px; }
+
+  .blog-post-content { font-size: 1.0625rem; line-height: 1.75; color: #d9d4c8; }
+  .blog-post-content p, .blog-post-content li { font-size: inherit; line-height: inherit; }
+  .blog-post-content p { margin: 0 0 1.1rem; }
+  .blog-post-content h2 {
+    font-size: clamp(1.35rem, 2vw, 1.65rem) !important;
+    line-height: 1.3 !important;
+    font-weight: 600 !important;
+    letter-spacing: 0;
+    color: var(--mg-ink);
+    margin: 2.75rem 0 0.85rem !important;
+    text-wrap: balance;
+  }
+  .blog-post-content h3 { font-size: 1.15rem !important; line-height: 1.35 !important; font-weight: 600 !important; margin: 1.75rem 0 0.6rem !important; }
+  .blog-post-content h4 { font-size: 1rem !important; line-height: 1.4 !important; }
+  .blog-post-content strong { color: var(--mg-ink); }
+  .blog-post-content a { color: var(--mg-gold); text-underline-offset: 3px; }
+  .blog-post-content ul, .blog-post-content ol { padding-left: 1.25rem; margin: 0 0 1.25rem; }
+  .blog-post-content li { margin-bottom: 0.4rem; }
+  .blog-post-content .mg-answer p { font-size: 1.05rem; line-height: 1.65; }
+  .blog-post-content .mg-toc li, .blog-post-content .mg-table, .blog-post-content .mg-faq details p { font-size: 0.95rem; line-height: 1.6; }
+  .blog-post-content .mg-cta { grid-template-columns: 1fr; padding: 1.5rem; }
+  .blog-post-content .mg-cta h3 { font-size: 1.3rem !important; margin: 0 0 0.35rem !important; }
+  .blog-post-content .mg-related h3 { font-size: 0.8rem !important; }
+  @media (max-width: 749px) {
+    .blog-post-content { font-size: 1rem; line-height: 1.7; }
+    .blog-post-content h2 { margin-top: 2.25rem !important; }
+    .blog-post-content .mg-answer p { font-size: 1rem; }
+  }
 </style>

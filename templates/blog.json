@@ -101,9 +101,19 @@
         "padding-block-start": 0,
         "padding-block-end": 48
       }
+    },
+    "mg_blog_styles": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-blog-styles' %}",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
+    "mg_blog_styles",
     "main"
   ]
 }

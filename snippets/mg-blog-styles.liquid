@@ -1,0 +1,106 @@
+{% doc %}
+  Calmer blog listing (/blogs/*): compact 3-column cards, smaller type, clamped excerpts.
+  Rendered once on the blog template via a custom-liquid section.
+{% enddoc %}
+<style>
+  .blog-posts { --columns-gap: 28px; --rows-gap: 40px; }
+
+  /* Page title: smaller, with a quiet eyebrow */
+  .blog-posts > .shopify-block:first-child,
+  .blog-posts .text-block:has(h1) { padding-block: 2.5rem 1.75rem !important; }
+  .blog-posts h1 {
+    font-size: clamp(1.75rem, 2.6vw, 2.35rem) !important;
+    line-height: 1.2 !important;
+    font-weight: 600;
+    letter-spacing: 0;
+    margin: 0;
+  }
+  .blog-posts h1::before {
+    content: 'Meru Gifting Journal';
+    display: block;
+    font-family: var(--font-body--family);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #C9A227;
+    margin-bottom: 0.6rem;
+  }
+
+  /* Every card after the first sits in a 3-column grid */
+  .blog-posts-container > .blog-post-item { --col-span: 2 !important; --blog-post-card-scale: 1 !important; }
+  .blog-posts-container > .blog-post-item:first-of-type { --col-span: 6 !important; }
+
+  .blog-post-item .blog-post-card__image {
+    height: auto !important;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: 10px !important;
+  }
+  .blog-post-item .blog-post-card__image-container { border-radius: 10px; overflow: hidden; }
+  .blog-post-item .blog-post-card__image { transition: transform 0.5s ease; }
+  .blog-post-item:hover .blog-post-card__image { transform: scale(1.03); }
+
+  .blog-post-item .blog-post-card__content { padding-block-start: 0.9rem; gap: 0.35rem; }
+  .blog-post-item .blog-post-card__title-link { text-decoration: none; }
+  .blog-post-item .blog-post-card__title-link .text-block {
+    font-size: 1.12rem !important;
+    line-height: 1.38 !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .blog-post-item .blog-post-card__title-link .spacing-style { padding: 0 !important; }
+  .blog-post-item .blog-post-card__title-link .text-block > * { font-size: inherit !important; line-height: inherit !important; margin: 0 !important; }
+  .blog-post-item .blog-post-card__title-link:hover .text-block, .blog-post-item .blog-post-card__title-link:hover .text-block * { color: #C9A227; }
+
+  .blog-post-item .blog-post-details {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a8a090 !important;
+    padding: 0 !important;
+    margin: 0.1rem 0 0.2rem;
+  }
+  .blog-post-item .blog-post-card__content-text {
+    font-size: 0.9rem !important;
+    line-height: 1.6 !important;
+    color: #bdb5a4 !important;
+    padding: 0 !important;
+  }
+  .blog-post-item .blog-post-card__content-text :is(p, div) {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+  }
+  .blog-post-item .blog-post-card__content-text a {
+    font-size: 0.8rem;
+    color: #C9A227 !important;
+    letter-spacing: 0.04em;
+  }
+
+  /* Featured (first) card: image 60%, text 40%, modest height */
+  @media (min-width: 750px) {
+    .blog-post-card--horizontal { align-items: center; column-gap: 2.5rem; }
+    .blog-post-card--horizontal .blog-post-card__image-container { flex: 0 0 58%; }
+    .blog-post-card--horizontal .blog-post-card__content { flex: 1 1 0; padding: 0; }
+    .blog-post-card--horizontal .blog-post-card__image { aspect-ratio: 16 / 10; max-height: 380px; }
+    .blog-post-card--horizontal .blog-post-card__title-link .text-block {
+      font-size: clamp(1.4rem, 2vw, 1.75rem) !important;
+      line-height: 1.3 !important;
+      -webkit-line-clamp: 4;
+    }
+    .blog-post-card--horizontal .blog-post-card__content-text :is(p, div) { -webkit-line-clamp: 3; }
+  }
+
+  @media (max-width: 749px) {
+    .blog-posts { --rows-gap: 32px; }
+    .blog-posts-container > .blog-post-item { --col-span: 6 !important; }
+    .blog-posts .text-block:has(h1) { padding-block: 1.75rem 1.25rem !important; }
+  }
+</style>
