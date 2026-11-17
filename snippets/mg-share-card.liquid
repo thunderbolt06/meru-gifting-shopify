@@ -20,13 +20,13 @@ Bulk orders, samples and logo branding available.
 {{ shop.url }}{{ product.url }}
 Meru Gifting | +91 78922 55078{%- endcapture -%}
 <style>
-  .mg-share { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: .1rem 0 .5rem; }
-  .mg-share__btn { display: flex; align-items: center; justify-content: center; gap: .5rem; padding: .8rem 1rem; border-radius: 999px; border: 1px solid rgba(201,162,39,.55); background: transparent; color: #f3c969; font: inherit; font-weight: 600; font-size: .92rem; cursor: pointer; transition: background .2s, color .2s; }
-  .mg-share__btn:hover { background: rgba(201,162,39,.12); }
+  .mg-share { display: flex; flex-wrap: wrap; justify-content: center; gap: .25rem 1.5rem; margin: .1rem 0 .25rem; }
+  .mg-share__btn { display: inline-flex; align-items: center; gap: .4rem; padding: .45rem .25rem; border: 0; border-radius: 6px; background: transparent; color: #a8a090; font: inherit; font-weight: 600; font-size: .85rem; cursor: pointer; transition: color .2s; }
+  .mg-share__btn:hover { color: #f3c969; }
   .mg-share__btn:focus-visible { outline: 2px solid #C9A227; outline-offset: 3px; }
-  .mg-share__btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .mg-share__btn[data-done] { background: #c9a227; color: #0b0b0b; border-color: #c9a227; }
-  .mg-share__msg { grid-column: 1 / -1; font-size: .8rem; color: #a8a090; min-height: 1em; margin: 0; text-align: center; }
+  .mg-share__btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .mg-share__btn[data-done] { color: #f3c969; }
+  .mg-share__msg { flex-basis: 100%; font-size: .8rem; color: #a8a090; min-height: 1em; margin: 0; text-align: center; }
 </style>
 <div class="mg-share" data-mg-share data-card="{% if mg_card %}{{ mg_card | image_url: width: 1200 }}{% endif %}" data-url="{{ shop.url }}{{ product.url }}" data-title="{{ product.title | escape }}">
   <script type="text/plain" data-mg-share-text>{{ mg_text }}</script>

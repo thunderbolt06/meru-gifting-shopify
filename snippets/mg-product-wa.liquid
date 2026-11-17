@@ -2,12 +2,46 @@
 {%- capture msg -%}Hi Meru Gifting, I'm interested in "{{ product.title }}"{% if product.selected_or_first_available_variant.sku != blank %} ({{ product.selected_or_first_available_variant.sku }}){% endif %}. Please share pricing for my quantity: {{ shop.url }}{{ product.url }}{%- endcapture -%}
 <style>
   .mg-pwa { display: grid; gap: .6rem; margin: .25rem 0 .5rem; }
-  .mg-pwa__btn { display: flex; align-items: center; justify-content: center; gap: .55rem; padding: .95rem 1.2rem; border-radius: 999px; background: #25D366; color: #fff !important; font-weight: 700; text-decoration: none; font-size: 1rem; }
-  .mg-pwa__btn svg { width: 20px; height: 20px; fill: currentColor; }
-  .mg-pwa__btn:focus-visible { outline: 2px solid #C9A227; outline-offset: 3px; }
+  .mg-pwa__btn { display: flex; align-items: center; justify-content: center; gap: .6rem; padding: .95rem 1.2rem; border-radius: 999px; background: #141210; border: 1px solid rgba(37, 211, 102, .5); color: #faf7f0 !important; font-weight: 700; text-decoration: none; font-size: .95rem; transition: border-color .2s ease, background-color .2s ease, transform .15s ease; }
+  .mg-pwa__btn:hover { border-color: #25D366; background: rgba(37, 211, 102, .08); transform: translateY(-1px); }
+  .mg-pwa__btn svg { width: 20px; height: 20px; fill: #25D366; }
+  .mg-pwa__btn:focus-visible { outline: 2px solid #f3c969; outline-offset: 3px; }
   .mg-pwa__note { font-size: .85rem; color: #a8a090; margin: 0; line-height: 1.5; }
   .mg-pwa__note a { color: #C9A227; }
   .mg-pwa__enq { color: #f3c969 !important; font-weight: 700; font-size: .88rem; text-align: center; }
+
+  /* Product page buttons: match the home hero (.mg-btn--gold / --outline) */
+  .product-form-buttons .add-to-cart-button.button,
+  .sticky-add-to-cart__button.add-to-cart-button.button {
+    background: linear-gradient(90deg, #f3c969, #c9a227) !important;
+    color: #17110a !important; border: 0 !important; border-radius: 999px !important;
+    font-weight: 700 !important; box-shadow: 0 6px 20px rgba(201, 162, 39, .25);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .product-form-buttons .add-to-cart-button.button:hover,
+  .sticky-add-to-cart__button.add-to-cart-button.button:hover { transform: translateY(-1px); box-shadow: 0 8px 26px rgba(201, 162, 39, .35); }
+  .product-form-buttons .add-to-cart-button .svg-wrapper { color: #17110a; }
+  .product-form-buttons button.shopify-payment-button__button--unbranded {
+    background: transparent !important; color: #faf7f0 !important;
+    border: 1px solid rgba(250, 247, 240, .55) !important; border-radius: 999px !important;
+    font-weight: 700 !important; box-shadow: none !important; transition: border-color .15s ease, color .15s ease, transform .15s ease;
+  }
+  .product-form-buttons button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
+    background: rgba(201, 162, 39, .08) !important; border-color: #f3c969 !important; color: #f3c969 !important; transform: translateY(-1px);
+  }
+  .product-form-buttons .quantity-selector { border-radius: 999px; }
+
+  /* Selected variant: gold outline + tint instead of a solid gold fill */
+  .variant-option__button-label:has(:checked) {
+    border-color: #c9a227 !important; color: #f3c969 !important;
+    --color-selected-variant-text: #f3c969; --color-selected-variant-hover-text: #f3c969;
+  }
+  .variant-option__button-label .variant-option__button-label__pill { background: rgba(201, 162, 39, .12) !important; }
+  .variant-option__button-label:has(:checked) .variant-option__button-label__text { font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mg-pwa__btn, .product-form-buttons .add-to-cart-button.button, .product-form-buttons button.shopify-payment-button__button--unbranded { transition: none; transform: none !important; }
+  }
 </style>
 <div class="mg-pwa">
   <a class="mg-pwa__btn" href="https://wa.me/917892255078?text={{ msg | url_encode }}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 1.9 17.7L.3 23.7l6.2-1.6a11.8 11.8 0 0 0 5.6 1.4c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.4-8.2Zm-8.4 18.1c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.8 9.8 0 1 1 8.3 4.6Z"/></svg>Get bulk price on WhatsApp</a>
