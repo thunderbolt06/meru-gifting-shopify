@@ -2,7 +2,7 @@
   Catalog download page. PDFs live in Shopify admin > Content > Files, referenced with file_url.
   Row format: collection-handle|Title|Description|pdf filename
 {%- endcomment -%}
-{%- assign rows = 'diwali-hampers|Diwali Hampers Catalog 2026|Festive hampers with dry fruits, diyas, scented candles, brass décor, bamboo desk sets and drinkware in premium rigid boxes.|meru-gifting-diwali-hampers-catalog-2026.pdf~~corporate-gift-hampers|Corporate Gift Hampers Catalog 2026|Onboarding kits, client gifts and employee hampers — flasks, mugs, notebooks, tech and desk essentials with custom logo branding.|meru-gifting-corporate-gift-hampers-catalog-2026.pdf~~christmas-hampers|Christmas Hampers Catalog 2026|Year-end and Christmas hampers — treats, festive mugs, candles, gift tins and red & green gift boxes.|meru-gifting-christmas-hampers-catalog-2026.pdf~~customer-works|Custom Branded Kits — Case Studies|Kits we have crafted for universities and companies: co-branded welcome kits, logo-printed Diwali boxes and bulk dispatch.|meru-gifting-custom-branded-kits-case-studies.pdf' | split: '~~' -%}
+{%- assign rows = 'diwali-hampers|Diwali Hampers Catalog 2026|Festive hampers with dry fruits, diyas, scented candles, brass décor, bamboo desk sets and drinkware in premium rigid boxes.|meru-gifting-diwali-hampers-catalog-2026.pdf~~corporate-gift-hampers|Corporate Gift Hampers Catalog 2026|Onboarding kits, client gifts and employee hampers: flasks, mugs, notebooks, tech and desk essentials with custom logo branding.|meru-gifting-corporate-gift-hampers-catalog-2026.pdf~~christmas-hampers|Christmas Hampers Catalog 2026|Year-end and Christmas hampers: treats, festive mugs, candles, gift tins and red & green gift boxes.|meru-gifting-christmas-hampers-catalog-2026.pdf~~customer-works|Custom Branded Kits: Case Studies|Kits we have crafted for universities and companies: co-branded welcome kits, logo-printed Diwali boxes and bulk dispatch.|meru-gifting-custom-branded-kits-case-studies.pdf' | split: '~~' -%}
 <style>
   .mgcat__hero { text-align: center; padding: 2.5rem 1rem 2rem; border-radius: 20px; border: 1px solid #C9A22744; background: radial-gradient(60% 90% at 50% 0%, rgba(232,119,46,.2), transparent 65%), linear-gradient(135deg, #2a0a10, #0b0b0b); margin-bottom: 2rem; }
   .mgcat__hero img { width: 170px; height: auto; margin: 0 auto 1rem; display: block; }
@@ -28,7 +28,7 @@
   <div class="mgcat__hero">
     <img src="{{ 'mg-logo.png' | asset_url }}" alt="Meru Gifting" width="1730" height="1043">
     <h1>Download our Hamper Catalogs</h1>
-    <p>Browse every hamper design offline or share with your team. For pricing, customisation and bulk orders, WhatsApp us — we reply within working hours, Mon–Sat 9 AM–7 PM.</p>
+    <p>Browse every hamper design offline or share with your team. For pricing, customisation and bulk orders, WhatsApp us. We reply within working hours, Mon–Sat 9 AM–7 PM.</p>
     <a class="mgcat__btn mgcat__btn--wa" href="https://wa.me/917892255078?text={{ 'Hi Meru Gifting, please share your latest hamper catalog and pricing.' | url_encode }}" target="_blank" rel="noopener">WhatsApp +91 78922 55078</a>
   </div>
   <div class="mgcat__grid">

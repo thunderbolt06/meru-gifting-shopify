@@ -345,7 +345,7 @@
       "subtext": "بطاقة الهدايا الخاصة بك",
       "shop_link": "زيارة المتجر الإلكتروني",
       "add_to_apple_wallet": "الإضافة إلى Apple Wallet",
-      "qr_image_alt": "رمز QR — امسحه ضوئيًا لاسترداد بطاقة الهدايا",
+      "qr_image_alt": "رمز QR - امسحه ضوئيًا لاسترداد بطاقة الهدايا",
       "copy_code": "نسخ كود بطاقة الهدايا",
       "expiration_date": "تنتهي الصلاحية في {{ expires_on }}",
       "copy_code_success": "تم نسخ الكود بنجاح",

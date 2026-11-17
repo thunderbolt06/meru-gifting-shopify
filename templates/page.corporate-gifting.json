@@ -12,7 +12,7 @@
     "mg_hero": {
       "type": "custom-liquid",
       "settings": {
-        "custom_liquid": "{% render 'mg-hero-banner', eyebrow: 'Corporate gifting · Bengaluru to pan-India', title: 'Corporate gifting &amp; <em>corporate gifts</em> for businesses in India', subtitle: 'Premium hampers, welcome kits and branded merchandise with your logo — curated, packed and delivered to one office or a thousand doorsteps.' %}",
+        "custom_liquid": "{% render 'mg-hero-banner', eyebrow: 'Corporate gifting · Bengaluru to pan-India', title: 'Corporate gifting &amp; <em>corporate gifts</em> for businesses in India', subtitle: 'Premium hampers, welcome kits and branded merchandise with your logo, curated, packed and delivered to one office or a thousand doorsteps.' %}",
         "section_width": "full-width",
         "padding-block-start": 0,
         "padding-block-end": 0

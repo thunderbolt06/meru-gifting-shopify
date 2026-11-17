@@ -50,7 +50,7 @@ export function supportsViewTransitions() {
  * Remove check if ever resolved.
  *
  * Note: the IIFE in view-transitions.js has an inline copy of this logic (it
- * runs before modules load) — keep the two in sync.
+ * runs before modules load) - keep the two in sync.
  * @param {string} [userAgent=navigator.userAgent] - User-agent string to test.
  *   Defaults to the live `navigator.userAgent`; pass an explicit value to keep
  *   the function pure and testable without overriding the browser UA.
@@ -815,7 +815,7 @@ export function calculateHeaderGroupHeight(
   // A transparent header is absolutely positioned, so the loop above counts its section
   // wrapper as 0px. When a section follows it in the group, header.liquid pushes that
   // section down by the header's height using a margin, which offsetHeight also
-  // excludes — so the header's height has to be added back manually.
+  // excludes - so the header's height has to be added back manually.
   if (header instanceof HTMLElement && header.hasAttribute('transparent') && header.parentElement?.nextElementSibling) {
     return totalHeight + header.offsetHeight;
   }

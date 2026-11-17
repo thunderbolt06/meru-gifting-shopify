@@ -21,7 +21,7 @@ const PRESERVED_ATTRIBUTES = [
   // Live-only marker the client sets while a shopper is editing a quantity input. The
   // server re-render never carries it, so without preserving it onto the new node here
   // copyAttributes would strip it off the live node before syncFormControlState runs, and
-  // skipsValueUpdate (which needs both nodes to carry it) could never hold — the typed
+  // skipsValueUpdate (which needs both nodes to carry it) could never hold - the typed
   // value would be overwritten mid-edit by a concurrent cart-items morph.
   'data-skip-value-update',
 ];

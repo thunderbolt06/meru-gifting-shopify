@@ -34,7 +34,7 @@
   <div class="mg-enq__stats">
     <div class="mg-enq__lead">
       <h2 id="mg-enq-h">{{ title | default: 'Plan your corporate gifting' }}</h2>
-      <p>Share a few details and our team will send a curated shortlist with prices and a free branding mock-up — usually within one working day.</p>
+      <p>Share a few details and our team will send a curated shortlist with prices and a free branding mock-up, usually within one working day.</p>
     </div>
     <div class="mg-enq__stat"><strong>150+</strong><span>Brands served</span></div>
     <div class="mg-enq__stat"><strong>250+</strong><span>Institutions</span></div>
@@ -45,7 +45,7 @@
     {%- form 'contact', id: 'MgEnquiryForm' -%}
       <h3>Corporate gifting enquiry</h3>
       {%- if form.posted_successfully? -%}
-        <p class="mg-enq__ok" role="status">Thank you — your enquiry is in. We'll get back to you within one working day. For anything urgent, WhatsApp +91 78922 55078.</p>
+        <p class="mg-enq__ok" role="status">Thank you! Your enquiry is in. We'll get back to you within one working day. For anything urgent, WhatsApp +91 78922 55078.</p>
       {%- endif -%}
       {%- if form.errors -%}
         <div class="mg-enq__err" role="alert">{{ form.errors | default_errors }}</div>

@@ -387,7 +387,7 @@ class HeaderMenu extends Component {
 
     const menu = findSubmenu(this.#state.activeItem);
     // Keep the submenu open while focus moves between the link, its disclosure
-    // button, and the submenu contents — i.e. anywhere inside the same list item.
+    // button, and the submenu contents - i.e. anywhere inside the same list item.
     const isMovingWithinItem =
       event.relatedTarget instanceof Node &&
       event.target instanceof Element &&

@@ -30,7 +30,7 @@
     "mg_hampers": {
       "type": "custom-liquid",
       "settings": {
-        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-product-grid', handle: 'corporate-gift-hampers', title: 'Corporate Gift Hampers', limit: 8, eyebrow: 'Ready to ship', subtitle: 'Curated hampers for clients, teams and partners — add your logo to any of them.' %}</div>",
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-product-grid', handle: 'corporate-gift-hampers', title: 'Corporate Gift Hampers', limit: 8, eyebrow: 'Ready to ship', subtitle: 'Curated hampers for clients, teams and partners. Add your logo to any of them.' %}</div>",
         "section_width": "full-width",
         "padding-block-start": 0,
         "padding-block-end": 0
@@ -96,7 +96,7 @@
     "mg_festive": {
       "type": "custom-liquid",
       "settings": {
-        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-product-grid', handle: 'christmas-hampers', title: 'Christmas &amp; New Year hampers', limit: 4, eyebrow: 'Year-end gifting', subtitle: 'Year-end treats for teams and clients — book early for December delivery.' %}</div>",
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-product-grid', handle: 'christmas-hampers', title: 'Christmas &amp; New Year hampers', limit: 4, eyebrow: 'Year-end gifting', subtitle: 'Year-end treats for teams and clients. Book early for December delivery.' %}</div>",
         "section_width": "full-width",
         "padding-block-start": 0,
         "padding-block-end": 0,
