@@ -60,6 +60,12 @@
     .mgx.has-cur, .mgx.has-cur * { cursor: none !important; }
   }
 
+  /* home desktop: show the header logo at the top-left, sized to fill the header row */
+  @media (min-width: 750px) {
+    .header-logo[data-hidden-on-home-page] { display: flex; }
+    .header-logo[data-hidden-on-home-page] .header-logo__image { height: 54px !important; width: auto !important; max-width: 240px; }
+  }
+
   @media (max-width: 749px) {
     .mgx { --mgx-h: min(640px, 82svh); }
     .mgx__img { object-position: 78% 50%; }
