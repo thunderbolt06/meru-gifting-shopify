@@ -30,7 +30,7 @@
 {%- when 'budget' -%}
 <div class="mgt" id="mgt-{{ uid }}" data-tool="budget">
   <div class="mgt__row">
-    <label>Number of gifts<input type="number" min="50" step="10" value="100" data-k="qty"></label>
+    <label>Number of gifts<input type="number" min="10" step="10" value="100" data-k="qty"></label>
     <label>Budget per person (₹)<input type="number" min="200" step="50" value="1200" data-k="per"></label>
     <label>Occasion
       <select data-k="occ">
@@ -56,7 +56,7 @@
 {%- when 'kit' -%}
 <div class="mgt" id="mgt-{{ uid }}" data-tool="kit">
   <div class="mgt__row">
-    <label>Number of kits<input type="number" min="50" step="10" value="50" data-k="qty"></label>
+    <label>Number of kits<input type="number" min="10" step="10" value="50" data-k="qty"></label>
     <label>Packaging
       <select data-k="box"><option value="180">Branded kraft box (~₹180)</option><option value="350" selected>Rigid magnetic box (~₹350)</option><option value="550">Premium wooden / fabric box (~₹550)</option></select>
     </label>
@@ -90,7 +90,7 @@
   <div class="mgt__row">
     <label>Delivery needed by<input type="date" data-k="date"></label>
     <label>Order size
-      <select data-k="qty"><option value="0">50 to 200 gifts</option><option value="2">200 to 1,000 gifts</option><option value="5">1,000+ gifts</option></select>
+      <select data-k="qty"><option value="0">10 to 200 gifts</option><option value="2">200 to 1,000 gifts</option><option value="5">1,000+ gifts</option></select>
     </label>
     <label>Branding
       <select data-k="brand"><option value="2">Logo branding</option><option value="0">Ready stock, no branding</option></select>
