@@ -78,7 +78,7 @@ Meru Gifting | +91 78922 55078{%- endcapture -%}
       else box.querySelector('.mg-share__msg').textContent = box.dataset.url;
     }
   };
-  const share = async (box, btn, fallback) => {
+  const share = async (box, btn) => {
     const text = box.querySelector('[data-mg-share-text]').textContent.trim(), card = box.dataset.card;
     if (navigator.share) {
       try {
@@ -87,7 +87,6 @@ Meru Gifting | +91 78922 55078{%- endcapture -%}
           const f = new File([await pngBlob(card)], 'meru-gifting-product.png', { type: 'image/png' });
           if (navigator.canShare({ files: [f] })) data.files = [f];
         }
-        if (fallback && !data.files) return copy(box, btn);
         await navigator.share(data); return;
       } catch (e) { if (e.name === 'AbortError') return; }
     }
@@ -96,9 +95,8 @@ Meru Gifting | +91 78922 55078{%- endcapture -%}
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-mg-share] .mg-share__btn'); if (!btn) return;
     const box = btn.closest('[data-mg-share]');
-    // Both buttons use the share sheet (sends card image + text + link together, which a paste cannot).
-    // Copy falls back to the clipboard when the browser can't share files.
-    share(box, btn, btn.dataset.act === 'copy');
+    // Share opens the native share sheet (falls back to copy); Copy always writes to the clipboard.
+    if (btn.dataset.act === 'copy') copy(box, btn); else share(box, btn);
   });
 })();
 </script>
