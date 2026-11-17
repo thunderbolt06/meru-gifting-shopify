@@ -164,13 +164,9 @@
 
   assign bottom_row_blocks = ''
 
-  # Home page: the logo lives in the hero, so collapse to one row (logo left, shown only once scrolled).
+  # Home page uses the same centered-logo layout as every other page.
   assign mg_menu_row = section.settings.menu_row
   assign mg_logo_column = ''
-  if template.name == 'index'
-    assign mg_menu_row = 'top'
-    assign mg_logo_column = 'left'
-  endif
 
   if mg_menu_row == 'bottom'
     assign bottom_row_blocks = bottom_row_blocks | append: 'menu,'
