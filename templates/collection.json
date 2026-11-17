@@ -213,10 +213,24 @@
         "padding-block-start": 0,
         "padding-block-end": 32
       }
+    },
+    "mg_aeo_top": {
+      "type": "mg-aeo-collection",
+      "settings": {
+        "part": "top"
+      }
+    },
+    "mg_aeo_bottom": {
+      "type": "mg-aeo-collection",
+      "settings": {
+        "part": "bottom"
+      }
     }
   },
   "order": [
     "section",
-    "main"
+    "mg_aeo_top",
+    "main",
+    "mg_aeo_bottom"
   ]
 }

@@ -1,0 +1,163 @@
+{%- doc -%}
+  Interactive planning tools for AEO landing pages. Server-rendered labels and defaults so the
+  tool reads sensibly without JS; JS adds live calculation and a prefilled WhatsApp hand-off.
+  @param {string} tool - budget | kit | deadline
+  @param {string} [context] - page title, used in the WhatsApp message
+{%- enddoc -%}
+{%- assign uid = tool | append: '-' | append: context | handleize | truncate: 40, '' -%}
+<style>
+  .mgt { border: 1px solid var(--mg-line-gold); border-radius: 18px; background: radial-gradient(80% 120% at 100% 0%, rgba(201,162,39,.14), transparent 60%), #13110d; padding: clamp(1.1rem, 2.5vw, 1.6rem); display: grid; gap: 1.1rem; }
+  .mgt__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .85rem; }
+  .mgt label { display: grid; gap: .35rem; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mg-gold); font-weight: 700; }
+  .mgt input[type=number], .mgt input[type=date], .mgt select { background: #0b0b0b; color: #faf7f0; border: 1px solid var(--mg-line); border-radius: 10px; padding: .7rem .8rem; font-size: 1rem; font-family: inherit; text-transform: none; letter-spacing: 0; width: 100%; box-sizing: border-box; }
+  .mgt input:focus, .mgt select:focus { outline: 2px solid var(--mg-gold); outline-offset: 1px; }
+  .mgt input[type=range] { accent-color: var(--mg-gold); width: 100%; }
+  .mgt__out { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .75rem; }
+  .mgt__out div { background: #0b0b0b; border: 1px solid var(--mg-line); border-radius: 12px; padding: .8rem .95rem; }
+  .mgt__out b { display: block; font-family: var(--mg-serif); color: var(--mg-gold-soft); font-size: clamp(1.25rem, 2.4vw, 1.6rem); line-height: 1.2; }
+  .mgt__out span { color: var(--mg-muted); font-size: .8rem; }
+  .mgt__note { margin: 0; color: #d9d1bf; font-size: .92rem; line-height: 1.6; }
+  .mgt__note a { color: var(--mg-gold-soft); }
+  .mgt__items { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .5rem; }
+  .mgt__item { display: flex !important; grid-template-columns: none !important; align-items: center; gap: .6rem !important; text-transform: none !important; letter-spacing: 0 !important; font-weight: 500 !important; color: #e6dfcf !important; font-size: .92rem !important; border: 1px solid var(--mg-line); border-radius: 12px; padding: .65rem .8rem; background: #0b0b0b; cursor: pointer; }
+  .mgt__item:has(input:checked) { border-color: var(--mg-gold); background: rgba(201,162,39,.08); }
+  .mgt__item input { accent-color: var(--mg-gold); width: 1.05rem; height: 1.05rem; }
+  .mgt__item small { margin-left: auto; color: var(--mg-muted); white-space: nowrap; }
+  .mgt__actions { display: flex; gap: .6rem; flex-wrap: wrap; }
+</style>
+
+{%- case tool -%}
+{%- when 'budget' -%}
+<div class="mgt" id="mgt-{{ uid }}" data-tool="budget">
+  <div class="mgt__row">
+    <label>Number of gifts<input type="number" min="50" step="10" value="100" data-k="qty"></label>
+    <label>Budget per person (₹)<input type="number" min="200" step="50" value="1200" data-k="per"></label>
+    <label>Occasion
+      <select data-k="occ">
+        <option>Employee welcome kit</option><option>Diwali / festive gift</option><option>Year-end / New Year gift</option><option>Client appreciation</option><option>Work anniversary / awards</option><option>Event or conference giveaway</option>
+      </select>
+    </label>
+    <label>Logo branding
+      <select data-k="brand"><option value="1">Yes, brand it</option><option value="0">No branding</option></select>
+    </label>
+  </div>
+  <div class="mgt__out" aria-live="polite">
+    <div><b data-o="total">₹1,20,000</b><span>Gift spend before GST</span></div>
+    <div><b data-o="tier">Mid-range</b><span>Budget tier</span></div>
+    <div><b data-o="lead">7 to 9 days</b><span>Typical turnaround in Bengaluru</span></div>
+  </div>
+  <p class="mgt__note" data-o="advice">At ₹1,200 a head you can do a 3 to 4 item branded kit or a curated hamper. <a href="/collections/corporate-gift-hampers">See hampers</a>.</p>
+  <div class="mgt__actions">
+    <a class="mg-btn mg-btn--wa" data-o="wa" href="https://wa.me/917892255078" target="_blank" rel="noopener">Send this plan on WhatsApp</a>
+    <a class="mg-btn mg-btn--outline" href="/pages/bulk-enquiry">Email an enquiry</a>
+  </div>
+</div>
+
+{%- when 'kit' -%}
+<div class="mgt" id="mgt-{{ uid }}" data-tool="kit">
+  <div class="mgt__row">
+    <label>Number of kits<input type="number" min="50" step="10" value="50" data-k="qty"></label>
+    <label>Packaging
+      <select data-k="box"><option value="180">Branded kraft box (~₹180)</option><option value="350" selected>Rigid magnetic box (~₹350)</option><option value="550">Premium wooden / fabric box (~₹550)</option></select>
+    </label>
+  </div>
+  <div class="mgt__items">
+    <label class="mgt__item"><input type="checkbox" data-p="350" checked> Diary or notebook<small>₹250 to 450</small></label>
+    <label class="mgt__item"><input type="checkbox" data-p="650" checked> Vacuum flask / bottle<small>₹450 to 900</small></label>
+    <label class="mgt__item"><input type="checkbox" data-p="120" checked> Metal pen<small>₹80 to 200</small></label>
+    <label class="mgt__item"><input type="checkbox" data-p="350"> Coffee mug<small>₹250 to 450</small></label>
+    <label class="mgt__item"><input type="checkbox" data-p="450"> T-shirt or hoodie<small>₹350 to 1,200</small></label>
+    <label class="mgt__item"><input type="checkbox" data-p="900"> Power bank / tech<small>₹600 to 1,500</small></label>
+    <label class="mgt__item"><input type="checkbox" data-p="300"> Laptop sleeve / pouch<small>₹250 to 600</small></label>
+    <label class="mgt__item"><input type="checkbox" data-p="250"> Desk plant / eco item<small>₹150 to 400</small></label>
+    <label class="mgt__item"><input type="checkbox" data-p="150"> Lanyard, ID & stickers<small>₹100 to 200</small></label>
+    <label class="mgt__item"><input type="checkbox" data-p="400"> Snacks & treats<small>₹250 to 600</small></label>
+  </div>
+  <div class="mgt__out" aria-live="polite">
+    <div><b data-o="per">₹1,470</b><span>Estimated cost per kit</span></div>
+    <div><b data-o="total">₹73,500</b><span>Estimated total before GST</span></div>
+    <div><b data-o="count">3 items</b><span>Plus packaging</span></div>
+  </div>
+  <p class="mgt__note">Estimates use mid-range Meru Gifting prices with logo branding. Final quotes depend on brand, finish and quantity.</p>
+  <div class="mgt__actions">
+    <a class="mg-btn mg-btn--wa" data-o="wa" href="https://wa.me/917892255078" target="_blank" rel="noopener">Get a quote for this kit</a>
+    <a class="mg-btn mg-btn--outline" href="/collections/corporate-gifts">Browse kit items</a>
+  </div>
+</div>
+
+{%- when 'deadline' -%}
+<div class="mgt" id="mgt-{{ uid }}" data-tool="deadline">
+  <div class="mgt__row">
+    <label>Delivery needed by<input type="date" data-k="date"></label>
+    <label>Order size
+      <select data-k="qty"><option value="0">50 to 200 gifts</option><option value="2">200 to 1,000 gifts</option><option value="5">1,000+ gifts</option></select>
+    </label>
+    <label>Branding
+      <select data-k="brand"><option value="2">Logo branding</option><option value="0">Ready stock, no branding</option></select>
+    </label>
+    <label>Deliver to
+      <select data-k="ship"><option value="2">Bengaluru</option><option value="5">Rest of Karnataka</option><option value="10">Pan-India / multiple cities</option></select>
+    </label>
+  </div>
+  <div class="mgt__out" aria-live="polite">
+    <div><b data-o="order">Pick a date</b><span>Confirm your order by</span></div>
+    <div><b data-o="art">-</b><span>Approve artwork by</span></div>
+    <div><b data-o="days">-</b><span>Working days needed</span></div>
+  </div>
+  <p class="mgt__note" data-o="advice">Choose your delivery date to see the last safe day to confirm. We count working days (Monday to Saturday) and add a buffer for proofs.</p>
+  <div class="mgt__actions">
+    <a class="mg-btn mg-btn--wa" data-o="wa" href="https://wa.me/917892255078" target="_blank" rel="noopener">Lock in this timeline</a>
+  </div>
+</div>
+{%- endcase -%}
+
+<script>
+(function () {
+  var root = document.getElementById('mgt-{{ uid }}'); if (!root) return;
+  var ctx = {{ context | default: 'your corporate gifting guide' | json }};
+  var inr = function (n) { return '₹' + Math.round(n).toLocaleString('en-IN'); };
+  var val = function (k) { var el = root.querySelector('[data-k="' + k + '"]'); return el ? el.value : ''; };
+  var out = function (k, v, html) { var el = root.querySelector('[data-o="' + k + '"]'); if (!el) return; if (html) el.innerHTML = v; else el.textContent = v; };
+  var wa = function (msg) { var a = root.querySelector('[data-o="wa"]'); if (a) a.href = 'https://wa.me/917892255078?text=' + encodeURIComponent(msg + '\n(From: ' + ctx + ')'); };
+  var tool = root.getAttribute('data-tool');
+
+  function budget() {
+    var q = Math.max(1, +val('qty') || 0), p = +val('per') || 0, b = val('brand') === '1';
+    out('total', inr(q * p));
+    var tier, adv;
+    if (p < 500) { tier = 'Essentials'; adv = 'Under ₹500 a head works best for one quality branded item: a diary, mug, pen set or desk accessory. <a href="/pages/corporate-gifts-under-500-guide">See gifts under ₹500</a>.'; }
+    else if (p < 1000) { tier = 'Smart value'; adv = 'At ' + inr(p) + ' you can pair two items, for example a vacuum flask with a diary, in a branded sleeve. <a href="/pages/corporate-gifts-under-1000-guide">See gifts under ₹1,000</a>.'; }
+    else if (p < 2500) { tier = 'Mid-range'; adv = 'At ' + inr(p) + ' a head you can do a 3 to 4 item welcome kit or a curated festive hamper. <a href="/collections/corporate-gift-hampers">See hampers</a>.'; }
+    else if (p < 5000) { tier = 'Premium'; adv = 'At ' + inr(p) + ' choose handcrafted artisanal pieces or a premium tech-and-leather set. <a href="/pages/premium-corporate-gifts-for-clients">See premium gifts</a>.'; }
+    else { tier = 'Luxury / leadership'; adv = 'Above ₹5,000 suits CXO and key-client gifting: heritage brass, silver-finish décor and bespoke boxes. <a href="/collections/artisanal-mementos">See artisanal mementos</a>.'; }
+    out('tier', tier); out('advice', adv, true);
+    var d = q <= 200 ? 7 : q <= 1000 ? 10 : 14; if (!b) d -= 3;
+    out('lead', d +  ' to ' + (d + 2) + ' days');
+    wa('Hi Meru Gifting, I need ' + q + ' gifts for "' + val('occ') + '" at about ' + inr(p) + ' per person (' + (b ? 'with' : 'without') + ' logo branding). Total budget ~' + inr(q * p) + '.');
+  }
+  function kit() {
+    var q = Math.max(1, +val('qty') || 0), box = +val('box') || 0, sum = 0, n = 0, names = [];
+    root.querySelectorAll('input[type=checkbox]').forEach(function (c) { if (c.checked) { sum += +c.getAttribute('data-p'); n++; names.push(c.parentNode.childNodes[1].textContent.trim()); } });
+    var per = sum + box;
+    out('per', inr(per)); out('total', inr(per * q)); out('count', n + (n === 1 ? ' item' : ' items'));
+    wa('Hi Meru Gifting, please quote ' + q + ' welcome kits with: ' + names.join(', ') + '. My estimate is about ' + inr(per) + ' per kit.');
+  }
+  function addWorking(date, days) { var d = new Date(date); while (days > 0) { d.setDate(d.getDate() - 1); if (d.getDay() !== 0) days--; } return d; }
+  function fmt(d) { return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }); }
+  function deadline() {
+    var v = val('date'); if (!v) return;
+    var prod = 5 + (+val('qty')) + (+val('brand')), ship = +val('ship'), proof = +val('brand') ? 2 : 0;
+    var total = prod + ship + proof;
+    var target = new Date(v + 'T12:00:00');
+    var orderBy = addWorking(target, total), artBy = addWorking(target, prod + ship);
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    out('order', fmt(orderBy)); out('art', proof ? fmt(artBy) : 'Not needed'); out('days', total + ' working days');
+    var late = orderBy < today;
+    out('advice', late ? 'That date is tight. Ask us about express production and ready-stock options. WhatsApp us today and we will tell you what is still possible.' : 'Confirm by ' + fmt(orderBy) + ' to stay safe. Festive weeks (Diwali, Christmas) book up early, so earlier is better.');
+    wa('Hi Meru Gifting, I need gifts delivered by ' + fmt(target) + '. Your planner says to confirm by ' + fmt(orderBy) + '. Can we start?');
+  }
+  var fn = tool === 'budget' ? budget : tool === 'kit' ? kit : deadline;
+  if (tool === 'deadline') { var di = root.querySelector('[data-k="date"]'); var t = new Date(); t.setDate(t.getDate() + 30); di.value = t.toISOString().slice(0, 10); di.min = new Date().toISOString().slice(0, 10); }
+  root.addEventListener('input', fn); root.addEventListener('change', fn); fn();
+})();
+</script>

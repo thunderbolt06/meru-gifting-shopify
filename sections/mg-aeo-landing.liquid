@@ -1,0 +1,373 @@
+{%- comment -%}
+  AEO landing page. Renders the JSON in page.metafields.mgaeo.data (written by merugifting/aeo-site/push_pages.py).
+  Structure follows the AEO playbook: answer first (BLUF), self-contained H2 sections, lists/tables,
+  FAQ with FAQPage schema, visible "updated" date, and interactive tools (budget, kit builder, order-by planner).
+{%- endcomment -%}
+{%- assign d = page.metafields.mgaeo.data.value -%}
+{%- if d == blank -%}
+  <div class="mg-wrap mg-sec"><div class="rte">{{ page.content }}</div></div>
+{%- else -%}
+{%- assign wa = 'https://wa.me/917892255078?text=' -%}
+{%- capture wa_msg -%}Hi Meru Gifting, I'm looking at "{{ d.h1 | default: page.title }}" on your site and need help.{%- endcapture -%}
+{%- assign hero_img = blank -%}
+{%- if d.hero_image != blank -%}{%- assign hero_img = images[d.hero_image] -%}{%- endif -%}
+
+<div class="mgl" data-kind="{{ d.kind }}">
+  {%- comment -%} ---------- Hero ---------- {%- endcomment -%}
+  <section class="mgl-hero{% if hero_img != blank %} mgl-hero--img{% endif %}">
+    <div class="mgl-hero__in">
+      <div class="mgl-hero__copy">
+        <nav class="mgl-crumb" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/pages/feeds">Guides</a> / <span aria-current="page">{{ d.crumb | default: page.title }}</span></nav>
+        {%- if d.eyebrow != blank -%}<p class="mgl-eyebrow">{{ d.eyebrow }}</p>{%- endif -%}
+        <h1>{{ d.h1 | default: page.title }}</h1>
+        {%- if d.sub != blank -%}<p class="mgl-sub">{{ d.sub }}</p>{%- endif -%}
+        <div class="mgl-hero__cta">
+          <a class="mg-btn mg-btn--gold" href="/pages/bulk-enquiry">Get a curated shortlist</a>
+          <a class="mg-btn mg-btn--wa" href="{{ wa }}{{ wa_msg | url_encode }}" target="_blank" rel="noopener">WhatsApp us</a>
+        </div>
+        <p class="mgl-meta">By <strong>{{ d.author | default: 'Meru Gifting team, Bengaluru' }}</strong> · Updated <time datetime="{{ d.updated }}">{{ d.updated | date: '%-d %b %Y' }}</time>{% if d.read_min %} · {{ d.read_min }} min read{% endif %}</p>
+      </div>
+      {%- if hero_img != blank -%}
+        <div class="mgl-hero__media">
+          <img src="{{ hero_img | image_url: width: 1100 }}" srcset="{{ hero_img | image_url: width: 600 }} 600w, {{ hero_img | image_url: width: 1100 }} 1100w" sizes="(max-width: 899px) 92vw, 46vw" width="1100" height="{{ 1100 | divided_by: hero_img.aspect_ratio | round }}" alt="{{ d.hero_alt | default: d.h1 | escape }}" fetchpriority="high">
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  <div class="mg-wrap mgl-body">
+    {%- comment -%} ---------- Answer box + stats ---------- {%- endcomment -%}
+    {%- if d.answer != blank -%}
+      <div class="mgl-answer" id="answer">
+        <p class="mgl-answer__k">Short answer</p>
+        <p class="mgl-answer__t">{{ d.answer }}</p>
+        {%- if d.stats.size > 0 -%}
+          <dl class="mgl-stats">
+            {%- for s in d.stats -%}<div><dt>{{ s.v }}</dt><dd>{{ s.l }}</dd></div>{%- endfor -%}
+          </dl>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="mgl-grid">
+      {%- comment -%} ---------- Table of contents ---------- {%- endcomment -%}
+      <aside class="mgl-toc" aria-label="On this page">
+        <details class="mgl-toc__box" open>
+          <summary>On this page</summary>
+          <ol>
+            {%- for s in d.sections -%}<li><a href="#{{ s.id }}">{{ s.h2 }}</a></li>{%- endfor -%}
+            {%- if d.faq.size > 0 -%}<li><a href="#faq">FAQs</a></li>{%- endif -%}
+          </ol>
+        </details>
+        <div class="mgl-toc__cta">
+          <p>Need 50+ gifts?</p>
+          <a class="mg-btn mg-btn--gold mg-btn--sm" href="/pages/bulk-enquiry">Enquire</a>
+        </div>
+      </aside>
+
+      <article class="mgl-main">
+        {%- for s in d.sections -%}
+          <section class="mgl-sec mgl-sec--{{ s.type }}" id="{{ s.id }}" aria-labelledby="{{ s.id }}-h">
+            <h2 id="{{ s.id }}-h">{{ s.h2 }}</h2>
+            {%- if s.lead != blank -%}<p class="mgl-lead">{{ s.lead }}</p>{%- endif -%}
+            {%- case s.type -%}
+              {%- when 'text' -%}
+                <div class="mgl-rte">{{ s.body }}</div>
+
+              {%- when 'picks' -%}
+                <ol class="mgl-picks">
+                  {%- for it in s.items -%}
+                    {%- assign pp = blank -%}
+                    {%- if it.handle != blank -%}{%- assign pp = all_products[it.handle] -%}{%- endif -%}
+                    <li class="mgl-pick">
+                      <span class="mgl-pick__n">{{ forloop.index }}</span>
+                      {%- if pp != blank and pp.featured_image -%}
+                        <a class="mgl-pick__img" href="{{ pp.url }}"><img src="{{ pp.featured_image | image_url: width: 360 }}" width="180" height="180" alt="{{ pp.title | escape }}" loading="lazy"></a>
+                      {%- endif -%}
+                      <div class="mgl-pick__body">
+                        <h3>{% if pp != blank %}<a href="{{ pp.url }}">{{ it.name | default: pp.title }}</a>{% elsif it.url != blank %}<a href="{{ it.url }}">{{ it.name }}</a>{% else %}{{ it.name }}{% endif %}</h3>
+                        <p>{{ it.why }}</p>
+                        <p class="mgl-pick__meta">
+                          {%- if it.price != blank -%}<span>{{ it.price }}</span>{%- elsif pp != blank -%}<span>From {{ pp.price_min | money_without_trailing_zeros | replace: 'Rs. ', '₹' }}</span>{%- endif -%}
+                          {%- if it.best_for != blank -%}<span>Best for: {{ it.best_for }}</span>{%- endif -%}
+                        </p>
+                      </div>
+                    </li>
+                  {%- endfor -%}
+                </ol>
+
+              {%- when 'table' -%}
+                <div class="mgl-table" tabindex="0" role="region" aria-label="{{ s.h2 | escape }}">
+                  <table>
+                    <thead><tr>{%- for c in s.cols -%}<th scope="col">{{ c }}</th>{%- endfor -%}</tr></thead>
+                    <tbody>
+                      {%- for r in s.rows -%}<tr>{%- for c in r -%}{%- if forloop.first -%}<th scope="row">{{ c }}</th>{%- else -%}<td>{{ c }}</td>{%- endif -%}{%- endfor -%}</tr>{%- endfor -%}
+                    </tbody>
+                  </table>
+                </div>
+
+              {%- when 'steps' -%}
+                <ol class="mgl-steps">
+                  {%- for it in s.items -%}<li><h3>{{ it.t }}</h3><p>{{ it.d }}</p></li>{%- endfor -%}
+                </ol>
+
+              {%- when 'checklist' -%}
+                <ul class="mgl-check">
+                  {%- for it in s.items -%}<li>{{ it }}</li>{%- endfor -%}
+                </ul>
+
+              {%- when 'cards' -%}
+                <div class="mgl-cards">
+                  {%- for it in s.items -%}
+                    {%- if it.url != blank -%}<a class="mgl-card" href="{{ it.url }}">{%- else -%}<div class="mgl-card">{%- endif -%}
+                      {%- if it.tag != blank -%}<span class="mgl-card__tag">{{ it.tag }}</span>{%- endif -%}
+                      <h3>{{ it.t }}</h3><p>{{ it.d }}</p>
+                      {%- if it.url != blank -%}<span class="mgl-card__go">Explore →</span>{%- endif -%}
+                    {%- if it.url != blank -%}</a>{%- else -%}</div>{%- endif -%}
+                  {%- endfor -%}
+                </div>
+
+              {%- when 'products' -%}
+                {%- assign c = collections[s.collection] -%}
+                {%- assign lim = s.limit | default: 8 -%}
+                {%- if c != blank and c.products_count > 0 -%}
+                  <div class="mg-grid mgl-pgrid">
+                    {%- assign shown = 0 -%}
+                    {%- for p in c.products limit: 60 -%}
+                      {%- if shown >= lim -%}{%- break -%}{%- endif -%}
+                      {%- if p.featured_image -%}
+                        {%- if s.max_price == blank or p.price_min <= s.max_price -%}
+                          {%- render 'mg-product-card', product: p -%}
+                          {%- assign shown = shown | plus: 1 -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                  <div class="mg-more"><a class="mg-btn mg-btn--outline" href="{{ c.url }}">{{ s.button | default: 'See the full range' }} · {{ c.products_count }} →</a></div>
+                {%- endif -%}
+
+              {%- when 'tool' -%}
+                {%- render 'mg-aeo-tools', tool: s.tool, context: d.h1 -%}
+
+              {%- when 'quote' -%}
+                <blockquote class="mgl-quote"><p>{{ s.body }}</p>{% if s.cite != blank %}<cite>{{ s.cite }}</cite>{% endif %}</blockquote>
+            {%- endcase -%}
+            {%- if s.after != blank -%}<div class="mgl-rte mgl-after">{{ s.after }}</div>{%- endif -%}
+          </section>
+        {%- endfor -%}
+
+        {%- comment -%} ---------- FAQ ---------- {%- endcomment -%}
+        {%- if d.faq.size > 0 -%}
+          <section class="mgl-sec" id="faq" aria-labelledby="faq-h">
+            <h2 id="faq-h">{{ d.faq_title | default: 'Frequently asked questions' }}</h2>
+            <div class="mg-faq mgl-faq">
+              {%- for f in d.faq -%}
+                <details{% if forloop.first %} open{% endif %}><summary>{{ f.q }}</summary><div class="mg-faq__a">{{ f.a }}</div></details>
+              {%- endfor -%}
+            </div>
+          </section>
+        {%- endif -%}
+
+        {%- comment -%} ---------- Related ---------- {%- endcomment -%}
+        {%- if d.related.size > 0 -%}
+          <section class="mgl-sec" aria-labelledby="rel-h">
+            <h2 id="rel-h">Keep exploring</h2>
+            <div class="mgl-related">
+              {%- for r in d.related -%}<a href="{{ r.url }}">{{ r.t }} <span aria-hidden="true">→</span></a>{%- endfor -%}
+            </div>
+          </section>
+        {%- endif -%}
+      </article>
+    </div>
+
+    <div class="mg-sec">{%- render 'mg-cta-pair' -%}</div>
+  </div>
+</div>
+
+{%- comment -%} ---------- Structured data ---------- {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": {{ request.origin | append: page.url | append: '#webpage' | json }},
+      "url": {{ request.origin | append: page.url | json }},
+      "name": {{ d.h1 | default: page.title | json }},
+      "description": {{ d.answer | default: page.metafields.global.description_tag | strip_html | json }},
+      "inLanguage": "en-IN",
+      "datePublished": {{ page.created_at | date: '%Y-%m-%d' | json }},
+      "dateModified": {{ d.updated | default: page.updated_at | date: '%Y-%m-%d' | json }},
+      "author": { "@type": "Organization", "name": "Meru Gifting", "url": {{ request.origin | json }} },
+      "publisher": { "@id": {{ request.origin | append: '/#organization' | json }} },
+      "about": {{ d.about | default: d.crumb | default: page.title | json }}
+      {%- if hero_img != blank -%},"primaryImageOfPage": {{ hero_img | image_url: width: 1200 | prepend: 'https:' | json }}{%- endif -%}
+    }
+    {%- assign has_picks = false -%}
+    {%- for s in d.sections -%}{%- if s.type == 'picks' -%}{%- assign has_picks = true -%}{%- assign pick_sec = s -%}{%- break -%}{%- endif -%}{%- endfor -%}
+    {%- if has_picks -%},
+    {
+      "@type": "ItemList",
+      "name": {{ pick_sec.h2 | json }},
+      "itemListElement": [
+        {%- for it in pick_sec.items -%}
+        {"@type":"ListItem","position":{{ forloop.index }},"name":{{ it.name | json }}{% if it.handle != blank %},"url":{{ request.origin | append: '/products/' | append: it.handle | json }}{% elsif it.url != blank %},"url":{{ request.origin | append: it.url | json }}{% endif %}}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+    {%- endif -%}
+    {%- if d.faq.size > 0 -%},
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- for f in d.faq -%}
+        {"@type":"Question","name":{{ f.q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ f.a | strip_html | json }}}}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+    {%- endif -%}
+  ]
+}
+</script>
+{%- endif -%}
+
+{%- render 'mg-aeo-faq-css' -%}
+<style>
+  .mgl { background: var(--mg-bg); color: var(--mg-text); }
+  .mgl a { color: inherit; }
+  .mgl-hero { background: radial-gradient(60% 120% at 85% 0%, rgba(201,162,39,.22), transparent 60%), linear-gradient(135deg, #15110a, #0b0b0b 60%); border-bottom: 1px solid rgba(201,162,39,.3); }
+  .mgl-hero__in { max-width: var(--mg-page); margin: 0 auto; padding: clamp(1.75rem, 4vw, 3.25rem) clamp(1rem, 3vw, 2rem); display: grid; gap: clamp(1.25rem, 3vw, 2.5rem); align-items: center; }
+  .mgl-hero--img .mgl-hero__in { grid-template-columns: 1.05fr .95fr; }
+  .mgl-crumb { font-size: .78rem; color: var(--mg-muted); margin: 0 0 .9rem; }
+  .mgl-crumb a { color: var(--mg-muted); text-decoration: none; }
+  .mgl-crumb a:hover { color: var(--mg-gold-soft); }
+  .mgl-eyebrow { color: var(--mg-gold); letter-spacing: .2em; text-transform: uppercase; font-size: .74rem; font-weight: 700; margin: 0 0 .6rem; }
+  .mgl-hero h1 { font-family: var(--mg-serif); color: #faf7f0; font-size: clamp(1.85rem, 4vw, 3rem); line-height: 1.1; margin: 0 0 .8rem; letter-spacing: 0; }
+  .mgl-sub { color: #d9d1bf; line-height: 1.65; margin: 0 0 1.2rem; max-width: 40rem; font-size: 1.02rem; }
+  .mgl-hero__cta { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .mgl-meta { font-size: .8rem; color: var(--mg-muted); margin: 0; }
+  .mgl-meta strong { color: #d9d1bf; font-weight: 600; }
+  .mgl-hero__media img { width: 100%; height: auto; display: block; border-radius: 20px; border: 1px solid var(--mg-line-gold); box-shadow: 0 24px 60px rgba(0,0,0,.55); }
+
+  .mgl-body { padding-block: clamp(1.5rem, 3vw, 2.5rem) 0; }
+  .mgl-answer { border: 1px solid var(--mg-line-gold); background: linear-gradient(135deg, rgba(201,162,39,.10), rgba(201,162,39,.02)); border-radius: 18px; padding: clamp(1.1rem, 2.5vw, 1.6rem) clamp(1.1rem, 2.5vw, 1.8rem); margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+  .mgl-answer__k { margin: 0 0 .35rem; color: var(--mg-gold); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; }
+  .mgl-answer__t { margin: 0; font-size: clamp(1rem, 1.6vw, 1.12rem); line-height: 1.7; color: #f4efe3; }
+  .mgl-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .75rem; margin: 1.1rem 0 0; }
+  .mgl-stats div { background: rgba(11,11,11,.55); border: 1px solid var(--mg-line); border-radius: 12px; padding: .7rem .9rem; }
+  .mgl-stats dt { font-family: var(--mg-serif); color: var(--mg-gold-soft); font-size: 1.35rem; font-weight: 700; }
+  .mgl-stats dd { margin: .15rem 0 0; color: var(--mg-muted); font-size: .8rem; line-height: 1.4; }
+
+  .mgl-grid { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: clamp(1.5rem, 3vw, 3rem); align-items: start; }
+  .mgl-toc { position: sticky; top: 110px; display: grid; gap: 1rem; }
+  .mgl-toc__box { border: 1px solid var(--mg-line); border-radius: 14px; background: var(--mg-surface); }
+  .mgl-toc__box summary { cursor: pointer; list-style: none; padding: .85rem 1rem; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--mg-gold); font-weight: 700; }
+  .mgl-toc__box summary::-webkit-details-marker { display: none; }
+  .mgl-toc ol { margin: 0; padding: 0 1rem .9rem 2.1rem; display: grid; gap: .45rem; font-size: .86rem; line-height: 1.4; }
+  .mgl-toc ol a { color: var(--mg-muted); text-decoration: none; }
+  .mgl-toc ol a:hover, .mgl-toc ol a.is-active { color: var(--mg-gold-soft); }
+  .mgl-toc li::marker { color: var(--mg-gold); }
+  .mgl-toc__cta { border: 1px solid var(--mg-line-gold); border-radius: 14px; padding: 1rem; background: #15120c; display: grid; gap: .6rem; justify-items: start; }
+  .mgl-toc__cta p { margin: 0; font-family: var(--mg-serif); color: var(--mg-gold-soft); font-size: 1.1rem; }
+
+  .mgl-main { min-width: 0; }
+  .mgl-sec { padding-block: 0 clamp(2rem, 4vw, 3rem); scroll-margin-top: 110px; }
+  .mgl-sec h2 { font-family: var(--mg-serif); color: var(--mg-gold-soft); font-size: clamp(1.4rem, 2.6vw, 1.95rem); line-height: 1.2; margin: 0 0 .75rem; letter-spacing: 0; }
+  .mgl-sec h3 { color: #faf7f0; font-size: 1.02rem; margin: 0 0 .3rem; line-height: 1.35; }
+  .mgl-lead { color: #e6dfcf; line-height: 1.7; margin: 0 0 1.1rem; font-size: 1.01rem; }
+  .mgl-rte { color: #d9d1bf; line-height: 1.75; font-size: .98rem; }
+  .mgl-rte p { margin: 0 0 1rem; }
+  .mgl-rte strong { color: #faf7f0; }
+  .mgl-rte ul, .mgl-rte ol { padding-left: 1.2rem; margin: 0 0 1rem; display: grid; gap: .4rem; }
+  .mgl-rte a, .mgl-lead a, .mg-faq__a a { color: var(--mg-gold-soft); text-decoration: underline; text-underline-offset: 3px; }
+  .mgl-after { margin-top: 1rem; }
+
+  .mgl-picks { list-style: none; padding: 0; margin: 0; display: grid; gap: .85rem; counter-reset: none; }
+  .mgl-pick { display: grid; grid-template-columns: auto auto 1fr; gap: 1rem; align-items: start; border: 1px solid var(--mg-line); background: var(--mg-surface); border-radius: 16px; padding: 1rem; transition: border-color .2s ease; }
+  .mgl-pick:hover { border-color: var(--mg-line-gold); }
+  .mgl-pick__n { width: 2.1rem; height: 2.1rem; border-radius: 999px; display: grid; place-items: center; background: linear-gradient(90deg, var(--mg-gold-soft), var(--mg-gold)); color: #17110a; font-weight: 800; font-size: .9rem; }
+  .mgl-pick__img img { width: 96px; height: 96px; object-fit: cover; border-radius: 12px; display: block; background: #0f0e0c; }
+  .mgl-pick__body p { margin: 0 0 .4rem; color: #d9d1bf; line-height: 1.6; font-size: .94rem; }
+  .mgl-pick__body h3 a { text-decoration: none; }
+  .mgl-pick__body h3 a:hover { color: var(--mg-gold-soft); }
+  .mgl-pick__meta { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .mgl-pick__meta span { font-size: .76rem; color: var(--mg-gold-soft); border: 1px solid var(--mg-line-gold); border-radius: 999px; padding: .2rem .6rem; }
+
+  .mgl-table { overflow-x: auto; border: 1px solid var(--mg-line); border-radius: 14px; background: var(--mg-surface); }
+  .mgl-table table { width: 100%; border-collapse: collapse; font-size: .9rem; min-width: 560px; }
+  .mgl-table th, .mgl-table td { text-align: left; padding: .75rem .9rem; border-bottom: 1px solid var(--mg-line); vertical-align: top; line-height: 1.5; color: #d9d1bf; }
+  .mgl-table thead th { color: var(--mg-gold); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; background: #15120c; }
+  .mgl-table tbody th { color: #faf7f0; font-weight: 600; }
+  .mgl-table tbody tr:last-child > * { border-bottom: 0; }
+  .mgl-table tbody tr:hover > * { background: rgba(201,162,39,.05); }
+
+  .mgl-steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: .85rem; counter-reset: st; }
+  .mgl-steps li { counter-increment: st; border: 1px solid var(--mg-line); border-radius: 16px; padding: 1.1rem; background: var(--mg-surface); position: relative; }
+  .mgl-steps li::before { content: counter(st, decimal-leading-zero); display: block; font-family: var(--mg-serif); color: var(--mg-gold); font-size: 1.5rem; font-weight: 700; margin-bottom: .4rem; }
+  .mgl-steps p { margin: 0; color: #d9d1bf; line-height: 1.6; font-size: .92rem; }
+
+  .mgl-check { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .55rem .9rem; }
+  .mgl-check li { position: relative; padding: .7rem .9rem .7rem 2.4rem; border: 1px solid var(--mg-line); border-radius: 12px; background: var(--mg-surface); color: #d9d1bf; line-height: 1.5; font-size: .93rem; }
+  .mgl-check li::before { content: ""; position: absolute; left: .9rem; top: .95rem; width: .8rem; height: .45rem; border-left: 2px solid var(--mg-gold); border-bottom: 2px solid var(--mg-gold); transform: rotate(-45deg); }
+
+  .mgl-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .85rem; }
+  .mgl-card { display: flex; flex-direction: column; gap: .35rem; border: 1px solid var(--mg-line); border-radius: 16px; padding: 1.1rem; background: var(--mg-surface); text-decoration: none; transition: border-color .2s ease, transform .2s ease; }
+  a.mgl-card:hover { border-color: var(--mg-line-gold); transform: translateY(-2px); }
+  .mgl-card p { margin: 0; color: #d9d1bf; line-height: 1.55; font-size: .9rem; }
+  .mgl-card__tag { align-self: flex-start; font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: var(--mg-gold); border: 1px solid var(--mg-line-gold); border-radius: 999px; padding: .15rem .55rem; }
+  .mgl-card__go { margin-top: auto; padding-top: .4rem; color: var(--mg-gold); font-weight: 700; font-size: .8rem; }
+
+  .mgl-pgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .mgl-quote { margin: 0; border-left: 3px solid var(--mg-gold); padding: .4rem 0 .4rem 1.2rem; }
+  .mgl-quote p { font-family: var(--mg-serif); font-size: 1.2rem; color: #f4efe3; line-height: 1.5; margin: 0 0 .5rem; }
+  .mgl-quote cite { color: var(--mg-muted); font-style: normal; font-size: .85rem; }
+
+  .mgl-faq { max-width: none; }
+  .mgl-faq .mg-faq__a p { margin: 0 0 .6rem; }
+  .mgl-related { display: flex; flex-wrap: wrap; gap: .55rem; }
+  .mgl-related a { text-decoration: none; border: 1px solid var(--mg-line-gold); color: var(--mg-gold-soft); border-radius: 999px; padding: .5rem 1rem; font-size: .88rem; font-weight: 600; transition: background-color .15s ease; }
+  .mgl-related a:hover { background: rgba(201,162,39,.12); }
+
+  @media (max-width: 989px) {
+    .mgl-hero--img .mgl-hero__in { grid-template-columns: 1fr; }
+    .mgl-hero__media { order: -1; }
+    .mgl-grid { grid-template-columns: 1fr; }
+    .mgl-toc { position: static; }
+    .mgl-toc__box:not([open]) { }
+    .mgl-toc__cta { display: none; }
+    .mgl-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 599px) {
+    .mgl-pick { grid-template-columns: auto 1fr; }
+    .mgl-pick__img { grid-row: span 1; }
+    .mgl-pick__body { grid-column: 1 / -1; }
+  }
+</style>
+<script>
+  (function () {
+    var links = document.querySelectorAll('.mgl-toc ol a');
+    if (!links.length || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(max-width: 989px)').matches) {
+      var box = document.querySelector('.mgl-toc__box'); if (box) box.removeAttribute('open');
+    }
+    var map = {};
+    links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('is-active'); });
+          var a = map[e.target.id]; if (a) a.classList.add('is-active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MG AEO landing",
+  "settings": [],
+  "presets": [{ "name": "MG AEO landing" }]
+}
+{% endschema %}

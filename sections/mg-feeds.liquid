@@ -1,0 +1,105 @@
+{%- comment -%}
+  /pages/feeds (also /feeds via URL redirect): hub of every AEO guide, tool and collection.
+  Data: shop.metafields.mgaeo.feeds (JSON list) written by aeo-site/push_feeds.py.
+  Server-renders every card (crawlable without JS); JS adds search + type filters.
+{%- endcomment -%}
+{%- assign items = shop.metafields.mgaeo.feeds.value -%}
+<div class="mgf">
+  <section class="mgl-hero">
+    <div class="mgl-hero__in mgf-hero">
+      <nav class="mgl-crumb" aria-label="Breadcrumb"><a href="/">Home</a> / <span aria-current="page">Guides & tools</span></nav>
+      <p class="mgl-eyebrow">Meru Gifting knowledge hub</p>
+      <h1>Corporate gifting guides, tools & collections</h1>
+      <p class="mgl-sub">Every answer we give corporate buyers in one place: what to gift, what it costs, how long it takes and how to order 50 to 5,000 gifts in Bengaluru and across India.</p>
+      <div class="mgf-search">
+        <label class="visually-hidden" for="mgf-q">Search guides</label>
+        <input id="mgf-q" type="search" placeholder="Search: welcome kit, Diwali, under ₹500, Whitefield…" autocomplete="off">
+        <span class="mgf-count" aria-live="polite"><b>{{ items.size }}</b> resources</span>
+      </div>
+      <div class="mgf-filters" role="toolbar" aria-label="Filter by type">
+        <button type="button" class="is-on" data-k="all">All</button>
+        {%- assign kinds = '' -%}
+        {%- for it in items -%}{%- unless kinds contains it.kind -%}{%- assign kinds = kinds | append: it.kind | append: '|' -%}{%- endunless -%}{%- endfor -%}
+        {%- assign klist = kinds | split: '|' -%}
+        {%- for k in klist -%}{%- if k != blank -%}<button type="button" data-k="{{ k | handleize }}">{{ k }}</button>{%- endif -%}{%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <div class="mg-wrap mg-sec">
+    <ul class="mgf-grid">
+      {%- for it in items -%}
+        {%- assign im = blank -%}
+        {%- if it.img != blank -%}{%- assign im = images[it.img] -%}{%- endif -%}
+        <li class="mgf-item" data-k="{{ it.kind | handleize }}" data-s="{{ it.t | downcase | escape }} {{ it.d | downcase | escape }} {{ it.kind | downcase }}">
+          <a class="mgf-card" href="{{ it.url }}">
+            <div class="mgf-card__media">
+              {%- if im != blank -%}<img src="{{ im | image_url: width: 520 }}" width="520" height="{{ 520 | divided_by: im.aspect_ratio | round }}" alt="" loading="lazy">{%- endif -%}
+              <span class="mg-card__badge">{{ it.kind }}</span>
+            </div>
+            <div class="mgf-card__body">
+              <h2>{{ it.t }}</h2>
+              <p>{{ it.d }}</p>
+              <span class="mgl-card__go">Read →</span>
+            </div>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+    <p class="mgf-empty" hidden>No guides match that search. <a class="mg-link" href="/pages/bulk-enquiry">Ask us directly →</a></p>
+    <div class="mg-sec">{%- render 'mg-cta-pair' -%}</div>
+  </div>
+</div>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","name":"Corporate gifting guides, tools & collections","url":{{ request.origin | append: '/pages/feeds' | json }},"publisher":{"@id":{{ request.origin | append: '/#organization' | json }}},
+"mainEntity":{"@type":"ItemList","numberOfItems":{{ items.size }},"itemListElement":[{%- for it in items -%}{"@type":"ListItem","position":{{ forloop.index }},"name":{{ it.t | json }},"url":{{ request.origin | append: it.url | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]}}
+</script>
+<style>
+  .mgf-hero { display: block; text-align: center; }
+  .mgf-hero .mgl-sub { margin-inline: auto; }
+  .mgl-hero { background: radial-gradient(60% 120% at 85% 0%, rgba(201,162,39,.22), transparent 60%), linear-gradient(135deg, #15110a, #0b0b0b 60%); border-bottom: 1px solid rgba(201,162,39,.3); }
+  .mgl-hero__in { max-width: var(--mg-page); margin: 0 auto; padding: clamp(1.75rem, 4vw, 3.25rem) clamp(1rem, 3vw, 2rem); }
+  .mgl-crumb { font-size: .78rem; color: var(--mg-muted); margin: 0 0 .9rem; } .mgl-crumb a { color: var(--mg-muted); text-decoration: none; }
+  .mgl-eyebrow { color: var(--mg-gold); letter-spacing: .2em; text-transform: uppercase; font-size: .74rem; font-weight: 700; margin: 0 0 .6rem; }
+  .mgl-hero h1 { font-family: var(--mg-serif); color: #faf7f0; font-size: clamp(1.85rem, 4vw, 3rem); line-height: 1.1; margin: 0 0 .8rem; }
+  .mgl-sub { color: #d9d1bf; line-height: 1.65; margin: 0 0 1.4rem; max-width: 44rem; }
+  .mgf-search { display: flex; align-items: center; gap: .8rem; max-width: 640px; margin: 0 auto 1rem; }
+  .mgf-search input { flex: 1; background: #0b0b0b; color: #faf7f0; border: 1px solid var(--mg-line-gold); border-radius: 999px; padding: .85rem 1.2rem; font-size: 1rem; font-family: inherit; }
+  .mgf-search input:focus { outline: 2px solid var(--mg-gold); outline-offset: 2px; }
+  .mgf-count { color: var(--mg-muted); font-size: .85rem; white-space: nowrap; } .mgf-count b { color: var(--mg-gold-soft); }
+  .mgf-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: .45rem; }
+  .mgf-filters button { background: transparent; color: var(--mg-gold-soft); border: 1px solid var(--mg-line-gold); border-radius: 999px; padding: .42rem .95rem; font-size: .84rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .mgf-filters button:hover { background: rgba(201,162,39,.1); }
+  .mgf-filters button.is-on { background: linear-gradient(90deg, var(--mg-gold-soft), var(--mg-gold)); color: #17110a; border-color: transparent; }
+  .mgf-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: clamp(.8rem, 1.6vw, 1.25rem); }
+  .mgf-card { display: flex; flex-direction: column; height: 100%; background: var(--mg-surface); border: 1px solid var(--mg-line); border-radius: var(--mg-radius); overflow: hidden; text-decoration: none; color: inherit; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
+  .mgf-card:hover { border-color: var(--mg-line-gold); transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0,0,0,.45); }
+  .mgf-card__media { position: relative; aspect-ratio: 16 / 9; background: radial-gradient(70% 90% at 70% 20%, rgba(201,162,39,.25), transparent 70%), #15120c; overflow: hidden; }
+  .mgf-card__media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+  .mgf-card:hover .mgf-card__media img { transform: scale(1.04); }
+  .mgf-card__body { padding: .95rem 1.05rem 1.1rem; display: flex; flex-direction: column; gap: .4rem; flex: 1; }
+  .mgf-card__body h2 { font-size: 1rem; line-height: 1.35; margin: 0; color: #faf7f0; font-weight: 600; letter-spacing: 0; font-family: inherit; }
+  .mgf-card__body p { margin: 0; color: var(--mg-muted); font-size: .86rem; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .mgl-card__go { margin-top: auto; padding-top: .3rem; color: var(--mg-gold); font-weight: 700; font-size: .8rem; }
+  .mg-card__badge { position: absolute; top: .6rem; left: .6rem; background: rgba(11,11,11,.82); color: var(--mg-gold-soft); border: 1px solid var(--mg-line-gold); font-size: .66rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: .26rem .55rem; border-radius: 999px; }
+  .mgf-empty { text-align: center; color: var(--mg-muted); margin-top: 2rem; }
+  @media (max-width: 599px) { .mgf-search { flex-direction: column; align-items: stretch; } .mgf-count { text-align: center; } }
+</style>
+<script>
+(function () {
+  var q = document.getElementById('mgf-q'), items = [].slice.call(document.querySelectorAll('.mgf-item')), btns = [].slice.call(document.querySelectorAll('.mgf-filters button')), count = document.querySelector('.mgf-count b'), empty = document.querySelector('.mgf-empty'), kind = 'all';
+  try { var p = new URLSearchParams(location.search); if (p.get('q')) q.value = p.get('q'); if (p.get('type')) kind = p.get('type'); } catch (e) {}
+  function run() {
+    var s = q.value.trim().toLowerCase(), n = 0, words = s.split(/\s+/).filter(Boolean);
+    items.forEach(function (li) { var ok = (kind === 'all' || li.dataset.k === kind) && words.every(function (w) { return li.dataset.s.indexOf(w) > -1; }); li.hidden = !ok; if (ok) n++; });
+    count.textContent = n; empty.hidden = n > 0;
+    btns.forEach(function (b) { b.classList.toggle('is-on', b.dataset.k === kind); });
+  }
+  q.addEventListener('input', run);
+  btns.forEach(function (b) { b.addEventListener('click', function () { kind = b.dataset.k; run(); }); });
+  run();
+})();
+</script>
+{% schema %}
+{ "name": "MG feeds hub", "settings": [], "presets": [{ "name": "MG feeds hub" }] }
+{% endschema %}
