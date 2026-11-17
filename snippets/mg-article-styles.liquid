@@ -90,6 +90,11 @@
   .blog-post-content .mg-cta { grid-template-columns: 1fr; padding: 1.5rem; }
   .blog-post-content .mg-cta h3 { font-size: 1.3rem !important; margin: 0 0 0.35rem !important; }
   .blog-post-content .mg-related h3 { font-size: 0.8rem !important; }
+  /* Desktop: TOC left, article centre, author + CTA right (see blocks/_blog-post-content) */
+  @media (min-width: 1100px) {
+    .section-content-wrapper:has(.mg-read) > .shopify-block:has(.mg-read) { max-width: 1320px; }
+    .shopify-section:has(.mg-author) { display: none; }
+  }
   @media (max-width: 749px) {
     .blog-post-content { font-size: 1rem; line-height: 1.7; }
     .blog-post-content h2 { margin-top: 2.25rem !important; }

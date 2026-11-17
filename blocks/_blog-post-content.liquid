@@ -1,18 +1,98 @@
+{% liquid
+  # Give every H2 an anchor id and collect them for the side table of contents.
+  assign parts = article.content | split: '<h2'
+  assign body = parts.first
+  assign toc = ''
+  assign toc_count = 0
+  for part in parts offset: 1
+    assign heading_html = part | split: '</h2>' | first
+    assign heading_text = '<h2' | append: heading_html | append: '</h2>' | strip_html | strip
+    assign heading_id = heading_text | handleize | truncate: 64, ''
+    if part contains ' id="'
+      assign body = body | append: '<h2' | append: part
+    else
+      assign body = body | append: '<h2 id="' | append: heading_id | append: '"' | append: part
+    endif
+    assign toc_count = toc_count | plus: 1
+    capture toc_item
+      echo '<li><a href="#' | append: heading_id | append: '">' | append: heading_text | append: '</a></li>'
+    endcapture
+    assign toc = toc | append: toc_item
+  endfor
+%}
 
+<div class="mg-read{% if toc_count >= 2 %} mg-read--toc{% endif %}">
+  {% if toc_count >= 2 %}
+    <aside class="mg-read__toc" aria-label="Table of contents">
+      <nav>
+        <p class="mg-read__label">In this guide</p>
+        <ol>
+          {{ toc }}
+        </ol>
+      </nav>
+    </aside>
+  {% endif %}
 
-<div
-  class="blog-post-content rte"
-  style="
-    {% if block.settings.text_color != blank %}
-      --color: {{ block.settings.text_color }};
-      --color-rgb: {{ block.settings.text_color.rgb }};
-    {% endif %}
-  "
->
-  <rte-formatter>
-    {{ article.content }}
-  </rte-formatter>
+  <div
+    class="blog-post-content rte"
+    style="
+      {% if block.settings.text_color != blank %}
+        --color: {{ block.settings.text_color }};
+        --color-rgb: {{ block.settings.text_color.rgb }};
+      {% endif %}
+    "
+  >
+    <rte-formatter>
+      {{ body }}
+    </rte-formatter>
+  </div>
+
+  <aside class="mg-read__side" aria-label="About the author">
+    <div class="mg-read__sticky">
+      <div class="mg-side-author">
+        <div class="mg-side-author__top">
+          <div class="mg-side-author__avatar" aria-hidden="true">RJ</div>
+          <div>
+            <p class="mg-read__label">Written by</p>
+            <p class="mg-side-author__name">Rahil Jain</p>
+          </div>
+        </div>
+        <p class="mg-side-author__bio">
+          Founder of Meru Gifting, Bangalore. Designing corporate gifting programmes for 150+ brands since 2012.
+        </p>
+        <a class="mg-side-author__link" href="/blogs/founder-notes">More from Rahil</a>
+      </div>
+
+      <div class="mg-side-cta">
+        <p class="mg-read__label">Bulk orders</p>
+        <p class="mg-side-cta__title">Planning gifts for your team or clients?</p>
+        <p class="mg-side-cta__text">Branded gifts and hampers from 10 pieces, with your logo. Pan-India delivery and GST invoice.</p>
+        <a class="mg-side-cta__btn mg-side-cta__btn--gold" href="/pages/bulk-enquiry">Get a quote</a>
+        <a class="mg-side-cta__btn mg-side-cta__btn--ghost" href="https://wa.me/917892255078" target="_blank" rel="noopener">WhatsApp us</a>
+        <a class="mg-side-cta__more" href="/pages/catalog">Download catalogue</a>
+      </div>
+    </div>
+  </aside>
 </div>
+
+{% if toc_count >= 2 %}
+  <script>
+    (() => {
+      const links = [...document.querySelectorAll('.mg-read__toc a')];
+      const heads = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+      if (!links.length) return;
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        let current = -1;
+        heads.forEach((h, i) => { if (h && h.getBoundingClientRect().top < window.innerHeight * 0.3) current = i; });
+        links.forEach((a, i) => a.classList.toggle('is-active', i === current));
+      };
+      document.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true, capture: true });
+      update();
+    })();
+  </script>
+{% endif %}
 
 {% stylesheet %}
   .blog-post-content {
@@ -23,6 +103,186 @@
 
   .blog-post-content a {
     color: currentcolor;
+  }
+
+  .mg-read__toc,
+  .mg-read__side {
+    display: none;
+  }
+
+  .blog-post-content h2[id] {
+    scroll-margin-top: 140px;
+  }
+
+  @media screen and (min-width: 1100px) {
+    .mg-read {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr) 270px;
+      gap: 48px;
+      align-items: stretch;
+    }
+
+    .mg-read .blog-post-content {
+      max-width: 720px;
+      width: 100%;
+    }
+
+    .mg-read__toc,
+    .mg-read__side {
+      display: block;
+    }
+
+    .mg-read:not(.mg-read--toc) {
+      grid-template-columns: minmax(0, 1fr) 270px;
+    }
+
+    .mg-read__toc nav,
+    .mg-read__sticky {
+      position: sticky;
+      top: 130px;
+    }
+
+    .mg-read__toc nav {
+      max-height: calc(100vh - 160px);
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+  }
+
+  .mg-read__label {
+    margin: 0 0 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #c9a227;
+  }
+
+  .mg-read__toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid #2e2920;
+  }
+
+  .mg-read__toc li {
+    margin: 0;
+  }
+
+  .mg-read__toc a {
+    display: block;
+    padding: 0.45rem 0 0.45rem 0.9rem;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: #a8a090;
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .mg-read__toc a:hover,
+  .mg-read__toc a.is-active {
+    color: #faf7f0;
+    border-left-color: #c9a227;
+  }
+
+  .mg-side-author,
+  .mg-side-cta {
+    border: 1px solid #2e2920;
+    background: #15130f;
+    border-radius: 14px;
+    padding: 1.15rem 1.2rem;
+  }
+
+  .mg-side-cta {
+    margin-top: 1rem;
+    background: linear-gradient(160deg, #1d1910, #0b0b0b);
+    border-color: #c9a22755;
+  }
+
+  .mg-side-author__top {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .mg-side-author__top .mg-read__label {
+    margin: 0 0 0.15rem;
+  }
+
+  .mg-side-author__avatar {
+    flex: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid #c9a22766;
+    background: #0b0b0b;
+    color: #c9a227;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .mg-side-author__name {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #faf7f0;
+  }
+
+  .mg-side-author__bio,
+  .mg-side-cta__text {
+    margin: 0.75rem 0 0;
+    font-size: 0.84rem;
+    line-height: 1.55;
+    color: #a8a090;
+  }
+
+  .mg-side-author__link,
+  .mg-side-cta__more {
+    display: inline-block;
+    margin-top: 0.7rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #c9a227;
+    text-decoration: none;
+  }
+
+  .mg-side-cta__title {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.35;
+    font-weight: 600;
+    color: #faf7f0;
+  }
+
+  .mg-side-cta__btn {
+    display: block;
+    text-align: center;
+    margin-top: 0.7rem;
+    padding: 0.65rem 1rem;
+    border-radius: 999px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .mg-side-cta__btn--gold {
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #e3c45a, #c9a227);
+    color: #111;
+  }
+
+  .mg-side-cta__btn--ghost {
+    border: 1px solid #c9a227;
+    color: #c9a227;
+  }
+
+  .mg-side-cta__more {
+    display: block;
+    text-align: center;
   }
 {% endstylesheet %}
 
