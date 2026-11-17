@@ -27,15 +27,6 @@
         "padding-block-end": 0
       }
     },
-    "mg_cats": {
-      "type": "custom-liquid",
-      "settings": {
-        "custom_liquid": "{% render 'mg-category-circles' %}",
-        "section_width": "full-width",
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
     "mg_hampers": {
       "type": "custom-liquid",
       "settings": {
@@ -163,7 +154,6 @@
   "order": [
     "mg_hero",
     "mg_marquee",
-    "mg_cats",
     "mg_hampers",
     "mg_solutions",
     "mg_best",

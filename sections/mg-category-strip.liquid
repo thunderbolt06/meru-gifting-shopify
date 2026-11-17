@@ -1,13 +1,12 @@
 {%- comment -%}
   BoxUp-style round category shortcuts under the header. Shown on browsing
-  templates only (collections, search, corporate page) so product and
-  checkout-adjacent pages stay focused. On the home page the strip is
-  rendered by templates/index.json below the marquee instead.
+  templates only (home, collections, search, corporate page) so product and
+  checkout-adjacent pages stay focused.
 {%- endcomment -%}
 {%- liquid
   assign show = false
   case template.name
-    when 'collection', 'list-collections', 'search'
+    when 'index', 'collection', 'list-collections', 'search'
       assign show = true
     when 'page'
       if template.suffix == 'corporate-gifting' or template.suffix == 'bulk-enquiry'
@@ -16,7 +15,47 @@
   endcase
 -%}
 {%- if show -%}
-{%- render 'mg-category-circles' -%}
+{%- comment -%} label | url | image source (c:collection-handle or p:product-handle) {%- endcomment -%}
+{%- capture items -%}Welcome Kits|/collections/customer-works|c:customer-works~Corporate Hampers|/collections/corporate-gift-hampers|c:corporate-gift-hampers~Festive Gifts|/collections/diwali-hampers|c:diwali-hampers~Christmas & New Year|/collections/christmas-hampers|c:christmas-hampers~Drinkware|/search?type=product&q=bottle+OR+flask+OR+mug+OR+tumbler+OR+sipper|f:MGH-2224-lifestyle.jpg~Diaries|/search?type=product&q=diary+OR+notebook+OR+pen+OR+planner|f:IMG_9297.jpg~Tech Gifts|/search?type=product&q=speaker+OR+charger+OR+earbuds+OR+%22power+bank%22+OR+gadget|f:mm8-hero-bamboo.jpg~Desk Essentials|/search?type=product&q=%22desk+organiser%22+OR+%22pen+stand%22+OR+clock+OR+%22desk+set%22+OR+lamp|f:LAMP-hero-bamboo.jpg~Awards & Mementos|/collections/types?q=Samman|f:MG-SMN-003.png~Artisanal Decor|/collections/artisanal-mementos|f:MG-DPT-169.png~Customised|/collections/customised-orders|c:customised-orders{%- endcapture -%}
+<style>
+  .mg-cats { background: #0b0b0b; border-bottom: 1px solid #2e2920; }
+  .mg-cats__track { max-width: 1440px; margin: 0 auto; display: flex; gap: clamp(.9rem, 2vw, 1.75rem); justify-content: center; overflow-x: auto; scroll-snap-type: x mandatory; padding: 1rem clamp(1rem, 3vw, 2rem) .9rem; scrollbar-width: none; list-style: none; margin-block: 0; }
+  .mg-cats__track::-webkit-scrollbar { display: none; }
+  .mg-cats__item { scroll-snap-align: start; flex: 0 0 auto; }
+  .mg-cats__item a { display: flex; flex-direction: column; align-items: center; gap: .5rem; width: 92px; text-decoration: none; color: #e8e0cc; font-size: .76rem; font-weight: 600; text-align: center; line-height: 1.25; }
+  .mg-cats__ring { width: 76px; height: 76px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, #f3c969, #8a6d14); transition: transform .2s ease, box-shadow .2s ease; }
+  .mg-cats__ring img, .mg-cats__ring span { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; background: #1b1814; border: 2px solid #0b0b0b; }
+  .mg-cats__item a:hover .mg-cats__ring, .mg-cats__item a:focus-visible .mg-cats__ring { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(201,162,39,.35); }
+  .mg-cats__item a:hover { color: #f3c969; }
+  .mg-cats__item a:focus-visible { outline: none; }
+  .mg-cats__item a:focus-visible .mg-cats__label { text-decoration: underline; }
+  @media (max-width: 1199px) { .mg-cats__track { justify-content: flex-start; } }
+  @media (max-width: 749px) { .mg-cats__item a { width: 74px; font-size: .7rem; } .mg-cats__ring { width: 62px; height: 62px; } }
+  @media (prefers-reduced-motion: reduce) { .mg-cats__ring { transition: none; } }
+</style>
+<nav class="mg-cats" aria-label="Shop by category">
+  <ul class="mg-cats__track">
+    {%- assign lines = items | strip | split: '~' -%}
+    {%- for line in lines -%}
+      {%- assign parts = line | split: '|' -%}
+      {%- assign src = parts[2] | strip -%}
+      {%- assign key = src | slice: 2, 200 -%}
+      {%- assign img = nil -%}
+      {%- if src contains 'c:' -%}
+        {%- assign col = collections[key] -%}
+        {%- assign img = col.image | default: col.products.first.featured_image -%}
+      {%- else -%}
+        {%- assign img = images[key] -%}
+      {%- endif -%}
+      <li class="mg-cats__item">
+        <a href="{{ parts[1] | strip }}">
+          <span class="mg-cats__ring">{%- if img -%}<img src="{{ img | image_url: width: 160, height: 160, crop: 'center' }}" width="160" height="160" alt="" loading="lazy" decoding="async">{%- else -%}<span></span>{%- endif -%}</span>
+          <span class="mg-cats__label">{{ parts[0] }}</span>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>
 {%- endif -%}
 
 {% schema %}
