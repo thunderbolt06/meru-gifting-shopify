@@ -1,7 +1,7 @@
 {%- doc -%}
   Full-bleed hero carousel: one short line per slide, two CTAs.
   Slides reveal with a circular wipe that grows from the click point.
-  On desktop the hero uses a custom cursor (gold dot + spinning "next gift" ring).
+  On desktop the hero uses a custom cursor (small gold dot + thin trailing ring).
   Images are Gemini-generated and live in assets/mg-hero-*.jpg (-m = mobile size).
 {%- enddoc -%}
 {%- liquid
@@ -30,7 +30,6 @@
                 linear-gradient(0deg, rgba(11,11,11,.55) 0%, rgba(11,11,11,0) 30%); }
   .mgx__copy { position: absolute; z-index: 2; left: max(clamp(1rem, 4vw, 2rem), calc((100% - 1280px) / 2 + 2rem)); top: 50%; transform: translateY(-50%); max-width: min(34rem, 88%); }
   .mgx__tag { display: inline-flex; align-items: center; gap: .55rem; margin: 0 0 1.1rem; color: #f3c969; font-size: .74rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
-  .mgx__tag::before { content: ""; width: 28px; height: 1px; background: currentColor; }
   .mgx__title { font-family: var(--mg-serif); font-size: clamp(2.3rem, 5.6vw, 4.6rem); line-height: 1.04; font-weight: 700; margin: 0 0 1.8rem; color: #faf7f0; letter-spacing: -.01em; }
   .mgx__title em { font-style: normal; color: #f3c969; }
   .mgx__w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; }
@@ -48,34 +47,14 @@
   .mgx__ctas .mg-btn span { transition: transform .2s ease; }
   .mgx__ctas .mg-btn:hover span { transform: translateX(4px); }
 
-  .mgx__nav { position: absolute; z-index: 5; left: max(clamp(1rem, 4vw, 2rem), calc((100% - 1280px) / 2 + 2rem)); bottom: clamp(1.1rem, 3vw, 2rem); display: flex; align-items: center; gap: 1.1rem; }
-  .mgx__dot { all: unset; cursor: pointer; display: grid; gap: .4rem; width: clamp(54px, 7vw, 92px); color: rgba(250,247,240,.55); font-size: .72rem; font-weight: 700; letter-spacing: .12em; }
-  .mgx__dot i { display: block; height: 2px; background: rgba(250,247,240,.25); overflow: hidden; }
-  .mgx__dot i::after { content: ""; display: block; height: 100%; width: 100%; background: #f3c969; transform: scaleX(0); transform-origin: left; }
-  .mgx__dot.is-on { color: #f3c969; }
-  .mgx__dot.is-on i::after { animation: mgx-prog var(--mgx-dur, 6.5s) linear both; }
-  .mgx.is-paused .mgx__dot.is-on i::after { animation-play-state: paused; }
-  .mgx__dot:focus-visible { outline: 2px solid #f3c969; outline-offset: 4px; }
-  @keyframes mgx-prog { to { transform: scaleX(1); } }
-  .mgx__pp { all: unset; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(250,247,240,.35); display: grid; place-items: center; color: #faf7f0; }
-  .mgx__pp:focus-visible { outline: 2px solid #f3c969; outline-offset: 3px; }
-  .mgx__pp svg { width: 12px; height: 12px; }
-  .mgx__pp .i-play, .mgx.is-stopped .mgx__pp .i-pause { display: none; }
-  .mgx.is-stopped .mgx__pp .i-play { display: block; }
-
   /* custom cursor (desktop, fine pointer only) */
   .mgx-cur { position: fixed; left: 0; top: 0; z-index: 2147483000; pointer-events: none; opacity: 0; transition: opacity .25s ease; }
   .mgx-cur.is-on { opacity: 1; }
   .mgx-cur__dot, .mgx-cur__ring { position: absolute; left: 0; top: 0; border-radius: 50%; will-change: transform; }
-  .mgx-cur__dot { width: 8px; height: 8px; margin: -4px 0 0 -4px; background: #f3c969; box-shadow: 0 0 14px rgba(243,201,105,.8); transition: width .25s ease, height .25s ease, margin .25s ease, background-color .25s ease; }
-  .mgx-cur__ring { width: 96px; height: 96px; margin: -48px 0 0 -48px; }
-  .mgx-cur__ring svg { width: 100%; height: 100%; display: block; animation: mgx-spin 9s linear infinite; transition: transform .35s cubic-bezier(.2,.8,.2,1), opacity .25s ease; }
-  .mgx-cur__ring text { fill: #f3c969; font: 700 10.5px/1 Montserrat, var(--font-body--family, sans-serif); letter-spacing: 2.6px; text-transform: uppercase; }
-  .mgx-cur__ring circle { fill: none; stroke: rgba(243,201,105,.35); stroke-width: 1; }
-  @keyframes mgx-spin { to { rotate: 360deg; } }
-  .mgx-cur.is-link .mgx-cur__ring svg { transform: scale(.35); opacity: 0; }
-  .mgx-cur.is-link .mgx-cur__dot { width: 46px; height: 46px; margin: -23px 0 0 -23px; background: rgba(243,201,105,.18); box-shadow: 0 0 0 1px #f3c969; }
-  .mgx-cur.is-down .mgx-cur__ring svg { transform: scale(.8); }
+  .mgx-cur__dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: #f3c969; }
+  .mgx-cur__ring { width: 30px; height: 30px; margin: -15px 0 0 -15px; border: 1px solid rgba(243,201,105,.7); transition: width .25s ease, height .25s ease, margin .25s ease, background-color .25s ease; }
+  .mgx-cur.is-link .mgx-cur__ring { width: 46px; height: 46px; margin: -23px 0 0 -23px; background: rgba(243,201,105,.12); }
+  .mgx-cur.is-down .mgx-cur__ring { width: 22px; height: 22px; margin: -11px 0 0 -11px; }
   @media (hover: hover) and (pointer: fine) {
     .mgx.has-cur, .mgx.has-cur * { cursor: none !important; }
   }
@@ -84,7 +63,7 @@
     .mgx { --mgx-h: min(640px, 82svh); }
     .mgx__img { object-position: 78% 50%; }
     .mgx__slide::after { background: linear-gradient(0deg, rgba(11,11,11,.95) 0%, rgba(11,11,11,.75) 38%, rgba(11,11,11,0) 70%); }
-    .mgx__copy { top: auto; bottom: 4.6rem; transform: none; right: 1rem; max-width: none; }
+    .mgx__copy { top: auto; bottom: 2rem; transform: none; right: 1rem; max-width: none; }
     .mgx__title { margin-bottom: 1.3rem; }
     .mgx__ctas { gap: .5rem; flex-wrap: nowrap; } .mgx__ctas .mg-btn { padding: .8rem .95rem; font-size: .82rem; white-space: nowrap; }
   }
@@ -123,16 +102,6 @@
       </div>
     </div>
   {%- endfor -%}
-  <div class="mgx__nav">
-    {%- for s in slides -%}
-      {%- assign p = s | strip | split: '|' -%}
-      <button class="mgx__dot{% if forloop.first %} is-on{% endif %}" type="button" aria-label="Show slide {{ forloop.index }}: {{ p[2] | strip_html }}"{% if forloop.first %} aria-current="true"{% endif %}><span>0{{ forloop.index }}</span><i></i></button>
-    {%- endfor -%}
-    <button class="mgx__pp" type="button" aria-label="Pause slideshow">
-      <svg class="i-pause" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><rect x="2" y="1" width="3" height="10"/><rect x="7" y="1" width="3" height="10"/></svg>
-      <svg class="i-play" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M3 1l8 5-8 5z"/></svg>
-    </button>
-  </div>
 </section>
 <script>
   (function () {
@@ -140,11 +109,8 @@
     if (!root || !root.hasAttribute('data-mgx') || root.dataset.ready) return;
     root.dataset.ready = '1';
     var slides = [].slice.call(root.querySelectorAll('.mgx__slide'));
-    var dots = [].slice.call(root.querySelectorAll('.mgx__dot'));
-    var pp = root.querySelector('.mgx__pp');
     var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var DUR = 6500, cur = 0, timer = null, busy = false, stopped = false, hovering = false, visible = true;
-    root.style.setProperty('--mgx-dur', DUR + 'ms');
+    var DUR = 6500, cur = 0, timer = null, busy = false, stopped = reduce, hovering = false, visible = true;
 
     function setOrigin(el, x, y) { el.style.setProperty('--cx', x + 'px'); el.style.setProperty('--cy', y + 'px'); }
     function go(n, x, y) {
@@ -155,8 +121,6 @@
       busy = true;
       next.removeAttribute('aria-hidden'); next.removeAttribute('inert');
       next.classList.add('is-entering');
-      dots[cur].classList.remove('is-on'); dots[cur].removeAttribute('aria-current');
-      dots[n].classList.add('is-on'); dots[n].setAttribute('aria-current', 'true');
       cur = n;
       setTimeout(function () {
         prev.classList.remove('is-active'); prev.setAttribute('aria-hidden', 'true'); prev.setAttribute('inert', '');
@@ -167,19 +131,9 @@
     }
     function schedule() {
       clearTimeout(timer);
-      // restart the progress bar
-      var bar = dots[cur]; bar.classList.remove('is-on'); void bar.offsetWidth; bar.classList.add('is-on');
-      if (stopped || hovering || !visible) { root.classList.add('is-paused'); return; }
-      root.classList.remove('is-paused');
+      if (stopped || hovering || !visible) return;
       timer = setTimeout(function () { go(cur + 1); }, DUR);
     }
-    dots.forEach(function (d, i) { d.addEventListener('click', function () { go(i); }); });
-    pp.addEventListener('click', function () {
-      stopped = !stopped;
-      root.classList.toggle('is-stopped', stopped);
-      pp.setAttribute('aria-label', stopped ? 'Play slideshow' : 'Pause slideshow');
-      schedule();
-    });
     root.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowRight') go(cur + 1); else if (e.key === 'ArrowLeft') go(cur - 1);
     });
@@ -206,7 +160,7 @@
     if (reduce || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     var c = document.createElement('div');
     c.className = 'mgx-cur'; c.setAttribute('aria-hidden', 'true');
-    c.innerHTML = '<div class="mgx-cur__ring"><svg viewBox="0 0 100 100"><defs><path id="mgx-cp" d="M50 50m-38 0a38 38 0 1 1 76 0a38 38 0 1 1-76 0"/></defs><circle cx="50" cy="50" r="47"/><text><textPath href="#mgx-cp">Next gift ✦ Next gift ✦ Next gift ✦</textPath></text></svg></div><div class="mgx-cur__dot"></div>';
+    c.innerHTML = '<div class="mgx-cur__ring"></div><div class="mgx-cur__dot"></div>';
     document.body.appendChild(c);
     root.classList.add('has-cur');
     var ring = c.firstChild, dot = c.lastChild;
