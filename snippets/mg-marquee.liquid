@@ -1,5 +1,5 @@
 {%- comment -%} Gold scrolling strip of proof points (BoxUp's orange stats band, in gold). {%- endcomment -%}
-{%- assign mq = '150+ brands served|250+ institutions|Gifting since 2012|Bulk orders from 50 pieces|Custom logo branding|GST invoicing|Pan-India delivery|4,000+ artisan families' | split: '|' -%}
+{%- assign mq = '150+ brands served|48 hour delivery available|Bulk orders|Custom logo branding' | split: '|' -%}
 <style>
   .mg-mq { background: linear-gradient(90deg, #a8841a, #c9a227 50%, #a8841a); color: #17110a; overflow: hidden; }
   .mg-mq__track { display: inline-flex; white-space: nowrap; animation: mg-mq 38s linear infinite; padding: .6rem 0; }
@@ -11,7 +11,10 @@
 </style>
 <div class="mg-mq" role="region" aria-label="Why teams choose Meru Gifting">
   <div class="mg-mq__track">
+    {%- comment -%} Short list, so each half repeats it twice to stay wider than the viewport. {%- endcomment -%}
     {%- for t in mq -%}<span>{{ t }}</span>{%- endfor -%}
+    {%- for t in mq -%}<span aria-hidden="true">{{ t }}</span>{%- endfor -%}
+    {%- for t in mq -%}<span aria-hidden="true">{{ t }}</span>{%- endfor -%}
     {%- for t in mq -%}<span aria-hidden="true">{{ t }}</span>{%- endfor -%}
   </div>
 </div>
