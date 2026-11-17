@@ -1,0 +1,35 @@
+{%- doc -%}
+  Latest articles strip.
+  @param {string} [blog] - Blog handle (default gifting-insights)
+  @param {string} [title]
+{%- enddoc -%}
+{%- assign b = blogs[blog] | default: blogs['gifting-insights'] -%}
+{%- if b.articles_count > 0 -%}
+<style>
+  .mg-blog { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(.75rem, 1.5vw, 1.1rem); }
+  .mg-blog a { text-decoration: none; color: inherit; border: 1px solid var(--mg-line); border-radius: var(--mg-radius); overflow: hidden; background: var(--mg-surface); display: flex; flex-direction: column; }
+  .mg-blog a:hover { border-color: var(--mg-line-gold); }
+  .mg-blog a:focus-visible { outline: 2px solid var(--mg-gold); outline-offset: 2px; }
+  .mg-blog img, .mg-blog__ph { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; background: linear-gradient(135deg, #2a200b, #0b0b0b); }
+  .mg-blog__ph { display: grid; place-items: center; }
+  .mg-blog__ph img { width: 34%; height: auto; aspect-ratio: auto; background: none; opacity: .85; }
+  .mg-blog__b { padding: .9rem 1rem 1.1rem; }
+  .mg-blog__b time { color: var(--mg-gold); font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .mg-blog__b h3 { font-size: .95rem; line-height: 1.4; margin: .35rem 0 0; color: #faf7f0; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  @media (max-width: 989px) { .mg-blog { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
+<section aria-labelledby="mg-blog-h">
+  <div class="mg-head-row">
+    <div class="mg-head mg-head--left"><p class="mg-head__eyebrow">Gifting insights</p><h2 class="mg-head__title" id="mg-blog-h">{{ title | default: 'Ideas & guides for corporate gifting' }}</h2></div>
+    <a class="mg-link" href="{{ b.url }}">View all articles →</a>
+  </div>
+  <div class="mg-blog">
+    {%- for a in b.articles limit: 4 -%}
+      <a href="{{ a.url }}">
+        {%- if a.image -%}<img src="{{ a.image | image_url: width: 600 }}" width="600" height="375" alt="" loading="lazy" decoding="async">{%- else -%}<span class="mg-blog__ph" aria-hidden="true"><img src="{{ 'mg-logo-mark.png' | asset_url }}" alt="" width="200" height="200" loading="lazy"></span>{%- endif -%}
+        <div class="mg-blog__b"><time datetime="{{ a.published_at | date: '%Y-%m-%d' }}">{{ a.published_at | date: '%b %d, %Y' }}</time><h3>{{ a.title }}</h3></div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}

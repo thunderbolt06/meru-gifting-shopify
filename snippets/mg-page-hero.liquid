@@ -1,0 +1,24 @@
+{%- doc -%}
+  Compact page banner with breadcrumb.
+  @param {string} [eyebrow]
+  @param {string} [title]
+  @param {string} [subtitle]
+{%- enddoc -%}
+<style>
+  .mgph { background: radial-gradient(60% 120% at 85% 0%, rgba(201,162,39,.22), transparent 60%), linear-gradient(135deg, #15110a, #0b0b0b 60%); border-bottom: 1px solid rgba(201,162,39,.3); }
+  .mgph__in { max-width: 1280px; margin: 0 auto; padding: clamp(1.75rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem); text-align: center; }
+  .mgph__crumb { font-size: .78rem; color: var(--mg-muted); margin: 0 0 .8rem; }
+  .mgph__crumb a { color: var(--mg-muted); text-decoration: none; }
+  .mgph__crumb a:hover { color: var(--mg-gold-soft); }
+  .mgph__eyebrow { color: var(--mg-gold); letter-spacing: .2em; text-transform: uppercase; font-size: .74rem; font-weight: 700; margin: 0 0 .6rem; }
+  .mgph h1 { font-family: var(--mg-serif); color: #faf7f0; font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.12; margin: 0 auto .7rem; max-width: 46rem; }
+  .mgph p.mgph__sub { color: #d9d1bf; max-width: 40rem; margin: 0 auto; line-height: 1.6; }
+</style>
+<section class="mgph">
+  <div class="mgph__in">
+    <nav class="mgph__crumb" aria-label="Breadcrumb"><a href="/">Home</a> / <span aria-current="page">{{ page.title | default: title | strip_html }}</span></nav>
+    {%- if eyebrow != blank -%}<p class="mgph__eyebrow">{{ eyebrow }}</p>{%- endif -%}
+    <h1>{{ title | default: page.title }}</h1>
+    {%- if subtitle != blank -%}<p class="mgph__sub">{{ subtitle }}</p>{%- endif -%}
+  </div>
+</section>

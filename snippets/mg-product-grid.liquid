@@ -1,0 +1,36 @@
+{%- doc -%}
+  BoxUp-style product grid: centered serif heading, bordered cards, "View all" button.
+
+  @param {string} handle - Collection handle to show
+  @param {string} [title] - Heading (defaults to collection title)
+  @param {string} [eyebrow] - Small uppercase line above the heading
+  @param {string} [subtitle] - Line under the heading
+  @param {number} [limit] - Products to show (default 8)
+  @param {string} [button] - Button label (default "View all")
+  @param {string} [badge] - Optional badge on every card (e.g. "Bulk")
+{%- enddoc -%}
+{%- assign c = collections[handle] -%}
+{%- if c != blank and c.products_count > 0 -%}
+  {%- assign lim = limit | default: 8 -%}
+  <section class="mg-pgrid" aria-label="{{ title | default: c.title | escape }}">
+    <div class="mg-head">
+      {%- if eyebrow != blank -%}<p class="mg-head__eyebrow">{{ eyebrow }}</p>{%- endif -%}
+      <h2 class="mg-head__title">{{ title | default: c.title }}</h2>
+      {%- if subtitle != blank -%}<p class="mg-head__sub">{{ subtitle }}</p>{%- endif -%}
+    </div>
+    <div class="mg-grid">
+      {%- comment -%} Skip products that have no photo yet so the grid never shows empty tiles {%- endcomment -%}
+      {%- assign shown = 0 -%}
+      {%- for p in c.products limit: 50 -%}
+        {%- if shown >= lim -%}{%- break -%}{%- endif -%}
+        {%- if p.featured_image -%}
+          {%- render 'mg-product-card', product: p, badge: badge -%}
+          {%- assign shown = shown | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- if c.products_count > lim -%}
+      <div class="mg-more"><a class="mg-btn mg-btn--outline" href="{{ c.url }}">{{ button | default: 'View all' }} · {{ c.products_count }} gifts →</a></div>
+    {%- endif -%}
+  </section>
+{%- endif -%}

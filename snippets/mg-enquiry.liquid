@@ -1,0 +1,70 @@
+{%- doc -%}
+  Stats column + corporate gifting enquiry form (Shopify contact form, lands in the store inbox).
+
+  @param {string} [id] - Anchor id for the section (default "enquiry")
+  @param {string} [title]
+{%- enddoc -%}
+<style>
+  .mg-enq { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(1.25rem, 3vw, 2.5rem); align-items: stretch; scroll-margin-top: 140px; }
+  .mg-enq__stats { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; align-content: start; }
+  .mg-enq__stat { border: 1px solid var(--mg-line); border-radius: 16px; background: var(--mg-surface); padding: 1.4rem 1.1rem; text-align: center; }
+  .mg-enq__stat strong { display: block; font-family: var(--mg-serif); color: #f3c969; font-size: clamp(1.8rem, 3.2vw, 2.4rem); line-height: 1.1; }
+  .mg-enq__stat span { color: var(--mg-muted); font-size: .82rem; }
+  .mg-enq__lead { grid-column: 1 / -1; margin: 0 0 .3rem; }
+  .mg-enq__lead h2 { font-family: var(--mg-serif); color: #f3c969; font-size: clamp(1.5rem, 3vw, 2.1rem); margin: 0 0 .5rem; }
+  .mg-enq__lead p { color: var(--mg-muted); margin: 0; line-height: 1.6; }
+  .mg-enq__form { border: 1px solid rgba(201,162,39,.45); border-radius: 20px; background: linear-gradient(160deg, #1b1814, #121110); padding: clamp(1.25rem, 3vw, 2rem); }
+  .mg-enq__form h3 { font-family: var(--mg-serif); color: #faf7f0; margin: 0 0 1rem; font-size: 1.35rem; }
+  .mg-enq__grid { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+  .mg-enq__f { display: flex; flex-direction: column; gap: .3rem; }
+  .mg-enq__f--full { grid-column: 1 / -1; }
+  .mg-enq__f label { font-size: .78rem; color: #e8e0cc; font-weight: 600; }
+  .mg-enq__f label abbr { color: var(--mg-gold); text-decoration: none; }
+  .mg-enq__f input, .mg-enq__f select, .mg-enq__f textarea { width: 100%; background: #0e0d0b; color: #faf7f0; border: 1px solid #3a3326; border-radius: 10px; padding: .72rem .85rem; font: inherit; font-size: .92rem; }
+  .mg-enq__f input:focus, .mg-enq__f select:focus, .mg-enq__f textarea:focus { outline: none; border-color: var(--mg-gold); box-shadow: 0 0 0 3px rgba(201,162,39,.2); }
+  .mg-enq__f textarea { min-height: 96px; resize: vertical; }
+  .mg-enq__submit { margin-top: 1rem; width: 100%; }
+  .mg-enq__note { color: var(--mg-muted); font-size: .76rem; margin: .7rem 0 0; text-align: center; }
+  .mg-enq__ok { border: 1px solid #2f7d4f; background: rgba(37,211,102,.08); color: #c8f2d6; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
+  .mg-enq__err { border: 1px solid #a33; background: rgba(170,51,51,.1); color: #f2c8c8; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
+  @media (max-width: 899px) { .mg-enq { grid-template-columns: 1fr; } }
+  @media (max-width: 479px) { .mg-enq__grid { grid-template-columns: 1fr; } }
+</style>
+<section class="mg-enq" id="{{ id | default: 'enquiry' }}" aria-labelledby="mg-enq-h">
+  <div class="mg-enq__stats">
+    <div class="mg-enq__lead">
+      <h2 id="mg-enq-h">{{ title | default: 'Plan your corporate gifting' }}</h2>
+      <p>Share a few details and our team will send a curated shortlist with prices and a free branding mock-up — usually within one working day.</p>
+    </div>
+    <div class="mg-enq__stat"><strong>150+</strong><span>Brands served</span></div>
+    <div class="mg-enq__stat"><strong>250+</strong><span>Institutions</span></div>
+    <div class="mg-enq__stat"><strong>2,500+</strong><span>Bespoke designs</span></div>
+    <div class="mg-enq__stat"><strong>Since 2012</strong><span>Gifting from Bengaluru</span></div>
+  </div>
+  <div class="mg-enq__form">
+    {%- form 'contact', id: 'MgEnquiryForm' -%}
+      <h3>Corporate gifting enquiry</h3>
+      {%- if form.posted_successfully? -%}
+        <p class="mg-enq__ok" role="status">Thank you — your enquiry is in. We'll get back to you within one working day. For anything urgent, WhatsApp +91 78922 55078.</p>
+      {%- endif -%}
+      {%- if form.errors -%}
+        <div class="mg-enq__err" role="alert">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+      <input type="hidden" name="contact[Enquiry type]" value="Corporate / bulk gifting">
+      <div class="mg-enq__grid">
+        <div class="mg-enq__f"><label for="mge-name">Name <abbr title="required">*</abbr></label><input id="mge-name" name="contact[name]" autocomplete="name" required></div>
+        <div class="mg-enq__f"><label for="mge-phone">Phone <abbr title="required">*</abbr></label><input id="mge-phone" type="tel" name="contact[phone]" autocomplete="tel" inputmode="tel" pattern="[0-9+\s\-]{8,16}" required></div>
+        <div class="mg-enq__f"><label for="mge-company">Company <abbr title="required">*</abbr></label><input id="mge-company" name="contact[Company]" autocomplete="organization" required></div>
+        <div class="mg-enq__f"><label for="mge-email">Work email <abbr title="required">*</abbr></label><input id="mge-email" type="email" name="contact[email]" autocomplete="email" required></div>
+        <div class="mg-enq__f"><label for="mge-qty">No. of gifts <abbr title="required">*</abbr></label>
+          <select id="mge-qty" name="contact[Quantity]" required><option value="">Select</option><option>Under 50</option><option>50 – 100</option><option>100 – 250</option><option>250 – 500</option><option>500 – 1,000</option><option>1,000+</option></select></div>
+        <div class="mg-enq__f"><label for="mge-budget">Budget per gift <abbr title="required">*</abbr></label>
+          <select id="mge-budget" name="contact[Budget per gift]" required><option value="">Select</option><option>Under ₹500</option><option>₹500 – ₹1,000</option><option>₹1,000 – ₹2,500</option><option>₹2,500 – ₹5,000</option><option>Above ₹5,000</option></select></div>
+        <div class="mg-enq__f mg-enq__f--full"><label for="mge-date">Needed by</label><input id="mge-date" type="date" name="contact[Needed by]"></div>
+        <div class="mg-enq__f mg-enq__f--full"><label for="mge-body">Tell us about the occasion</label><textarea id="mge-body" name="contact[body]" placeholder="e.g. New Year gifts for 200 employees, logo on box and bottle, delivery to 3 offices"></textarea></div>
+      </div>
+      <button class="mg-btn mg-btn--gold mg-enq__submit" type="submit">Get my proposal</button>
+      <p class="mg-enq__note">Prefer chat? <a class="mg-link" href="https://wa.me/917892255078" target="_blank" rel="noopener">WhatsApp +91 78922 55078</a></p>
+    {%- endform -%}
+  </div>
+</section>

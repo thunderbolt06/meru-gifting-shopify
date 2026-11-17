@@ -1,0 +1,33 @@
+{%- comment -%} "Why choose us" icon row + how it works steps. {%- endcomment -%}
+<style>
+  .mg-why { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(.75rem, 2vw, 1.25rem); }
+  .mg-why__i { text-align: center; padding: 1.5rem 1rem; border: 1px solid var(--mg-line); border-radius: 16px; background: var(--mg-surface); }
+  .mg-why__ic { width: 58px; height: 58px; margin: 0 auto .9rem; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(201,162,39,.5); color: #f3c969; background: rgba(201,162,39,.08); }
+  .mg-why__ic svg { width: 28px; height: 28px; }
+  .mg-why__i h3 { font-family: var(--mg-serif); color: #faf7f0; font-size: 1.08rem; margin: 0 0 .35rem; }
+  .mg-why__i p { color: var(--mg-muted); font-size: .84rem; line-height: 1.55; margin: 0; }
+  .mg-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-top: clamp(1.5rem, 3vw, 2.25rem); counter-reset: s; list-style: none; padding: 0; }
+  .mg-steps li { counter-increment: s; position: relative; padding: 1rem 1rem 1rem 3.4rem; border-left: 2px solid rgba(201,162,39,.5); color: #e8e0cc; font-size: .88rem; line-height: 1.5; }
+  .mg-steps li::before { content: counter(s); position: absolute; left: .8rem; top: .9rem; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: #c9a227; color: #17110a; font-weight: 800; display: grid; place-items: center; font-size: .85rem; }
+  .mg-steps strong { display: block; color: #faf7f0; }
+  @media (max-width: 899px) { .mg-why, .mg-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 479px) { .mg-steps { grid-template-columns: 1fr; } }
+</style>
+<section aria-labelledby="mg-why-h">
+  <div class="mg-head">
+    <p class="mg-head__eyebrow">Why Meru Gifting</p>
+    <h2 class="mg-head__title" id="mg-why-h">Why companies choose us</h2>
+  </div>
+  <div class="mg-why">
+    <div class="mg-why__i"><div class="mg-why__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><h3>Bulk pricing</h3><p>Slab-based pricing from 50 pieces, with GST invoices and PO handling.</p></div>
+    <div class="mg-why__i"><div class="mg-why__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>On-time delivery</h3><p>5–7 working days after approval, tracked pan-India with express options.</p></div>
+    <div class="mg-why__i"><div class="mg-why__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16v4Z"/></svg></div><h3>In-house branding</h3><p>Engraving, UV and foil printing done in-house, with a mock-up for every order.</p></div>
+    <div class="mg-why__i"><div class="mg-why__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><h3>One point of contact</h3><p>A dedicated gifting manager from shortlist to doorstep delivery.</p></div>
+  </div>
+  <ol class="mg-steps" aria-label="How ordering works">
+    <li><strong>Share your brief</strong>Occasion, quantity, budget and date.</li>
+    <li><strong>Get a shortlist</strong>Curated options with prices in a day.</li>
+    <li><strong>Approve the mock-up</strong>See your logo on every piece first.</li>
+    <li><strong>We pack &amp; deliver</strong>Bulk or door-to-door, across India.</li>
+  </ol>
+</section>

@@ -1,0 +1,28 @@
+{%- doc -%}
+  Compact product card used by mg-product-grid.
+
+  @param {object} product - Product
+  @param {string} [badge] - Optional badge text
+{%- enddoc -%}
+{%- liquid
+  assign img = product.featured_image
+  assign title = product.title | split: ' – MGH' | first | split: ' – MM' | first
+  assign label = product.type | default: product.vendor
+  assign price = product.price_min | money_without_trailing_zeros | replace: 'Rs. ', '₹'
+-%}
+<a class="mg-card" href="{{ product.url }}">
+  <div class="mg-card__media">
+    {%- if img -%}
+      <img src="{{ img | image_url: width: 500 }}" srcset="{{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 500 }} 500w, {{ img | image_url: width: 700 }} 700w" sizes="(max-width: 749px) 46vw, (max-width: 989px) 31vw, 23vw" width="500" height="500" alt="{{ img.alt | default: product.title | escape }}" loading="lazy" decoding="async">
+    {%- endif -%}
+    {%- if badge != blank -%}<span class="mg-card__badge">{{ badge }}</span>{%- endif -%}
+  </div>
+  <div class="mg-card__body">
+    <p class="mg-card__title">{{ title }}</p>
+    {%- if label != blank -%}<p class="mg-card__type">{{ label }}</p>{%- endif -%}
+    <div class="mg-card__foot">
+      <span class="mg-card__price">{% if product.price_varies %}<small>From </small>{% endif %}{{ price }}</span>
+      <span class="mg-card__cta">View →</span>
+    </div>
+  </div>
+</a>

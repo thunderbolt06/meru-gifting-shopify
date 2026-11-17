@@ -1,0 +1,27 @@
+{%- comment -%}
+  The page's own rich-text body (SEO copy) in a collapsible "Read more" panel,
+  so long-form content stays indexable without pushing the browsing UI down.
+{%- endcomment -%}
+{%- if page.content != blank -%}
+<style>
+  .mg-seo { border: 1px solid var(--mg-line); border-radius: 18px; background: var(--mg-surface); padding: clamp(1.25rem, 3vw, 2rem); }
+  .mg-seo__body { position: relative; max-height: 320px; overflow: hidden; color: #d9d1bf; line-height: 1.7; font-size: .93rem; }
+  .mg-seo__body h1, .mg-seo__body h2, .mg-seo__body h3 { font-family: var(--mg-serif); color: #f3c969; line-height: 1.25; }
+  .mg-seo__body h1 { font-size: 1.6rem; } .mg-seo__body h2 { font-size: 1.3rem; } .mg-seo__body h3 { font-size: 1.1rem; }
+  .mg-seo__body a { color: var(--mg-gold-soft); }
+  .mg-seo__body::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: linear-gradient(180deg, rgba(20,18,16,0), var(--mg-surface)); pointer-events: none; }
+  .mg-seo__toggle:checked ~ .mg-seo__body { max-height: none; }
+  .mg-seo__toggle:checked ~ .mg-seo__body::after { display: none; }
+  .mg-seo__toggle { position: absolute; opacity: 0; pointer-events: none; }
+  .mg-seo__btn { display: inline-flex; margin-top: 1rem; cursor: pointer; }
+  .mg-seo__btn .less { display: none; }
+  .mg-seo__toggle:checked ~ .mg-seo__btn .less { display: inline; }
+  .mg-seo__toggle:checked ~ .mg-seo__btn .more { display: none; }
+  .mg-seo__toggle:focus-visible ~ .mg-seo__btn { outline: 2px solid var(--mg-gold); outline-offset: 3px; }
+</style>
+<div class="mg-seo">
+  <input class="mg-seo__toggle" type="checkbox" id="mg-seo-toggle">
+  <div class="mg-seo__body">{{ page.content | replace: '<h1', '<h2' | replace: '</h1>', '</h2>' }}</div>
+  <label class="mg-seo__btn mg-btn mg-btn--outline mg-btn--sm" for="mg-seo-toggle"><span class="more">Read more</span><span class="less">Show less</span></label>
+</div>
+{%- endif -%}

@@ -1,0 +1,35 @@
+{%- comment -%} "Signature gifting solutions" tiles — browse by purpose, like BoxUp. {%- endcomment -%}
+{%- capture items -%}
+Employee Welcome Kits|Onboarding kits with flasks, diaries and tech, branded for day one.|/collections/customer-works|c:customer-works~Client Appreciation|Premium hampers that say thank you to clients and partners.|/collections/corporate-gift-hampers|c:corporate-gift-hampers~Festive Gifting|Diwali, Christmas and New Year boxes for whole teams.|/collections/diwali-hampers|c:diwali-hampers~Rewards & Recognition|Plaques, mementos and keepsakes for milestones and awards.|/collections/types?q=Samman|f:MG-SMN-003.png~Artisanal & Heritage|Handcrafted brass, pottery and decor from Indian artisans.|/collections/artisanal-mementos|f:MG-DPT-169.png
+{%- endcapture -%}
+<style>
+  .mg-sol { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(.75rem, 1.5vw, 1rem); }
+  .mg-sol__card { text-decoration: none; color: inherit; display: flex; flex-direction: column; border-radius: var(--mg-radius); overflow: hidden; border: 1px solid var(--mg-line); background: var(--mg-surface); transition: border-color .2s ease, transform .2s ease; }
+  .mg-sol__card:hover { border-color: var(--mg-line-gold); transform: translateY(-3px); }
+  .mg-sol__card:focus-visible { outline: 2px solid var(--mg-gold); outline-offset: 2px; }
+  .mg-sol__card img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+  .mg-sol__body { padding: .9rem 1rem 1.1rem; }
+  .mg-sol__body h3 { font-family: var(--mg-serif); color: #f3c969; font-size: 1.05rem; margin: 0 0 .35rem; }
+  .mg-sol__body p { margin: 0; color: var(--mg-muted); font-size: .82rem; line-height: 1.5; }
+  @media (max-width: 989px) { .mg-sol { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 749px) { .mg-sol { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: .5rem; } .mg-sol__card { flex: 0 0 62%; scroll-snap-align: start; } }
+  @media (prefers-reduced-motion: reduce) { .mg-sol__card { transition: none; } .mg-sol__card:hover { transform: none; } }
+</style>
+<section aria-labelledby="mg-sol-h">
+  <div class="mg-head">
+    <p class="mg-head__eyebrow">Gift by purpose</p>
+    <h2 class="mg-head__title" id="mg-sol-h">Our signature gifting solutions</h2>
+  </div>
+  <div class="mg-sol">
+    {%- assign rows = items | strip | split: '~' -%}
+    {%- for r in rows -%}
+      {%- assign t = r | split: '|' -%}
+      {%- assign key = t[3] | slice: 2, 200 -%}
+      {%- if t[3] contains 'c:' -%}{%- assign col = collections[key] -%}{%- assign img = col.image | default: col.products.first.featured_image -%}{%- else -%}{%- assign img = images[key] -%}{%- endif -%}
+      <a class="mg-sol__card" href="{{ t[2] }}">
+        {%- if img -%}<img src="{{ img | image_url: width: 480, height: 600, crop: 'center' }}" width="480" height="600" alt="" loading="lazy" decoding="async">{%- endif -%}
+        <div class="mg-sol__body"><h3>{{ t[0] }}</h3><p>{{ t[1] }}</p></div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>

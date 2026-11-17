@@ -1,0 +1,41 @@
+{%- comment -%} BoxUp-style "Promote your brand" bento of merchandise categories. {%- endcomment -%}
+{%- capture tiles -%}
+Drinkware|Bottles, flasks, tumblers and mugs your team will carry every day — engraved or printed with your logo.|/search?type=product&q=bottle+OR+flask+OR+mug+OR+tumbler+OR+sipper|IMG_9371.jpg~Tech Gifts|Bluetooth speakers, chargers and desk gadgets that pair utility with a premium finish.|/search?type=product&q=speaker+OR+charger+OR+earbuds+OR+%22power+bank%22+OR+gadget|mm9-hero-bamboo.jpg~Bags & Travel|Laptop backpacks and travel essentials that take your brand wherever your people go.|/search?type=product&q=bag+OR+backpack+OR+umbrella+OR+travel|9014-4-hero-brown.jpg~Desk Essentials|Desk sets, clocks, lamps and organisers that keep your logo in sight all day.|/search?type=product&q=%22desk+organiser%22+OR+%22pen+stand%22+OR+clock+OR+%22desk+set%22+OR+lamp|IMG_9366.jpg~Diaries & Journals|PU, leather and bamboo diaries with pens — a timeless, useful gift for any team.|/search?type=product&q=diary+OR+notebook+OR+pen+OR+planner|IMG_9297.jpg
+{%- endcapture -%}
+<style>
+  .mg-bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 260px; gap: clamp(.75rem, 1.5vw, 1.1rem); }
+  .mg-bento__tile { position: relative; overflow: hidden; border-radius: var(--mg-radius); border: 1px solid var(--mg-line); background: #1b1814; text-decoration: none; color: #faf7f0; display: block; }
+  .mg-bento__tile:nth-child(1) { grid-column: span 4; }
+  .mg-bento__tile:nth-child(2) { grid-column: span 2; }
+  .mg-bento__tile:nth-child(3), .mg-bento__tile:nth-child(4), .mg-bento__tile:nth-child(5) { grid-column: span 2; }
+  .mg-bento__tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+  .mg-bento__tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,11,11,0) 25%, rgba(11,11,11,.92) 100%); }
+  .mg-bento__tile:hover img { transform: scale(1.05); }
+  .mg-bento__tile:hover { border-color: var(--mg-line-gold); }
+  .mg-bento__tile:focus-visible { outline: 2px solid var(--mg-gold); outline-offset: 2px; }
+  .mg-bento__txt { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; padding: 1.1rem 1.2rem 1.2rem; }
+  .mg-bento__txt h3 { font-family: var(--mg-serif); font-size: clamp(1.25rem, 2vw, 1.6rem); margin: 0 0 .35rem; color: #faf7f0; }
+  .mg-bento__txt p { margin: 0 0 .6rem; color: #d9d1bf; font-size: .85rem; line-height: 1.45; max-width: 30rem; }
+  .mg-bento__txt span { color: #f3c969; font-weight: 700; font-size: .82rem; }
+  @media (max-width: 899px) { .mg-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 220px; } .mg-bento__tile:nth-child(n) { grid-column: span 1; } .mg-bento__tile:nth-child(1) { grid-column: span 2; } }
+  @media (max-width: 479px) { .mg-bento__txt p { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .mg-bento__tile img { transition: none; } }
+</style>
+<section aria-labelledby="mg-bento-h">
+  <div class="mg-head">
+    <p class="mg-head__eyebrow">Branded merchandise</p>
+    <h2 class="mg-head__title" id="mg-bento-h">Promote your brand with gifts people use</h2>
+    <p class="mg-head__sub">Pick a category, we'll brand it — printing, engraving or embossing with a free mock-up before production.</p>
+  </div>
+  <div class="mg-bento">
+    {%- assign rows = tiles | strip | split: '~' -%}
+    {%- for r in rows -%}
+      {%- assign t = r | split: '|' -%}
+      {%- assign img = images[t[3]] -%}
+      <a class="mg-bento__tile" href="{{ t[2] }}">
+        {%- if img -%}<img src="{{ img | image_url: width: 900 }}" srcset="{{ img | image_url: width: 500 }} 500w, {{ img | image_url: width: 900 }} 900w" sizes="(max-width: 899px) 50vw, 33vw" width="900" height="900" alt="" loading="lazy" decoding="async">{%- endif -%}
+        <div class="mg-bento__txt"><h3>{{ t[0] }}</h3><p>{{ t[1] }}</p><span>View all →</span></div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>

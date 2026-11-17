@@ -1,0 +1,27 @@
+{%- comment -%} Two side-by-side CTA panels: download catalogue / talk to our experts. {%- endcomment -%}
+<style>
+  .mg-ctas { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(.9rem, 2vw, 1.4rem); }
+  .mg-ctap { position: relative; overflow: hidden; border-radius: 20px; padding: clamp(1.5rem, 3vw, 2.4rem); border: 1px solid rgba(201,162,39,.45); display: flex; flex-direction: column; align-items: flex-start; gap: .8rem; }
+  .mg-ctap--a { background: radial-gradient(80% 120% at 100% 0%, rgba(201,162,39,.25), transparent 60%), #15120c; }
+  .mg-ctap--b { background: radial-gradient(80% 120% at 0% 100%, rgba(201,162,39,.22), transparent 60%), #15120c; }
+  .mg-ctap h3 { font-family: var(--mg-serif); color: #f3c969; font-size: clamp(1.35rem, 2.4vw, 1.75rem); margin: 0; }
+  .mg-ctap p { color: #d9d1bf; margin: 0 0 .4rem; line-height: 1.6; max-width: 30rem; font-size: .95rem; }
+  .mg-ctap__row { display: flex; gap: .6rem; flex-wrap: wrap; }
+  @media (max-width: 749px) { .mg-ctas { grid-template-columns: 1fr; } }
+</style>
+<div class="mg-ctas">
+  <div class="mg-ctap mg-ctap--a">
+    <h3>Download our catalogues</h3>
+    <p>Hamper and corporate gift catalogues with prices and quantities — share them with your team and shortlist in minutes.</p>
+    <a class="mg-btn mg-btn--gold" href="/pages/catalog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v3h16v-3"/></svg>Download catalogue</a>
+  </div>
+  <div class="mg-ctap mg-ctap--b">
+    <h3>Talk to our gifting experts</h3>
+    <p>Tell us your occasion, budget and quantity. We'll send a curated shortlist and a free branding mock-up within one working day.</p>
+    <div class="mg-ctap__row">
+      <a class="mg-btn mg-btn--outline" href="/pages/bulk-enquiry">Send an enquiry</a>
+      <a class="mg-btn mg-btn--wa" href="https://wa.me/917892255078?text={{ 'Hi Meru Gifting, I need help planning corporate gifts.' | url_encode }}" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="mg-btn mg-btn--outline" href="tel:+917892255078">Call +91 78922 55078</a>
+    </div>
+  </div>
+</div>

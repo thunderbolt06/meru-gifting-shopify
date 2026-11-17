@@ -47,6 +47,7 @@
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
+    {%- render 'mg-ui' -%}
 
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
@@ -188,6 +189,7 @@
       </footer>
     </div>
 
+    {% render 'whatsapp-button' %}
     {% render 'cart-drawer', render_wrapper: true %}
     {% render 'theme-drawer' %}
 
