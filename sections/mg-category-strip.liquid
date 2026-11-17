@@ -29,8 +29,9 @@
   .mg-cats__item a:hover { color: #f3c969; }
   .mg-cats__item a:focus-visible { outline: none; }
   .mg-cats__item a:focus-visible .mg-cats__label { text-decoration: underline; }
+  .mg-cats__divider { flex: 0 0 auto; align-self: center; width: 1px; height: 64px; margin-bottom: 1.4rem; background: linear-gradient(180deg, transparent, #c9a227 20%, #c9a227 80%, transparent); opacity: .7; }
   @media (max-width: 1199px) { .mg-cats__track { justify-content: flex-start; } }
-  @media (max-width: 749px) { .mg-cats__item a { width: 74px; font-size: .7rem; } .mg-cats__ring { width: 62px; height: 62px; } }
+  @media (max-width: 749px) { .mg-cats__divider { height: 52px; } .mg-cats__item a { width: 74px; font-size: .7rem; } .mg-cats__ring { width: 62px; height: 62px; } }
   @media (prefers-reduced-motion: reduce) { .mg-cats__ring { transition: none; } }
 </style>
 <nav class="mg-cats" aria-label="Shop by category">
@@ -47,6 +48,7 @@
       {%- else -%}
         {%- assign img = images[key] -%}
       {%- endif -%}
+      {%- if forloop.index == 5 -%}<li class="mg-cats__divider" role="separator" aria-hidden="true"></li>{%- endif -%}
       <li class="mg-cats__item">
         <a href="{{ parts[1] | strip }}">
           <span class="mg-cats__ring">{%- if img -%}<img src="{{ img | image_url: width: 160, height: 160, crop: 'center' }}" width="160" height="160" alt="" loading="lazy" decoding="async">{%- else -%}<span></span>{%- endif -%}</span>

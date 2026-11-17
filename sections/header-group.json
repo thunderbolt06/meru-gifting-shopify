@@ -70,7 +70,7 @@
           "type": "_header-menu",
           "static": true,
           "settings": {
-            "menu": "mg-mega-menu",
+            "menu": "mg-nav-sets-items",
             "type_font_primary_size": "0.8rem",
             "menu_font_style": "inverse",
             "type_font_primary_link": "body",
