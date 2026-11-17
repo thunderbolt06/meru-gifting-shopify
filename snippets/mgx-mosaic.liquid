@@ -1,0 +1,35 @@
+{%- doc -%}
+  Masonry photo wall with optional filter chips.
+  @param {string} [files] - "~"-separated "Files name|caption|tags"
+  @param {string} [collection] - Pull product photos from this collection instead (skips detail cards)
+  @param {number} [limit] - Max photos from collection (default 12)
+  @param {string} [filters] - "~"-separated "tag|Label" to show filter chips
+  @param {string} [id] - Unique id (needed with filters)
+  @param {number} [cols]
+{%- enddoc -%}
+{%- assign gid = id | default: 'mgx-mosaic' -%}
+{%- if filters != blank -%}
+  <div class="mgx-filters" data-mgx-filter="{{ gid }}" role="group" aria-label="Filter photos">
+    <button type="button" aria-pressed="true" data-f="all">All</button>
+    {%- assign fs = filters | split: '~' -%}{%- for f in fs -%}{%- assign x = f | split: '|' -%}<button type="button" aria-pressed="false" data-f="{{ x[0] }}">{{ x[1] }}</button>{%- endfor -%}
+  </div>
+{%- endif -%}
+<div class="mgx-mosaic" id="{{ gid }}" style="--cols: {{ cols | default: 4 }}">
+  {%- if collection != blank -%}
+    {%- assign shown = 0 -%}{%- assign lim = limit | default: 12 -%}
+    {%- for p in collections[collection].products limit: 60 -%}
+      {%- if shown >= lim -%}{%- break -%}{%- endif -%}
+      {%- assign im = nil -%}
+      {%- for m in p.images limit: 4 -%}{%- unless m.src contains 'mg-card' -%}{%- assign im = m -%}{%- break -%}{%- endunless -%}{%- endfor -%}
+      {%- if im -%}
+        <figure class="mg-rv" style="--d: {{ shown | modulo: 4 | times: 0.07 }}s"><a href="{{ p.url }}">{{ im | image_url: width: 600 | image_tag: alt: p.title, loading: 'lazy' }}</a><figcaption>{{ p.title | truncate: 60 }}</figcaption></figure>
+        {%- assign shown = shown | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- assign rows = files | split: '~' -%}
+    {%- for r in rows -%}{%- assign x = r | split: '|' -%}{%- assign im = images[x[0]] -%}
+      {%- if im -%}<figure class="mg-rv" data-tags="{{ x[2] }}" style="--d: {{ forloop.index0 | modulo: 4 | times: 0.07 }}s">{{ im | image_url: width: 640 | image_tag: alt: x[1], loading: 'lazy' }}{%- if x[1] != blank -%}<figcaption>{{ x[1] }}</figcaption>{%- endif -%}</figure>{%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+</div>

@@ -1,0 +1,56 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "mgx_00": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-fx' %}{% render 'mgx-hero', eyebrow: 'Help centre', title: 'Frequently asked <em>questions</em>', subtitle: 'Everything companies and gift-givers usually ask us about minimums, branding, timelines, payments and delivery. Anything else? WhatsApp +91 78922 55078, we reply fast.', chips: 'MOQ 10 pieces|5 to 7 day production|GST invoices|Pan-India and worldwide', cta1: 'Ask us directly|/pages/contact-us', cta2: 'How to order|/pages/how-to-order' %}",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_01": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec mg-sec--tight\">{% render 'mgx-head', title: 'Jump to a topic', eyebrow: 'Quick answers', sub: '' %}{% render 'mgx-cards', cols: 4, items: 'gift|Ordering|Minimums, mock-ups and timelines.|/pages/how-to-order|How to order~logo|Branding|Logos, names and custom packaging.|/pages/customised-orders|Customisation~truck|Delivery|India-wide and international shipping.|/pages/how-to-order|Timelines~card|Payments|Advance, GST invoices and POs.|/pages/bulk-enquiry|Get a quote' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mgx_02": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mg-faq', list: 'What is the minimum order quantity for corporate gifts?|Just 10 pieces for branded corporate gifts, workable for startups and enterprises alike. Artisanal mementos are available from a single piece.~Can you put our company logo on the gifts?|Yes. Laser engraving, UV print, full-colour print, foil stamping and embossing are available on nearly every product. Send your logo in any format and our designers will prepare it.~Do we approve the design before production?|Always. We send a digital mock-up of the branding, engraving or hamper layout for your written approval before production begins.~How long does an order take?|Standard turnaround is 5 to 7 working days after artwork approval. Delivery adds about 2 days within Bengaluru, about 5 days across Karnataka and up to 2 weeks pan-India. Express options are available for urgent orders.~What is a good budget per corporate gift?|Branded essentials start under ₹500, most welcome kits and hampers sit between ₹1,000 and ₹2,500, and premium leadership or client gifts go above ₹2,500. Share your budget and we will curate within it.~What do festive hampers cost?|Dry fruit jar boxes, sweet trays, chocolate boxes and gift baskets start from ₹1,000, plus branding and GST as applicable.~Do you have Christmas and New Year hampers?|Yes. Our Christmas hampers range covers year-end treats, mugs and goodies for teams, clients and family. Order early for December delivery.~What are joining kits?|Curated welcome kits for new hires: usually a branded bottle, diary, pen and tech accessory in a custom box, assembled to your budget and headcount.~What makes your artisanal mementos different?|They come from Dharohar, our craft brand established in 2012, handmade by 4,000+ artisan families across 25+ states: Moradabad metal craft, Bidri-style inlay, Dhokra, Kagzi pottery, lacquerware and hand-painted art.~Can you make custom acrylic trophies and mementos?|Yes. Our customised range includes laser-cut acrylic trophies and mementos made to your design, with logos, names and dates.~How does payment work?|50% advance to start production, balance before dispatch. We accept UPI, bank transfer and cards, and issue GST invoices. International payments via SWIFT, Wise or PayPal.~Do you provide GST invoices and handle POs?|Yes. We are GST-registered and a GeM registered vendor. B2B invoices, advance receipts and purchase orders are routine for us.~Do you deliver across India and abroad?|Yes. Tracked delivery via BlueDart, DTDC and Delhivery across India, and DHL or FedEx internationally, with bubble-wrapped, double-boxed packing.~Can you deliver to multiple addresses?|Yes. Share an address list and we pack and ship each gift individually, ideal for remote teams.~Can we mix categories in one order?|Absolutely. Many clients pair branded corporate gifts with artisanal mementos for leadership and hampers for the wider team, all on one invoice.~Can I see products before ordering?|Yes. Walk in to our Gandhinagar studio in Bangalore or book a video-call shopping session.~Can you work from our own design or reference?|Yes. Share a reference image and our in-house design team, with 2,500+ bespoke products designed to date, will build a mock-up.', title: 'All questions answered', eyebrow: 'FAQs', hide_more: True %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "background_color": "#100e0b"
+      }
+    },
+    "mgx_03": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mg-wrap mg-sec\">{% render 'mgx-cta', title: 'Still have a question?', text: 'Call or WhatsApp +91 78922 55078, or email merugifting@gmail.com. A real person replies, usually within the hour.', cta: 'Contact us|/pages/contact-us' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    }
+  },
+  "order": [
+    "mgx_00",
+    "mgx_01",
+    "mgx_02",
+    "mgx_03"
+  ]
+}

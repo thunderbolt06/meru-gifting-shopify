@@ -149,11 +149,21 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "mgx_categories": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-fx' %}<div class=\"mg-wrap mg-sec\">{% render 'mgx-head', eyebrow: 'Shop by category', title: 'Find the right corporate gift', sub: 'Live ranges, all brandable with your logo. MOQ 10 pieces.' %}{% render 'mgx-tiles', cols: 3, items: 'corporate-drinkware|Drinkware|Bottles, flasks, tumblers and mugs.|IMG_9936.jpg~corporate-tech-gifts|Tech and gadgets|Speakers, chargers and desk gadgets.|CGI-19.jpg~corporate-diaries-notebooks|Diaries and stationery|PU, cork and bamboo diaries with pens.|CGI-1.jpg~employee-welcome-kit-items|Welcome kit items|Build joining kits for new hires.|IMG_9368.jpg~eco-friendly-corporate-gifts|Eco-friendly gifts|Bamboo, cork and sustainable picks.|IMG_9386.jpg~bags-travel-gifts|Bags and travel|Laptop backpacks, slings and travel gear.' %}<div style=\"height:clamp(2rem,4vw,3rem)\"></div>{% render 'mgx-head', eyebrow: 'Shop by budget', title: 'Gifts for every budget' %}{% render 'mgx-tiles', cols: 4, items: 'corporate-gifts-under-500|Under ₹500|Event giveaways and bulk essentials.~corporate-gifts-500-to-1000|₹500 to ₹1,000|Everyday premium for teams.~corporate-gifts-1000-to-2500|₹1,000 to ₹2,500|Welcome kits and client gifts.~premium-corporate-gifts|Above ₹2,500|Leadership and key-account gifting.' %}</div>",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
     "mg_hero",
     "mg_marquee",
+    "mgx_categories",
     "mg_hampers",
     "mg_best",
     "mg_brands",

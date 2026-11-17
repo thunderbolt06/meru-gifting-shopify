@@ -1,0 +1,10 @@
+{%- doc -%}
+  Alternating vertical timeline.
+  @param {string} items - "~"-separated "tag|title|text"
+{%- enddoc -%}
+{%- assign rows = items | split: '~' -%}
+<ol class="mgx-tl">
+  {%- for r in rows -%}{%- assign x = r | split: '|' -%}
+    <li class="mg-rv"><div class="mgx-tl__box">{%- if x[0] != blank -%}<span class="mgx-tl__tag">{{ x[0] }}</span>{%- endif -%}<b>{{ x[1] }}</b><span>{{ x[2] }}</span></div></li>
+  {%- endfor -%}
+</ol>

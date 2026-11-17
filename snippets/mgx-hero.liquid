@@ -1,0 +1,34 @@
+{%- doc -%}
+  Photo hero for info pages. Background photo (bg) or plain gradient, optional 3-photo collage on the right.
+  @param {string} title - May include <em>
+  @param {string} [eyebrow]
+  @param {string} [subtitle]
+  @param {string} [bg] - Image src for mgx-img (asset:/col:/Files name)
+  @param {string} [collage] - Up to 3 image srcs, comma separated
+  @param {string} [chips] - Pipe-separated short facts
+  @param {string} [cta1] - "Label|/url"
+  @param {string} [cta2] - "Label|/url"
+{%- enddoc -%}
+<section class="mgx-hero{% if collage == blank %} mgx-hero--plain{% endif %}">
+  {%- if bg != blank -%}<div class="mgx-hero__bg">{% render 'mgx-img', src: bg, w: 1800, alt: '', eager: true %}</div>{%- else -%}<div class="mgx-hero__bg" style="background: radial-gradient(60% 120% at 85% 0%, rgba(201,162,39,.22), transparent 60%), linear-gradient(135deg, #15110a, #0b0b0b 60%);"></div>{%- endif -%}
+  <div class="mgx-hero__in">
+    <div class="mg-rv">
+      <nav class="mgx-crumb" aria-label="Breadcrumb"><a href="/">Home</a> / <span aria-current="page">{{ page.title }}</span></nav>
+      {%- if eyebrow != blank -%}<p class="mgx-eyebrow">{{ eyebrow }}</p>{%- endif -%}
+      <h1>{{ title }}</h1>
+      {%- if subtitle != blank -%}<p class="mgx-hero__sub">{{ subtitle }}</p>{%- endif -%}
+      <div class="mgx-hero__ctas">
+        {%- if cta1 != blank -%}{%- assign c = cta1 | split: '|' -%}<a class="mg-btn mg-btn--gold" href="{{ c[1] }}">{{ c[0] }}</a>{%- endif -%}
+        {%- if cta2 != blank -%}{%- assign c = cta2 | split: '|' -%}<a class="mg-btn mg-btn--outline" href="{{ c[1] }}">{{ c[0] }}</a>{%- endif -%}
+        <a class="mg-btn mg-btn--wa" href="https://wa.me/917892255078?text={{ 'Hi Meru Gifting, I found you via the ' | append: page.title | append: ' page.' | url_encode }}" target="_blank" rel="noopener">WhatsApp us</a>
+      </div>
+      {%- if chips != blank -%}<ul class="mgx-chips">{%- assign cs = chips | split: '|' -%}{%- for x in cs -%}<li>{{ x }}</li>{%- endfor -%}</ul>{%- endif -%}
+    </div>
+    {%- if collage != blank -%}
+      <div class="mgx-collage mg-rv" style="--d:.15s" aria-hidden="true">
+        {%- assign ims = collage | split: ',' -%}
+        {%- for s in ims limit: 3 -%}<figure>{% render 'mgx-img', src: s, w: 900, alt: '' %}</figure>{%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>

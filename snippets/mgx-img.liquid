@@ -1,0 +1,21 @@
+{%- doc -%}
+  Image resolver for the info pages.
+  @param {string} src - "asset:file.jpg" (theme asset), "col:handle" (collection featured image), "prod:handle" is NOT supported (all_products cap), else a Shopify Files filename
+  @param {number} [w] - Render width (default 900)
+  @param {string} [alt]
+  @param {boolean} [eager]
+{%- enddoc -%}
+{%- assign w = w | default: 900 -%}
+{%- if src contains 'asset:' -%}
+  {%- assign f = src | remove_first: 'asset:' -%}
+  <img src="{{ f | asset_url }}" alt="{{ alt | escape }}" width="1600" height="1000" {% if eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+{%- elsif src contains 'col:' -%}
+  {%- assign h = src | remove_first: 'col:' -%}
+  {%- assign c = collections[h] -%}
+  {%- assign im = c.image | default: c.featured_image -%}
+  {%- if im == blank -%}{%- for p in c.products limit: 6 -%}{%- if p.featured_image -%}{%- assign im = p.featured_image -%}{%- break -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+  {%- if im -%}{{ im | image_url: width: w | image_tag: alt: alt, loading: 'lazy', sizes: '(max-width: 749px) 50vw, 33vw' }}{%- endif -%}
+{%- else -%}
+  {%- assign im = images[src] -%}
+  {%- if im -%}{%- if eager -%}{{ im | image_url: width: w | image_tag: alt: alt, fetchpriority: 'high', sizes: '100vw' }}{%- else -%}{{ im | image_url: width: w | image_tag: alt: alt, loading: 'lazy' }}{%- endif -%}{%- endif -%}
+{%- endif -%}
