@@ -1,0 +1,355 @@
+{%- comment -%}
+  City / country landing page ("Cities we serve" and "We ship worldwide" in the footer).
+  Renders page.metafields.mgplace.data (written by merugifting/place-pages/push.py). All copy comes from that JSON,
+  which is the page's original body, split into fields. Falls back to the plain body if the metafield is missing.
+{%- endcomment -%}
+{%- assign d = page.metafields.mgplace.data.value -%}
+{%- if d == blank -%}
+  <div class="mg-wrap mg-sec"><div class="rte">{{ page.content }}</div></div>
+{%- else -%}
+{%- assign m = d.m -%}
+{%- assign city = false -%}{%- if d.kind == 'city' -%}{%- assign city = true -%}{%- endif -%}
+{%- assign nm = m.name | escape -%}
+{%- capture wa_msg -%}Hi Meru Gifting, I'm looking at {% if city %}corporate gifts in {{ m.name }}{% else %}gifts shipped to {{ m.name }}{% endif %} and need a quote.{%- endcapture -%}
+{%- assign wa_enc = wa_msg | url_encode -%}{%- assign wa = 'https://wa.me/917892255078?text=' | append: wa_enc -%}
+{%- assign hero_src = m.img -%}
+{%- if images[m.img] == blank -%}{%- if city -%}{%- assign hero_src = 'IMG_9366.jpg' -%}{%- else -%}{%- assign hero_src = 'asset:mg-hero-hamper.jpg' -%}{%- endif -%}{%- endif -%}
+{%- assign t1 = m.t1 | replace: nm, '<em>NAME</em>' | replace: 'NAME', nm -%}
+
+{% render 'mg-fx' %}
+{% render 'mg-place-ui' %}
+
+<div class="mgp mgp--{{ d.kind }}" data-mgp data-tz="{{ m.tz }}" data-tzlabel="{{ m.tzlabel }}" data-lead="{{ m.lead_weeks }}">
+
+  {%- comment -%} ================= HERO ================= {%- endcomment -%}
+  <section class="mgp-hero">
+    <div class="mgp-hero__bg" data-mgp-parallax>{% render 'mgx-img', src: hero_src, w: 2000, alt: '', eager: true %}</div>
+    <div class="mgp-hero__in">
+      <div class="mgp-hero__copy mg-rv">
+        <nav class="mgx-crumb" aria-label="Breadcrumb"><a href="/">Home</a> / <span>{% if city %}Cities we serve{% else %}We ship worldwide{% endif %}</span> / <span aria-current="page">{{ m.name }}</span></nav>
+        <p class="mgx-eyebrow">{% if city %}Corporate gifting · {{ m.name }}{% if m.state != blank %}, {{ m.state }}{% endif %}{% else %}Shipped from Bangalore, India · {{ m.name }}{% endif %}</p>
+        <h1 class="mgp-h1">{{ t1 }}{% if m.t2 != blank %}<span><span class="mgp-vh">: </span>{{ m.t2 }}</span>{% endif %}</h1>
+        <p class="mgp-hero__sub">{{ d.intro }}</p>
+        <div class="mgx-hero__ctas">
+          {%- if city -%}
+            <a class="mg-btn mg-btn--gold" href="/collections/corporate-gifts">Browse Corporate Gifts</a>
+            <a class="mg-btn mg-btn--wa" href="{{ wa }}" target="_blank" rel="noopener">WhatsApp Us</a>
+          {%- else -%}
+            <a class="mg-btn mg-btn--gold" href="{{ wa }}" target="_blank" rel="noopener">Get a shipping quote</a>
+            <a class="mg-btn mg-btn--outline" href="/collections/artisanal-mementos">Shop handcrafted gifts</a>
+          {%- endif -%}
+        </div>
+        <p class="mgp-open" data-mgp-open><span class="mgp-open__dot"></span><span data-mgp-open-txt>Open Mon to Sat, 9 AM to 7 PM IST</span></p>
+      </div>
+
+      {%- comment -%} Route card {%- endcomment -%}
+      <aside class="mgp-route mg-rv" style="--d:.15s" aria-label="Delivery route">
+        <div class="mgp-route__top">
+          <div><small>From</small><b>Bangalore studio</b><span>Gandhinagar</span></div>
+          <div class="mgp-route__line" aria-hidden="true"><i></i><svg viewBox="0 0 24 24" class="mgp-route__icon">{% if city %}<path d="M2 6h12v10H2zM14 10h4l3 3v3h-7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/>{% else %}<path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5Z" fill="currentColor"/>{% endif %}</svg></div>
+          <div class="mgp-route__to"><small>To</small><b>{{ m.name }}</b><span>{% if city %}{{ m.state }}{% else %}{{ m.tzlabel }} and nationwide{% endif %}</span></div>
+        </div>
+        <dl class="mgp-route__facts">
+          <div><dt>{% if city and m.key == 'bangalore' %}Stock items{% else %}Delivery{% endif %}</dt><dd>{{ m.days }}</dd></div>
+          {%- if m.km > 20 -%}<div><dt>Distance</dt><dd><span data-count="{{ m.km }}" data-suf=" km">{{ m.km }} km</span></dd></div>{%- else -%}<div><dt>Branded orders</dt><dd>24–48 h dispatch</dd></div>{%- endif -%}
+          {%- if city -%}<div><dt>Minimum order</dt><dd>10 pieces</dd></div>{%- else -%}<div><dt>Courier</dt><dd>DHL or FedEx</dd></div>{%- endif -%}
+        </dl>
+        {%- unless city -%}
+          <div class="mgp-clocks" data-mgp-clocks>
+            <div><small>Bangalore (IST)</small><b data-clock="Asia/Kolkata">--:--</b></div>
+            <div><small>{{ m.tzlabel }}</small><b data-clock="{{ m.tz }}">--:--</b></div>
+          </div>
+        {%- endunless -%}
+      </aside>
+    </div>
+    <a class="mgp-scroll" href="#mgp-start" aria-label="Scroll to details"><span></span></a>
+  </section>
+
+  {%- comment -%} ================= USP strip ================= {%- endcomment -%}
+  <div class="mg-wrap" id="mgp-start">
+    <ul class="mgp-usps">
+      {%- for u in d.usps -%}
+        {%- capture ic -%}{%- cycle 'truck', 'hand', 'logo', 'box' -%}{%- endcapture -%}
+        {%- if city == false -%}{%- capture ic -%}{%- cycle 'globe', 'shield', 'pen', 'card' -%}{%- endcapture -%}{%- endif -%}
+        <li class="mgp-usp mg-rv" style="--d: {{ forloop.index0 | times: 0.08 }}s" data-tilt>
+          <span class="mgp-usp__ic">{% render 'mg-place-icon', name: ic %}</span>
+          <b>{{ u.t }}</b><span>{{ u.d }}</span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  {%- if city -%}
+  {%- comment -%} ================= CITY: why + price ladder ================= {%- endcomment -%}
+  {%- assign s_why = d.secs[0] -%}{%- assign s_areas = d.secs[1] -%}{%- assign s_ind = d.secs[2] -%}{%- assign s_occ = d.secs[3] -%}
+  <section class="mg-wrap mg-sec">
+    <div class="mg-head mg-rv"><p class="mg-head__eyebrow">{{ m.name }}{% if m.state != blank %} · {{ m.state }}{% endif %}</p><h2 class="mg-head__title">{{ d.h2_main }}</h2></div>
+    <div class="mgp-why">
+      <div class="mgp-why__copy mg-rv">
+        <h3>{{ s_why.h }}</h3>
+        {%- for b in s_why.body -%}{%- if b.p -%}<p>{{ b.p }}</p>{%- endif -%}{%- endfor -%}
+      </div>
+      <div class="mgp-ladder mg-rv" style="--d:.12s">
+        <p class="mgp-ladder__k">Pick a budget per gift</p>
+        <a class="mgp-step" href="/pages/corporate-gifts-by-budget" style="--h:38%"><span class="mgp-step__bar"></span><b>₹150</b><span>Giveaways for large employee drops</span></a>
+        <a class="mgp-step" href="/pages/corporate-gifts-by-budget" style="--h:66%"><span class="mgp-step__bar"></span><b>₹500–₹1,500</b><span>Branded mid-range gifts</span></a>
+        <a class="mgp-step" href="/pages/corporate-gifts-by-budget" style="--h:100%"><span class="mgp-step__bar"></span><b>₹2,000–₹5,000+</b><span>Premium hampers and executive gifts</span></a>
+        <p class="mgp-ladder__note">MOQ 10 pieces · GST invoice with every order</p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ================= CITY: network map + areas ================= {%- endcomment -%}
+  <section class="mgp-band">
+    <div class="mg-wrap mg-sec">
+      <div class="mgp-net">
+        <div class="mgp-map mg-rv">
+          {% render 'mg-place-map', kind: 'city', current: m.key %}
+          <p class="mgp-map__cap"><span class="mgp-map__hub"></span> Bangalore studio <span class="mgp-map__cur"></span> {{ m.name }} · tap any city</p>
+        </div>
+        <div class="mg-rv" style="--d:.12s">
+          <p class="mg-head__eyebrow">Delivery map</p>
+          <h3 class="mgp-h3">{{ s_areas.h }}</h3>
+          <ul class="mgp-areas" data-mgp-areas>
+            {%- for a in m.areas -%}<li style="--i: {{ forloop.index0 }}">{% render 'mg-place-icon', name: 'pin' %}{{ a }}</li>{%- endfor -%}
+          </ul>
+          {%- for b in s_areas.body -%}{%- if b.p -%}<p class="mgp-p">{{ b.p }}</p>{%- endif -%}{%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ================= CITY: industries ================= {%- endcomment -%}
+  <section class="mg-wrap mg-sec">
+    <div class="mgx-split">
+      <div class="mgx-split__media mg-rv">
+        {% render 'mgx-img', src: m.split_img, w: 1100, alt: 'Corporate gift set packed at the Meru Gifting studio in Bangalore' %}
+        <div class="mgx-split__badge"><b>4,000+</b>artisan families since 2012</div>
+      </div>
+      <div class="mg-rv" style="--d:.12s">
+        <p class="mg-head__eyebrow">Who we gift for in {{ m.name }}</p>
+        <h2>{{ s_ind.h }}</h2>
+        <div class="mgx-split__body">{%- for b in s_ind.body -%}{%- if b.p -%}<p>{{ b.p }}</p>{%- endif -%}{%- endfor -%}</div>
+        <a class="mg-btn mg-btn--gold" href="/pages/bulk-enquiry">Plan a bulk order</a>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ================= CITY: occasions ================= {%- endcomment -%}
+  <section class="mgp-band">
+    <div class="mg-wrap mg-sec">
+      <div class="mg-head mg-rv"><p class="mg-head__eyebrow">Gift for every moment</p><h2 class="mg-head__title">{{ s_occ.h }}</h2></div>
+      <div class="mgp-occ">
+        {%- for o in m.occasions -%}
+          {%- assign c = collections[o.col] -%}
+          <a class="mgp-occ__card mg-rv" style="--d: {{ forloop.index0 | times: 0.07 }}s" href="{{ c.url | default: '/collections/corporate-gifts' }}">
+            <span class="mgp-occ__n">0{{ forloop.index }}</span>
+            <span class="mgp-occ__ic">{% render 'mg-place-icon', name: o.ic %}</span>
+            <b>{{ o.t }}</b>
+            {%- if c.products_count > 0 -%}<span class="mgp-occ__go">{{ c.products_count }} ideas →</span>{%- else -%}<span class="mgp-occ__go">See ideas →</span>{%- endif -%}
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ================= CITY: delivery coverage ================= {%- endcomment -%}
+  <section class="mg-wrap mg-sec">
+    <div class="mgp-cover mg-rv">
+      <div>
+        <p class="mg-head__eyebrow">From proof to doorstep</p>
+        <h2 class="mgp-h2">{{ d.h2_cover }}</h2>
+        <p class="mgp-p">{{ d.cover }}</p>
+      </div>
+      <ol class="mgp-track" data-mgp-track>
+        <li><span>1</span><b>Share brief</b><small>Quantity, budget, logo</small></li>
+        <li><span>2</span><b>Approve proof</b><small>Digital mock-up first</small></li>
+        <li><span>3</span><b>Made in Bangalore</b><small>Branded in-house</small></li>
+        <li><span>4</span><b>{% if m.key == 'bangalore' %}Pickup or delivery{% else %}Delivered in {{ m.name }}{% endif %}</b><small>{{ m.days }}</small></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="mgp-band"><div class="mg-wrap mg-sec">
+    {% render 'mg-product-grid', handle: 'corporate-gifts', title: 'Popular corporate gifts', eyebrow: 'Ready to brand', subtitle: 'Ship to any office address in town, with your logo on every piece.', limit: 8 %}
+  </div></section>
+
+  {%- else -%}
+  {%- comment -%} ================= COUNTRY ================= {%- endcomment -%}
+  {%- assign s_who = d.secs[0] -%}{%- assign s_why = d.secs[1] -%}{%- assign s_ship = d.secs[2] -%}{%- assign s_how = d.secs[3] -%}
+  <section class="mg-wrap mg-sec">
+    <div class="mgx-split">
+      <div class="mgx-split__media mg-rv">
+        {% render 'mgx-img', src: 'MG-DPT-001.png', w: 1100, alt: 'Handcrafted Dharohar brass and artisan pieces packed for export' %}
+        <div class="mgx-split__badge"><b>{{ m.km_label }}</b>Bangalore to {{ m.tzlabel }}</div>
+      </div>
+      <div class="mg-rv" style="--d:.12s">
+        <p class="mg-head__eyebrow">From our studio to {{ m.name }}</p>
+        <h2>{{ d.h2_main }}</h2>
+        <div class="mgx-split__body"><p>{{ d.lead }}</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mgp-band"><div class="mg-wrap mg-sec">
+    <div class="mg-head mg-rv"><p class="mg-head__eyebrow">Community, culture, companies</p><h2 class="mg-head__title">{{ s_who.h }}</h2></div>
+    <div class="mgp-who">
+      {%- for w in m.who -%}
+        {%- capture ic -%}{%- cycle 'people', 'temple', 'logo', 'ring' -%}{%- endcapture -%}
+        <article class="mgp-who__card mg-rv" style="--d: {{ forloop.index0 | times: 0.08 }}s" data-tilt>
+          <span class="mgp-usp__ic">{% render 'mg-place-icon', name: ic %}</span>
+          <h3>{{ w.t }}</h3><p>{{ w.d }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div></section>
+
+  <section class="mg-wrap mg-sec">
+    <div class="mgp-crafts">
+      <div class="mg-rv">
+        <p class="mg-head__eyebrow">Made by hand in India</p>
+        <h2 class="mgp-h2">{{ s_why.h }}</h2>
+        {%- for b in s_why.body -%}{%- if b.p -%}<p class="mgp-p">{{ b.p }}</p>{%- endif -%}{%- endfor -%}
+        <ul class="mgx-pills mgp-pills">{%- for c in m.crafts -%}<li>{{ c }}</li>{%- endfor -%}</ul>
+      </div>
+      <div class="mgp-craftwall mg-rv" style="--d:.12s" aria-hidden="true">
+        <figure>{% render 'mgx-img', src: 'MG-KLG-022.png', w: 600, alt: '' %}</figure>
+        <figure>{% render 'mgx-img', src: 'bidri-selver-inlaid-disc.png', w: 600, alt: '' %}</figure>
+        <figure>{% render 'mgx-img', src: 'MG-ALK-008.png', w: 600, alt: '' %}</figure>
+        <figure>{% render 'mgx-img', src: 'MG-SMN-003.png', w: 600, alt: '' %}</figure>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Shipping journey + docs + order-by planner {%- endcomment -%}
+  <section class="mgp-band"><div class="mg-wrap mg-sec">
+    <div class="mg-head mg-rv"><p class="mg-head__eyebrow">Door to door, fully documented</p><h2 class="mg-head__title">{{ s_ship.h }}</h2></div>
+    <ol class="mgp-journey mg-rv" data-mgp-track>
+      <li><span>{% render 'mg-place-icon', name: 'hand' %}</span><b>Crafted and personalised</b><small>Bangalore studio</small></li>
+      <li><span>{% render 'mg-place-icon', name: 'box' %}</span><b>Export-packed</b><small>Bubble-wrapped, foam-lined</small></li>
+      <li><span>{% render 'mg-place-icon', name: 'plane' %}</span><b>DHL Express or FedEx</b><small>International Priority</small></li>
+      <li><span>{% render 'mg-place-icon', name: 'shield' %}</span><b>Customs ready</b><small>Paperwork included</small></li>
+      <li><span>{% render 'mg-place-icon', name: 'pin' %}</span><b>Delivered in {{ m.name }}</b><small>{{ m.transit }}</small></li>
+    </ol>
+    <div class="mgp-ship">
+      <div class="mg-rv">
+        {%- for b in s_ship.body -%}{%- if b.p -%}<p class="mgp-p">{{ b.p }}</p>{%- endif -%}{%- endfor -%}
+        <ul class="mgp-docs">
+          <li>{% render 'mg-place-icon', name: 'doc' %}Commercial invoice</li>
+          <li>{% render 'mg-place-icon', name: 'doc' %}Packing list</li>
+          <li>{% render 'mg-place-icon', name: 'doc' %}Country-of-origin certificate</li>
+        </ul>
+      </div>
+      <form class="mgp-plan mg-rv" style="--d:.12s" data-mgp-plan onsubmit="return false">
+        <p class="mg-head__eyebrow">Order-by planner</p>
+        <h3>When is your celebration in {{ m.name }}?</h3>
+        <label for="mgp-date">Event or festival date</label>
+        <input id="mgp-date" type="date" data-mgp-date>
+        <div class="mgp-plan__out" data-mgp-out aria-live="polite">
+          <p>Pick a date and we will show the latest day to confirm your order, based on our {{ m.lead_weeks }}-week advance guidance for {{ m.name }}.</p>
+        </div>
+        <a class="mg-btn mg-btn--wa" href="{{ wa }}" target="_blank" rel="noopener" data-mgp-wa>WhatsApp us your date</a>
+      </form>
+    </div>
+  </div></section>
+
+  <section class="mg-wrap mg-sec">
+    <div class="mgp-how mg-rv">
+      <div>
+        <p class="mg-head__eyebrow">Simple from anywhere</p>
+        <h2 class="mgp-h2">{{ s_how.h }}</h2>
+        {%- for b in s_how.body -%}{%- if b.p -%}<p class="mgp-p">{{ b.p }}</p>{%- endif -%}{%- endfor -%}
+      </div>
+      <ul class="mgp-pay">
+        <li>{% render 'mg-place-icon', name: 'bank' %}<b>SWIFT</b><small>Bank transfer</small></li>
+        <li>{% render 'mg-place-icon', name: 'card' %}<b>Wise</b><small>Low-fee transfer</small></li>
+        <li>{% render 'mg-place-icon', name: 'card' %}<b>PayPal</b><small>Card or balance</small></li>
+        <li>{% render 'mg-place-icon', name: 'shield' %}<b>50% advance</b><small>Confirms production</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mgp-band"><div class="mg-wrap mg-sec">
+    <div class="mgp-net mgp-net--world">
+      <div class="mg-rv">
+        <p class="mg-head__eyebrow">Where we deliver</p>
+        <h2 class="mgp-h2">{{ d.h2_cover }}</h2>
+        <ul class="mgp-areas" data-mgp-areas>
+          {%- for a in m.cities -%}<li style="--i: {{ forloop.index0 }}">{% render 'mg-place-icon', name: 'pin' %}{{ a }}</li>{%- endfor -%}
+        </ul>
+      </div>
+      <div class="mgp-map mgp-map--world mg-rv" style="--d:.12s">
+        {% render 'mg-place-map', kind: 'country', current: m.key %}
+        <p class="mgp-map__cap"><span class="mgp-map__hub"></span> Bangalore studio <span class="mgp-map__cur"></span> {{ m.name }} · tap a country</p>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="mg-wrap mg-sec">
+    {% render 'mg-product-grid', handle: 'artisanal-mementos', title: 'Handcrafted gifts that travel well', eyebrow: 'Ships worldwide', subtitle: 'Heritage pieces from our artisan network, packed for international transit.', limit: 8 %}
+  </section>
+  {%- endif -%}
+
+  {%- comment -%} ================= FAQ ================= {%- endcomment -%}
+  <section class="mg-wrap mg-sec">
+    <div class="mgp-faq">
+      <div class="mgp-faq__side mg-rv">
+        <p class="mg-head__eyebrow">Good to know</p>
+        <h2 class="mgp-h2">{{ d.h2_faq }}</h2>
+        <p class="mgp-p">Still unsure? Our team answers on WhatsApp within the hour during working hours.</p>
+        <a class="mg-btn mg-btn--wa" href="{{ wa }}" target="_blank" rel="noopener">Ask on WhatsApp</a>
+      </div>
+      <div class="mgp-faq__list">
+        {%- for f in d.faq -%}
+          <details class="mgp-q mg-rv" style="--d: {{ forloop.index0 | modulo: 4 | times: 0.05 }}s"{% if forloop.first %} open{% endif %}>
+            <summary><span class="mgp-q__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ f.q }}<i aria-hidden="true"></i></summary>
+            <div class="mgp-q__a"><p>{{ f.a }}</p></div>
+          </details>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{%- for f in d.faq -%}{"@type":"Question","name":{{ f.q | strip_html | json }},"acceptedAnswer":{"@type":"Answer","text":{{ f.a | strip_html | json }}}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]}
+  </script>
+
+  {%- comment -%} ================= CONTACT ================= {%- endcomment -%}
+  <section class="mg-wrap mg-sec">
+    <div class="mgp-contact mg-rv">
+      <div class="mgp-contact__copy">
+        <p class="mg-head__eyebrow">Let's create something memorable</p>
+        <h2>{{ d.h2_contact }}</h2>
+        <p>{{ d.contact }}</p>
+        <div class="mgx-hero__ctas">
+          <a class="mg-btn mg-btn--gold" href="/pages/bulk-enquiry">Send a bulk enquiry</a>
+          <a class="mg-btn mg-btn--wa" href="{{ wa }}" target="_blank" rel="noopener">WhatsApp +91 78922 55078</a>
+          <a class="mg-btn mg-btn--outline" href="/pages/catalog">Download catalogues</a>
+        </div>
+      </div>
+      <div class="mgp-contact__live">
+        <p class="mgp-open mgp-open--big" data-mgp-open><span class="mgp-open__dot"></span><span data-mgp-open-txt>Open Mon to Sat, 9 AM to 7 PM IST</span></p>
+        <b data-clock="Asia/Kolkata" class="mgp-contact__clock">--:--</b>
+        <small>Local time at our Bangalore studio</small>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ================= Other places ================= {%- endcomment -%}
+  <section class="mgp-band"><div class="mg-wrap mg-sec mg-sec--tight">
+    <div class="mgp-more">
+      <div><p class="mg-head__eyebrow">Cities we serve</p>
+        <ul>{%- render 'mg-place-links', kind: 'city', cur: page.handle -%}</ul></div>
+      <div><p class="mg-head__eyebrow">We ship worldwide</p>
+        <ul>{%- render 'mg-place-links', kind: 'country', cur: page.handle -%}</ul></div>
+    </div>
+  </div></section>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "MG place landing",
+  "settings": [],
+  "presets": [{ "name": "MG place landing" }]
+}
+{% endschema %}
