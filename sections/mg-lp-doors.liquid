@@ -4,19 +4,20 @@
 {%- endcomment -%}
 {%- render 'mg-lp-ui' -%}
 <div class="mglp mglpd">
+  <div class="mglpd-title"><p class="mglp-eyebrow">Two ways to gift with Meru</p><h1 class="mglp-disp">Ready-to-ship hampers or <em>custom branded kits?</em></h1></div>
   <div class="mglpd-split">
     <section class="mglpd-door" aria-labelledby="mglpd-a">
-      <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-hamper-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-hamper.jpg' | asset_url }}" width="2400" height="1350" alt="" fetchpriority="high" style="object-position:75% 50%"></picture>
+      <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-hamper-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-hamper.jpg' | asset_url }}" width="2400" height="1350" alt="Black corporate gift hamper with notebook, bamboo flask, brass seal and chocolates" fetchpriority="high" style="object-position:75% 50%"></picture>
       <div class="mglpd-in">
         <p class="mglp-eyebrow">Ready to ship</p>
-        <h1 class="mglp-disp" id="mglpd-a">Pick a hamper. <em>We dispatch.</em></h1>
+        <h2 class="mglp-disp" id="mglpd-a">Pick a hamper. <em>We dispatch.</em></h2>
         <p class="mglp-sub">Curated hampers and gift sets in stock, for onboarding, client thank-yous and last-minute festive orders.</p>
         <ul class="mglpd-pts"><li>Fastest dispatch</li><li>Fixed pricing</li><li>From 10 pieces</li></ul>
         <div class="mglp-ctas"><a class="mg-btn mg-btn--gold" href="#mglpd-ready">Shop ready hampers</a></div>
       </div>
     </section>
     <section class="mglpd-door" aria-labelledby="mglpd-b">
-      <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-welcome-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-welcome.jpg' | asset_url }}" width="2400" height="1350" alt="" loading="lazy"></picture>
+      <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-welcome-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-welcome.jpg' | asset_url }}" width="2400" height="1350" alt="Black employee welcome kit with notebook, bottle, card holder and pen" loading="lazy"></picture>
       <div class="mglpd-in">
         <p class="mglp-eyebrow">Made for your brand</p>
         <h2 class="mglp-disp" id="mglpd-b">Your logo. <em>Every piece.</em></h2>
@@ -28,7 +29,8 @@
     <img class="mglpd-seal" src="{{ 'mg-logo-mark.png' | asset_url }}" width="120" height="120" alt="" aria-hidden="true">
   </div>
 
-  <ol class="mglpd-steps">
+  {%- render 'mg-lp-seo', part: 'answer' -%}
+  <ol class="mglpd-steps" style="margin-top:1.5rem">
     <li><b>Step 1</b><span>Share your brief</span><small>Occasion, quantity, budget and date.</small></li>
     <li><b>Step 2</b><span>Get a shortlist</span><small>Curated options with prices in a day.</small></li>
     <li><b>Step 3</b><span>Approve the mock-up</span><small>See your logo on every piece first.</small></li>
@@ -40,9 +42,12 @@
     <div class="mg-head"><p class="mg-head__eyebrow">Or browse by category</p><h2 class="mg-head__title">Everything we can brand</h2></div>
     {%- render 'mg-lp-cats', style: 'pills' -%}
   </section>
+  {%- render 'mg-lp-seo', part: 'more', hero: 'mg-hero-hamper.jpg' -%}
   <div class="mg-wrap mg-sec" id="mglpd-custom">{%- render 'mg-enquiry' -%}</div>
 </div>
 <style>
+  .mglpd-title { max-width: var(--mg-page); margin: 0 auto; padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1rem, 3vw, 2rem); text-align: center; display: flex; flex-direction: column; gap: .6rem; }
+  .mglpd-title .mglp-disp { font-size: clamp(1.7rem, 3.6vw, 2.8rem); }
   .mglpd-split { position: relative; display: grid; grid-template-columns: 1fr 1fr; min-height: 620px; }
   .mglpd-door { position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 3rem var(--mglp-pad); }
   .mglpd-door + .mglpd-door { border-left: 1px solid var(--mg-line-gold); }

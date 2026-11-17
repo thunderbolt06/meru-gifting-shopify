@@ -13,20 +13,20 @@
       <section class="mglpg-t mglpg-a">
         <picture class="mglp-media">
           <source media="(max-width: 749px)" srcset="{{ 'mg-hero-hamper-m.jpg' | asset_url }}">
-          <img src="{{ 'mg-hero-hamper.jpg' | asset_url }}" width="2400" height="1350" alt="" fetchpriority="high">
+          <img src="{{ 'mg-hero-hamper.jpg' | asset_url }}" width="2400" height="1350" alt="Black corporate gift hamper with notebook, bamboo flask, brass seal and chocolates" fetchpriority="high">
         </picture>
         <div class="mglpg-a__txt">
-          <p class="mglp-eyebrow">Corporate hampers</p>
-          <h1 class="mglp-disp">Gifts they will <em>remember.</em></h1>
+          <p class="mglp-eyebrow">Hampers, kits and mementos</p>
+          <h1 class="mglp-disp">Corporate gifting <em>lookbook</em></h1>
           <div class="mglp-ctas"><a class="mg-btn mg-btn--gold" href="/pages/bulk-enquiry">Get a bulk quote</a><a class="mg-btn mg-btn--ghost" href="/collections/corporate-gift-hampers">Explore hampers →</a></div>
         </div>
       </section>
       <a class="mglpg-t mglpg-b mglpg-shade" href="/collections/employee-welcome-kit-items">
-        <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-welcome-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-welcome.jpg' | asset_url }}" width="2400" height="1350" alt="" loading="lazy"></picture>
+        <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-welcome-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-welcome.jpg' | asset_url }}" width="2400" height="1350" alt="Black employee welcome kit with notebook, bottle, card holder and pen" loading="lazy"></picture>
         <span class="mglpg-cap"><b>Welcome kits,<br>your logo.</b><span>Onboarding →</span></span>
       </a>
       <a class="mglpg-t mglpg-c mglpg-shade" href="/collections/christmas-hampers">
-        <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-festive-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-festive.jpg' | asset_url }}" width="2400" height="1350" alt="" loading="lazy" style="object-position:30% 50%"></picture>
+        <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-festive-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-festive.jpg' | asset_url }}" width="2400" height="1350" alt="Christmas and New Year corporate gift box" loading="lazy" style="object-position:30% 50%"></picture>
         <span class="mglpg-cap"><b>Christmas &amp;<br>New Year</b><span>Shop →</span></span>
       </a>
       <a class="mglpg-t mglpg-d" href="/pages/our-clients">
@@ -50,10 +50,12 @@
         <span class="mglpg-cap"><b>Customised</b></span>
       </a>
     </div>
+    {%- render 'mg-lp-seo', part: 'answer' -%}
     <div class="mglpg-also"><span>Also shop</span>{%- render 'mg-lp-cats', style: 'chips', skip: 'Christmas & New Year,Customer Works,Awards & Mementos,Artisanal Decor,Customised' -%}</div>
   </div>
   <div class="mg-wrap mg-sec">{%- render 'mg-product-grid', handle: 'corporate-gift-hampers', title: 'Corporate gift hampers', eyebrow: 'Ready to brand', limit: 8 -%}</div>
   <div class="mg-wrap mg-sec">{%- render 'mg-case-studies' -%}</div>
+  {%- render 'mg-lp-seo', part: 'more', hero: 'mg-hero-hamper.jpg' -%}
   <div class="mg-wrap mg-sec mg-sec--tight">{%- render 'mg-cta-pair' -%}</div>
 </div>
 <style>

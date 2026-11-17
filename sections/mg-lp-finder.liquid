@@ -9,11 +9,11 @@
   <section class="mglpf-hero">
     <picture class="mglp-media">
       <source media="(max-width: 749px)" srcset="{{ 'mg-hero-hamper-m.jpg' | asset_url }}">
-      <img src="{{ 'mg-hero-hamper.jpg' | asset_url }}" width="2400" height="1350" alt="" fetchpriority="high">
+      <img src="{{ 'mg-hero-hamper.jpg' | asset_url }}" width="2400" height="1350" alt="Black corporate gift hamper with notebook, bamboo flask, brass seal and chocolates" fetchpriority="high">
     </picture>
     <div class="mglpf-in">
-      <p class="mglp-eyebrow">Corporate gift finder</p>
-      <h1 class="mglp-disp">Gifts they will <em>remember.</em></h1>
+      <p class="mglp-eyebrow">Gifts they will remember</p>
+      <h1 class="mglp-disp">Corporate gift finder: <em>pick in 3 taps</em></h1>
       <form class="mglpf-box" onsubmit="return false" aria-label="Find corporate gifts">
         <fieldset class="mglpf-row"><legend>Occasion</legend><div class="mglpf-opts" data-k="occ">
           {%- for o in occs -%}{%- assign op = o | split: '|' -%}<button type="button" class="mglp-chip" data-v="{{ op[0] }}" data-l="{{ op[1] }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">{{ op[1] }}</button>{%- endfor -%}
@@ -37,6 +37,7 @@
     </div>
   </section>
 
+  {%- render 'mg-lp-seo', part: 'answer' -%}
   <section class="mg-wrap mg-sec" id="mglpf-res" aria-live="polite">
     <div class="mglpf-res-h">
       <div>
@@ -66,6 +67,7 @@
     <div class="mg-head"><p class="mg-head__eyebrow">Prefer to browse?</p><h2 class="mg-head__title">Shop by category</h2></div>
     {%- render 'mg-lp-cats', style: 'chips' -%}
   </section>
+  {%- render 'mg-lp-seo', part: 'more', hero: 'mg-hero-hamper.jpg' -%}
   <div class="mg-wrap mg-sec mg-sec--tight">{%- render 'mg-cta-pair' -%}</div>
 </div>
 <style>
@@ -74,7 +76,7 @@
   .mglpf-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,11,11,.96) 0%, rgba(11,11,11,.84) 42%, rgba(11,11,11,.1) 78%); }
   .mglpf-in { position: relative; z-index: 1; width: 100%; max-width: var(--mg-page); margin: 0 auto; padding: 3.5rem clamp(1rem, 3vw, 2rem); display: flex; flex-direction: column; gap: 1.2rem; }
   .mglpf-in > * { max-width: 680px; }
-  .mglpf-in .mglp-disp { font-size: clamp(2.4rem, 5vw, 4rem); }
+  .mglpf-in .mglp-disp { font-size: clamp(2.2rem, 4.4vw, 3.4rem); }
   .mglpf-box { background: rgba(20,18,16,.92); border: 1px solid var(--mg-line-gold); border-radius: 18px; padding: 1.3rem 1.4rem; display: flex; flex-direction: column; gap: 1rem; backdrop-filter: blur(6px); }
   .mglpf-row { border: 0; margin: 0; padding: 0; display: grid; grid-template-columns: 8.5rem 1fr; gap: .8rem; align-items: center; min-width: 0; }
   .mglpf-row legend { float: left; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--mg-muted); font-weight: 700; padding: 0; }

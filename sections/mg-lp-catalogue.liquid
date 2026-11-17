@@ -16,7 +16,8 @@
       <button class="mg-btn mg-btn--gold mg-btn--sm" type="submit">Search</button>
     </form>
   </div>
-  <div class="mglpc-body">
+  {%- render 'mg-lp-seo', part: 'answer' -%}
+  <div class="mglpc-body" style="margin-top:1.25rem;border-top:1px solid var(--mg-line)">
     <aside class="mglpc-side" aria-label="Categories">
       <p class="mglpc-h">Gift sets</p>
       {%- for row in cats -%}
@@ -40,10 +41,10 @@
     </aside>
     <div class="mglpc-main">
       <section class="mglpc-banner">
-        <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-hamper-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-hamper.jpg' | asset_url }}" width="2400" height="1350" alt="" fetchpriority="high"></picture>
+        <picture class="mglp-media"><source media="(max-width: 749px)" srcset="{{ 'mg-hero-hamper-m.jpg' | asset_url }}"><img src="{{ 'mg-hero-hamper.jpg' | asset_url }}" width="2400" height="1350" alt="Black corporate gift hamper with notebook, bamboo flask, brass seal and chocolates" fetchpriority="high"></picture>
         <div class="mglpc-banner__in">
-          <p class="mglp-eyebrow">Corporate gift catalogue</p>
-          <h1 class="mglp-disp">Gifts they will <em>remember.</em></h1>
+          <p class="mglp-eyebrow">Prices per piece, from 10 pieces</p>
+          <h1 class="mglp-disp">Corporate gift <em>catalogue</em></h1>
           <p class="mglp-sub">Add gifts to your quote and we send prices with a free logo mock-up, usually within one working day.</p>
         </div>
       </section>
@@ -65,6 +66,7 @@
       {%- endfor -%}
     </div>
   </div>
+  {%- render 'mg-lp-seo', part: 'more', hero: 'mg-hero-hamper.jpg' -%}
   <div class="mg-wrap mg-sec" id="mglpc-enq">{%- render 'mg-enquiry' -%}</div>
   <div class="mglpc-basket" data-basket hidden>
     <div><b data-n>0</b><span>gifts in your quote</span></div>

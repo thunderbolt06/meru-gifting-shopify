@@ -8,17 +8,18 @@
   <section class="mglpb-hero">
     <div class="mglpb-copy">
       <p class="mglp-eyebrow">Per-piece pricing, GST invoice</p>
-      <h1 class="mglp-disp">What is your budget <em>per gift?</em></h1>
+      <h1 class="mglp-disp">Corporate gifts by <em>budget per gift</em></h1>
       <p class="mglp-sub">Pick a price band. Every gift below can carry your logo, from 10 pieces, delivered in 5 to 7 working days after approval.</p>
     </div>
     <div class="mglpb-pic">
       <picture class="mglp-media">
         <source media="(max-width: 749px)" srcset="{{ 'mg-hero-welcome-m.jpg' | asset_url }}">
-        <img src="{{ 'mg-hero-welcome.jpg' | asset_url }}" width="2400" height="1350" alt="" fetchpriority="high">
+        <img src="{{ 'mg-hero-welcome.jpg' | asset_url }}" width="2400" height="1350" alt="Black employee welcome kit with notebook, bottle, card holder and pen" fetchpriority="high">
       </picture>
     </div>
   </section>
 
+  {%- render 'mg-lp-seo', part: 'answer' -%}
   <nav class="mglpb-tabs" aria-label="Budget bands">
     <div class="mglpb-tabs__in">
       {%- for s in shelves -%}{%- assign sp = s | split: '|' -%}<a href="#b-{{ sp[0] }}"{% if forloop.first %} class="is-on"{% endif %}>{{ sp[1] }}</a>{%- endfor -%}
@@ -51,6 +52,7 @@
     <div class="mg-head"><p class="mg-head__eyebrow">Or start from a category</p><h2 class="mg-head__title">Shop by category</h2></div>
     {%- render 'mg-lp-cats', style: 'rings' -%}
   </section>
+  {%- render 'mg-lp-seo', part: 'more', hero: 'mg-hero-welcome.jpg' -%}
   <div class="mg-wrap mg-sec mg-sec--tight">{%- render 'mg-cta-pair' -%}</div>
 </div>
 <style>

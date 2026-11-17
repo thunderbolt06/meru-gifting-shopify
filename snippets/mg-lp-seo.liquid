@@ -1,0 +1,150 @@
+{%- doc -%}
+  SEO/AEO layer for the mg-lp-* landing pages. Content comes from page.metafields.mgaeo.data
+  (written by aeo-site/landing_pages.py from landing_content.py).
+
+  @param {string} part - 'answer' (breadcrumb + short answer box) or 'more' (sections, FAQ, related, JSON-LD)
+  @param {string} [hero] - Theme asset file name of the hero image, for primaryImageOfPage
+{%- enddoc -%}
+{%- assign d = page.metafields.mgaeo.data.value -%}
+{%- if d != blank -%}
+{%- if part == 'answer' -%}
+  <div class="mg-wrap mglps-top">
+    <nav class="mglps-crumb" aria-label="Breadcrumb"><a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/pages/feeds">Guides</a> <span aria-hidden="true">/</span> <span aria-current="page">{{ d.crumb | default: page.title }}</span></nav>
+    <div class="mglps-answer" id="answer">
+      <p class="mglps-answer__k">Short answer</p>
+      <p class="mglps-answer__t">{{ d.answer }}</p>
+      <p class="mglps-meta">By <strong>Meru Gifting team, Bengaluru</strong> · Updated <time datetime="{{ d.updated }}">{{ d.updated | date: '%-d %b %Y' }}</time></p>
+    </div>
+  </div>
+{%- else -%}
+  <div class="mg-wrap mglps">
+    {%- for s in d.sections -%}
+      <section class="mglps-sec" id="{{ s.id }}" aria-labelledby="{{ s.id }}-h">
+        <h2 id="{{ s.id }}-h">{{ s.h2 }}</h2>
+        {%- if s.lead != blank -%}<p class="mglps-lead">{{ s.lead }}</p>{%- endif -%}
+        {%- case s.type -%}
+          {%- when 'text' -%}<div class="mglps-rte">{{ s.body }}</div>
+          {%- when 'table' -%}
+            <div class="mglps-table"><table>
+              <thead><tr>{%- for c in s.cols -%}<th scope="col">{{ c }}</th>{%- endfor -%}</tr></thead>
+              <tbody>{%- for r in s.rows -%}<tr>{%- for c in r -%}{%- if forloop.first -%}<th scope="row">{{ c }}</th>{%- else -%}<td>{{ c }}</td>{%- endif -%}{%- endfor -%}</tr>{%- endfor -%}</tbody>
+            </table></div>
+          {%- when 'steps' -%}
+            <ol class="mglps-steps">{%- for it in s.items -%}<li><strong>{{ it.t }}</strong><span>{{ it.d }}</span></li>{%- endfor -%}</ol>
+          {%- when 'checklist' -%}
+            <ul class="mglps-check">{%- for it in s.items -%}<li>{{ it }}</li>{%- endfor -%}</ul>
+        {%- endcase -%}
+      </section>
+    {%- endfor -%}
+
+    {%- if d.faq.size > 0 -%}
+      <section class="mglps-sec" id="faq" aria-labelledby="faq-h">
+        <h2 id="faq-h">Frequently asked questions</h2>
+        <div class="mg-faq">
+          {%- for f in d.faq -%}<details{% if forloop.first %} open{% endif %}><summary>{{ f.q }}</summary><div class="mg-faq__a">{{ f.a }}</div></details>{%- endfor -%}
+        </div>
+      </section>
+    {%- endif -%}
+
+    {%- if d.related.size > 0 -%}
+      <section class="mglps-sec" aria-labelledby="rel-h">
+        <h2 id="rel-h">Keep exploring</h2>
+        <div class="mglps-related">{%- for r in d.related -%}<a href="{{ r.url }}">{{ r.t }} <span aria-hidden="true">→</span></a>{%- endfor -%}</div>
+      </section>
+    {%- endif -%}
+  </div>
+
+  {%- assign lc = collections[d.list] -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": {% if d.list != blank %}"CollectionPage"{% else %}"WebPage"{% endif %},
+        "@id": {{ request.origin | append: page.url | append: '#webpage' | json }},
+        "url": {{ request.origin | append: page.url | json }},
+        "name": {{ d.h1 | json }},
+        "headline": {{ d.h1 | json }},
+        "description": {{ d.answer | json }},
+        "inLanguage": "en-IN",
+        "datePublished": {{ page.created_at | date: '%Y-%m-%d' | json }},
+        "dateModified": {{ d.updated | json }},
+        "about": {{ d.about | json }},
+        "isPartOf": { "@type": "WebSite", "url": {{ request.origin | json }}, "name": "Meru Gifting" },
+        "author": { "@id": {{ request.origin | append: '/#organization' | json }} },
+        "publisher": { "@id": {{ request.origin | append: '/#organization' | json }} },
+        "speakable": { "@type": "SpeakableSpecification", "cssSelector": [".mglps-answer__t", "h1"] }
+        {%- if hero != blank -%},"primaryImageOfPage": { "@type": "ImageObject", "url": {{ hero | asset_url | prepend: 'https:' | json }} }{%- endif -%}
+        {%- if lc != blank and lc.products_count > 0 -%},
+        "mainEntity": {
+          "@type": "ItemList",
+          "name": {{ lc.title | json }},
+          "numberOfItems": {{ lc.products_count }},
+          "itemListElement": [
+            {%- assign n = 0 -%}
+            {%- for p in lc.products limit: 30 -%}{%- if n >= 10 -%}{%- break -%}{%- endif -%}{%- if p.featured_image -%}{%- assign n = n | plus: 1 -%}{%- if n > 1 -%},{%- endif -%}
+            {"@type":"ListItem","position":{{ n }},"url":{{ request.origin | append: p.url | json }},"name":{{ p.title | json }}}
+            {%- endif -%}{%- endfor -%}
+          ]
+        }
+        {%- endif -%}
+      }
+      {%- if d.faq.size > 0 -%},
+      {
+        "@type": "FAQPage",
+        "@id": {{ request.origin | append: page.url | append: '#faq' | json }},
+        "mainEntity": [
+          {%- for f in d.faq -%}{"@type":"Question","name":{{ f.q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ f.a | strip_html | json }}}}{% unless forloop.last %},{% endunless %}{%- endfor -%}
+        ]
+      }
+      {%- endif -%}
+      {%- for s in d.sections -%}{%- if s.type == 'steps' -%},
+      {
+        "@type": "HowTo",
+        "name": {{ s.h2 | json }},
+        "description": {{ s.lead | json }},
+        "step": [
+          {%- for it in s.items -%}{"@type":"HowToStep","position":{{ forloop.index }},"name":{{ it.t | json }},"text":{{ it.d | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}
+        ]
+      }
+      {%- break -%}{%- endif -%}{%- endfor -%}
+    ]
+  }
+  </script>
+  {%- render 'mg-aeo-faq-css' -%}
+  <style>
+    .mglps { padding-block: clamp(1.5rem, 3vw, 2.5rem); max-width: 980px; }
+    .mglps-sec { padding-block: clamp(1.25rem, 2.5vw, 2rem); border-top: 1px solid var(--mg-line); scroll-margin-top: calc(var(--header-height, 0px) + 1rem); }
+    .mglps-sec h2 { font-family: var(--mg-serif); color: var(--mg-gold-soft); font-size: clamp(1.35rem, 2.6vw, 1.85rem); line-height: 1.2; margin: 0 0 .6rem; text-wrap: balance; }
+    .mglps-lead { color: #e8e0cc; font-size: 1.02rem; line-height: 1.65; margin: 0 0 1rem; max-width: 46rem; }
+    .mglps-rte { color: #d9d1bf; line-height: 1.7; } .mglps-rte p { margin: 0 0 .8rem; } .mglps-rte ul { padding-left: 1.2rem; margin: 0; display: grid; gap: .45rem; }
+    .mglps-rte a, .mglps-table a, .mg-faq__a a { color: var(--mg-gold-soft); text-underline-offset: 3px; }
+    .mglps-table { overflow-x: auto; border: 1px solid var(--mg-line); border-radius: 12px; }
+    .mglps-table table { width: 100%; border-collapse: collapse; font-size: .9rem; min-width: 560px; }
+    .mglps-table th, .mglps-table td { padding: .75rem .9rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--mg-line); color: #d9d1bf; line-height: 1.5; }
+    .mglps-table thead th { background: var(--mg-surface-2); color: var(--mg-gold); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+    .mglps-table tbody th { color: var(--mg-text); font-weight: 600; }
+    .mglps-table tr:last-child th, .mglps-table tr:last-child td { border-bottom: 0; }
+    .mglps-steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .8rem; }
+    .mglps-steps li { counter-increment: s; background: var(--mg-surface); border: 1px solid var(--mg-line); border-radius: 12px; padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: .3rem; }
+    .mglps-steps li::before { content: counter(s); width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--mg-gold); color: #17110a; font-weight: 800; display: grid; place-items: center; font-size: .85rem; margin-bottom: .3rem; }
+    .mglps-steps strong { color: var(--mg-text); } .mglps-steps span { color: var(--mg-muted); font-size: .9rem; line-height: 1.5; }
+    .mglps-check { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: .5rem 1.25rem; }
+    .mglps-check li { position: relative; padding-left: 1.6rem; color: #d9d1bf; line-height: 1.55; }
+    .mglps-check li::before { content: "✓"; position: absolute; left: 0; color: var(--mg-gold-soft); font-weight: 700; }
+    .mglps-related { display: flex; flex-wrap: wrap; gap: .55rem; }
+    .mglps-related a { border: 1px solid var(--mg-line-gold); border-radius: 999px; padding: .55rem 1rem; color: var(--mg-gold-soft); text-decoration: none; font-weight: 600; font-size: .88rem; }
+    .mglps-related a:hover { background: rgba(201,162,39,.1); }
+  </style>
+{%- endif -%}
+{%- if part == 'answer' -%}
+  <style>
+    .mglps-top { padding-top: clamp(1.25rem, 2.5vw, 2rem); }
+    .mglps-crumb { font-size: .78rem; color: var(--mg-muted); margin: 0 0 .8rem; } .mglps-crumb a { color: var(--mg-muted); text-decoration: none; } .mglps-crumb a:hover { color: var(--mg-gold-soft); }
+    .mglps-answer { border: 1px solid var(--mg-line-gold); border-radius: 14px; background: var(--mg-surface); padding: 1.1rem 1.3rem; max-width: 980px; }
+    .mglps-answer__k { margin: 0 0 .35rem; color: var(--mg-gold); font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 700; }
+    .mglps-answer__t { margin: 0; color: var(--mg-text); font-size: 1.02rem; line-height: 1.7; }
+    .mglps-meta { margin: .6rem 0 0; color: var(--mg-muted); font-size: .78rem; }
+  </style>
+{%- endif -%}
+{%- endif -%}
