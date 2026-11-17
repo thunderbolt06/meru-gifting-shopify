@@ -37,13 +37,18 @@ Meru Gifting | +91 78922 55078{%- endcapture -%}
 <script>
 (() => {
   if (window.mgShareInit) return; window.mgShareInit = true;
-  const pngBlob = async (src) => {
+  const cache = {};
+  const pngBlob = (src) => cache[src] || (cache[src] = (async () => {
     const r = await fetch(src); const b = await r.blob();
     if (b.type === 'image/png') return b;
     const bmp = await createImageBitmap(b); const c = document.createElement('canvas');
     c.width = bmp.width; c.height = bmp.height; c.getContext('2d').drawImage(bmp, 0, 0);
     return await new Promise((ok) => c.toBlob(ok, 'image/png'));
-  };
+  })());
+  const toDataUrl = (b) => new Promise((ok) => { const r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(b); });
+  const esc = (t) => t.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  const linkify = (t) => esc(t).replace(/https?:\/\/\S+/g, (u) => `<a href="${u}">${u}</a>`).replace(/\n/g, '<br>');
+  document.querySelectorAll('[data-mg-share]').forEach((b) => { if (b.dataset.card) pngBlob(b.dataset.card).catch(() => {}); });
   const flash = (box, btn, msg) => {
     const label = btn.querySelector('span'), old = label.textContent;
     btn.setAttribute('data-done', ''); label.textContent = msg.split('.')[0];
@@ -54,8 +59,11 @@ Meru Gifting | +91 78922 55078{%- endcapture -%}
     const text = box.querySelector('[data-mg-share-text]').textContent.trim(), card = box.dataset.card;
     try {
       if (card && window.ClipboardItem && navigator.clipboard.write) {
+        const png = pngBlob(card);
+        const html = png.then(toDataUrl).then((d) => new Blob([`<img src="${d}" alt=""><br>${linkify(text)}`], { type: 'text/html' }));
         await navigator.clipboard.write([new ClipboardItem({
-          'image/png': pngBlob(card),
+          'image/png': png,
+          'text/html': html,
           'text/plain': new Blob([text], { type: 'text/plain' })
         })]);
         return flash(box, btn, 'Copied. Card image and link are on your clipboard.');
@@ -70,7 +78,7 @@ Meru Gifting | +91 78922 55078{%- endcapture -%}
       else box.querySelector('.mg-share__msg').textContent = box.dataset.url;
     }
   };
-  const share = async (box, btn) => {
+  const share = async (box, btn, fallback) => {
     const text = box.querySelector('[data-mg-share-text]').textContent.trim(), card = box.dataset.card;
     if (navigator.share) {
       try {
@@ -79,6 +87,7 @@ Meru Gifting | +91 78922 55078{%- endcapture -%}
           const f = new File([await pngBlob(card)], 'meru-gifting-product.png', { type: 'image/png' });
           if (navigator.canShare({ files: [f] })) data.files = [f];
         }
+        if (fallback && !data.files) return copy(box, btn);
         await navigator.share(data); return;
       } catch (e) { if (e.name === 'AbortError') return; }
     }
@@ -87,7 +96,9 @@ Meru Gifting | +91 78922 55078{%- endcapture -%}
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-mg-share] .mg-share__btn'); if (!btn) return;
     const box = btn.closest('[data-mg-share]');
-    (btn.dataset.act === 'share' ? share : copy)(box, btn);
+    // Both buttons use the share sheet (sends card image + text + link together, which a paste cannot).
+    // Copy falls back to the clipboard when the browser can't share files.
+    share(box, btn, btn.dataset.act === 'copy');
   });
 })();
 </script>
