@@ -69,6 +69,12 @@
 
   assign render_slideshow_arrows = false
 
+  # Meru Gifting: auto-advance the product carousel every few seconds
+  assign mg_gallery_autoplay = false
+  if media_presentation == 'carousel'
+    assign mg_gallery_autoplay = true
+  endif
+
   if selected_product.media.size <= 1
     assign slideshow_class = 'product-media-gallery__slideshow--single-media slideshow--single-media'
   else
@@ -453,7 +459,9 @@
       slideshow_arrows: slideshow_arrows,
       arrows_position: icons_position,
       animate_arrows: animate_arrows,
-      controls: controls
+      controls: controls,
+      autoplay: mg_gallery_autoplay,
+      autoplay_speed: 4
     %}
 
     {% if media_presentation == 'grid' %}
