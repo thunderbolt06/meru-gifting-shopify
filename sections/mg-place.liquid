@@ -73,7 +73,7 @@
         {%- if city == false -%}{%- capture ic -%}{%- cycle 'globe', 'shield', 'pen', 'card' -%}{%- endcapture -%}{%- endif -%}
         <li class="mgp-usp mg-rv" style="--d: {{ forloop.index0 | times: 0.08 }}s" data-tilt>
           <span class="mgp-usp__ic">{% render 'mg-place-icon', name: ic %}</span>
-          <b>{{ u.t }}</b><span>{{ u.d }}</span>
+          <b>{{ u.t }}<span class="mgp-vh">:</span></b><span>{{ u.d }}</span>
         </li>
       {%- endfor -%}
     </ul>
@@ -198,7 +198,7 @@
         {%- capture ic -%}{%- cycle 'people', 'temple', 'logo', 'ring' -%}{%- endcapture -%}
         <article class="mgp-who__card mg-rv" style="--d: {{ forloop.index0 | times: 0.08 }}s" data-tilt>
           <span class="mgp-usp__ic">{% render 'mg-place-icon', name: ic %}</span>
-          <h3>{{ w.t }}</h3><p>{{ w.d }}</p>
+          <h3>{{ w.t }}<span class="mgp-vh">:</span></h3><p>{{ w.d }}</p>
         </article>
       {%- endfor -%}
     </div>
