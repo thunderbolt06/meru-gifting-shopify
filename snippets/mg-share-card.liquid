@@ -1,0 +1,93 @@
+{%- comment -%}
+  Share / copy the product's details card (the media image named *-card.png or alt "product details").
+  Share: native share sheet (card image + text + link) on phones; falls back to copy.
+  Copy: puts the card image and the text-with-link on the clipboard (text only if the browser can't copy images).
+{%- endcomment -%}
+{%- assign mg_card = nil -%}
+{%- for m in product.media -%}
+  {%- if m.media_type == 'image' -%}
+    {%- assign mg_src = m.preview_image.src | downcase -%}
+    {%- assign mg_alt = m.alt | downcase -%}
+    {%- if mg_src contains '-card' or mg_src contains '/card_' or mg_src contains 'files/card' or mg_alt contains 'product details' -%}
+      {%- assign mg_card = m.preview_image -%}{%- break -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign mg_v = product.selected_or_first_available_variant -%}
+{%- capture mg_text -%}{{ product.title | replace: ' – ', ' (Model ' | replace: ' - ', ' (Model ' }}{% if product.title contains ' – ' or product.title contains ' - ' %}){% endif %}
+Price: {{ mg_v.price | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }} per pc + 18% GST
+Bulk orders, samples and logo branding available.
+{{ shop.url }}{{ product.url }}
+Meru Gifting | +91 78922 55078{%- endcapture -%}
+<style>
+  .mg-share { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: .1rem 0 .5rem; }
+  .mg-share__btn { display: flex; align-items: center; justify-content: center; gap: .5rem; padding: .8rem 1rem; border-radius: 999px; border: 1px solid rgba(201,162,39,.55); background: transparent; color: #f3c969; font: inherit; font-weight: 600; font-size: .92rem; cursor: pointer; transition: background .2s, color .2s; }
+  .mg-share__btn:hover { background: rgba(201,162,39,.12); }
+  .mg-share__btn:focus-visible { outline: 2px solid #C9A227; outline-offset: 3px; }
+  .mg-share__btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .mg-share__btn[data-done] { background: #c9a227; color: #0b0b0b; border-color: #c9a227; }
+  .mg-share__msg { grid-column: 1 / -1; font-size: .8rem; color: #a8a090; min-height: 1em; margin: 0; text-align: center; }
+</style>
+<div class="mg-share" data-mg-share data-card="{% if mg_card %}{{ mg_card | image_url: width: 1200 }}{% endif %}" data-url="{{ shop.url }}{{ product.url }}" data-title="{{ product.title | escape }}">
+  <script type="text/plain" data-mg-share-text>{{ mg_text }}</script>
+  <button type="button" class="mg-share__btn" data-act="share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg><span>Share product</span></button>
+  <button type="button" class="mg-share__btn" data-act="copy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy card + link</span></button>
+  <p class="mg-share__msg" aria-live="polite"></p>
+</div>
+<script>
+(() => {
+  if (window.mgShareInit) return; window.mgShareInit = true;
+  const pngBlob = async (src) => {
+    const r = await fetch(src); const b = await r.blob();
+    if (b.type === 'image/png') return b;
+    const bmp = await createImageBitmap(b); const c = document.createElement('canvas');
+    c.width = bmp.width; c.height = bmp.height; c.getContext('2d').drawImage(bmp, 0, 0);
+    return await new Promise((ok) => c.toBlob(ok, 'image/png'));
+  };
+  const flash = (box, btn, msg) => {
+    const label = btn.querySelector('span'), old = label.textContent;
+    btn.setAttribute('data-done', ''); label.textContent = msg.split('.')[0];
+    box.querySelector('.mg-share__msg').textContent = msg;
+    setTimeout(() => { btn.removeAttribute('data-done'); label.textContent = old; }, 2200);
+  };
+  const copy = async (box, btn) => {
+    const text = box.querySelector('[data-mg-share-text]').textContent.trim(), card = box.dataset.card;
+    try {
+      if (card && window.ClipboardItem && navigator.clipboard.write) {
+        await navigator.clipboard.write([new ClipboardItem({
+          'image/png': pngBlob(card),
+          'text/plain': new Blob([text], { type: 'text/plain' })
+        })]);
+        return flash(box, btn, 'Copied. Card image and link are on your clipboard.');
+      }
+    } catch (e) { /* fall through to text-only */ }
+    try { await navigator.clipboard.writeText(text); flash(box, btn, 'Copied. Product details and link are on your clipboard.'); }
+    catch (e) {
+      const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', '');
+      t.style.cssText = 'position:fixed;opacity:0;top:0'; document.body.appendChild(t); t.select();
+      const ok = document.execCommand('copy'); t.remove();
+      if (ok) flash(box, btn, 'Copied. Product details and link are on your clipboard.');
+      else box.querySelector('.mg-share__msg').textContent = box.dataset.url;
+    }
+  };
+  const share = async (box, btn) => {
+    const text = box.querySelector('[data-mg-share-text]').textContent.trim(), card = box.dataset.card;
+    if (navigator.share) {
+      try {
+        const data = { title: box.dataset.title, text };
+        if (card && navigator.canShare) {
+          const f = new File([await pngBlob(card)], 'meru-gifting-product.png', { type: 'image/png' });
+          if (navigator.canShare({ files: [f] })) data.files = [f];
+        }
+        await navigator.share(data); return;
+      } catch (e) { if (e.name === 'AbortError') return; }
+    }
+    copy(box, btn);
+  };
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-mg-share] .mg-share__btn'); if (!btn) return;
+    const box = btn.closest('[data-mg-share]');
+    (btn.dataset.act === 'share' ? share : copy)(box, btn);
+  });
+})();
+</script>
