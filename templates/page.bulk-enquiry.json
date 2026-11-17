@@ -12,7 +12,7 @@
     "mg_hero": {
       "type": "custom-liquid",
       "settings": {
-        "custom_liquid": "{% render 'mg-page-hero', eyebrow: 'Bulk &amp; corporate orders', title: 'Tell us what you need and we will do the rest', subtitle: 'From 50 pieces. Curated shortlist with prices and a free branding mock-up, usually within one working day.' %}",
+        "custom_liquid": "{% render 'mg-page-hero', eyebrow: 'Bulk &amp; corporate orders', title: 'Tell us what you need and we will do the rest', subtitle: 'From 10 pieces. Curated shortlist with prices and a free branding mock-up, usually within one working day.' %}",
         "section_width": "full-width",
         "padding-block-start": 0,
         "padding-block-end": 0

@@ -73,7 +73,7 @@
         "type": "textarea",
         "id": "seo_default_description",
         "label": "Default meta description",
-        "default": "Meru Gifting: corporate gifts, festive hampers, artisanal mementos and customised gifts handcrafted in India. Bulk orders from 50 pieces, GST invoicing, pan-India delivery.",
+        "default": "Meru Gifting: corporate gifts, festive hampers, artisanal mementos and customised gifts handcrafted in India. Bulk orders from 10 pieces, GST invoicing, pan-India delivery.",
         "info": "Used when a page has no description of its own. Keep under 160 characters."
       },
       {

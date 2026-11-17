@@ -28,7 +28,7 @@
         "announcement_mg2": {
           "type": "_announcement",
           "settings": {
-            "text": "Bulk orders from 50 pieces · GST invoicing · Pan-India delivery · Handcrafted by 4,000+ artisan families",
+            "text": "Bulk orders from 10 pieces · GST invoicing · Pan-India delivery · Handcrafted by 4,000+ artisan families",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
             "letter_spacing": "normal",
@@ -116,7 +116,7 @@
     "mg_topbar": {
       "type": "mg-topbar",
       "settings": {
-        "message": "Bulk & corporate gifting from 50 pieces, with your logo.",
+        "message": "Bulk & corporate gifting from 10 pieces, with your logo.",
         "link_label": "Enquire now",
         "link": "/pages/bulk-enquiry",
         "phone": "+91 78922 55078"
