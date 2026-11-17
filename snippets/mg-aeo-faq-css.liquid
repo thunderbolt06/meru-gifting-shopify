@@ -1,0 +1,13 @@
+{%- comment -%} Accordion styles shared by AEO sections (mirrors snippets/mg-faq.liquid). {%- endcomment -%}
+<style>
+  .mg-faq { display: grid; gap: .65rem; }
+  .mg-faq details { border: 1px solid var(--mg-line); border-radius: 12px; background: var(--mg-surface); }
+  .mg-faq details[open] { border-color: var(--mg-line-gold); }
+  .mg-faq summary { list-style: none; cursor: pointer; padding: 1rem 1.2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-weight: 600; color: #faf7f0; font-size: .97rem; }
+  .mg-faq summary::-webkit-details-marker { display: none; }
+  .mg-faq summary::after { content: "+"; color: var(--mg-gold); font-size: 1.4rem; line-height: 1; flex: none; transition: transform .2s ease; }
+  .mg-faq details[open] summary::after { transform: rotate(45deg); }
+  .mg-faq summary:focus-visible { outline: 2px solid var(--mg-gold); outline-offset: 2px; border-radius: 12px; }
+  .mg-faq .mg-faq__a { padding: 0 1.2rem 1.1rem; color: var(--mg-muted); line-height: 1.65; font-size: .92rem; margin: 0; }
+  .mg-faq .mg-faq__a a { color: var(--mg-gold-soft); }
+</style>

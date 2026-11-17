@@ -1,0 +1,95 @@
+{%- comment -%}
+  AEO block under the product form: quick answer, key facts table, best-for chips, FAQ (+ FAQPage schema).
+  Data: product.metafields.mgaeo.aeo (JSON) written by aeo-site/push_products.py. Product schema itself comes from product-information.
+{%- endcomment -%}
+{%- assign d = product.metafields.mgaeo.aeo.value -%}
+{%- if d != blank -%}
+<div class="mg-wrap mgp" id="mgp-details">
+  <div class="mgp-grid">
+    <div class="mgp-col">
+      <div class="mgp-answer">
+        <p class="mgp-k">Quick answer</p>
+        <p class="mgp-answer__t">{{ d.answer }}</p>
+        {%- if d.best_for.size > 0 -%}
+          <p class="mgp-k mgp-k--sub">Best for</p>
+          <ul class="mgc-chips mgp-chips">{%- for b in d.best_for -%}<li>{{ b }}</li>{%- endfor -%}</ul>
+        {%- endif -%}
+      </div>
+      {%- if d.facts.size > 0 -%}
+        <div class="mgp-facts">
+          <h2 class="mgp-h2">Key facts</h2>
+          <table>
+            <tbody>
+              {%- for f in d.facts -%}<tr><th scope="row">{{ f[0] }}</th><td>{{ f[1] }}</td></tr>{%- endfor -%}
+            </tbody>
+          </table>
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="mgp-col">
+      {%- if d.faq.size > 0 -%}
+        <h2 class="mgp-h2">Questions buyers ask</h2>
+        <div class="mg-faq mgp-faq">
+          {%- for f in d.faq -%}<details{% if forloop.first %} open{% endif %}><summary>{{ f.q }}</summary><div class="mg-faq__a">{{ f.a }}</div></details>{%- endfor -%}
+        </div>
+      {%- endif -%}
+      <div class="mgp-steps">
+        <p class="mgp-k">How ordering works</p>
+        <ol>
+          <li><b>Enquire</b> with quantity, budget and date</li>
+          <li><b>Approve</b> a free digital mock-up</li>
+          <li><b>Pay 50%</b> advance, GST invoice issued</li>
+          <li><b>Receive</b> in {{ d.lead | default: '5 to 7 working days + delivery' }}</li>
+        </ol>
+        <div class="mgp-cta">
+          <a class="mg-btn mg-btn--gold mg-btn--sm" href="/pages/bulk-enquiry">Get a bulk quote</a>
+          <a class="mg-btn mg-btn--wa mg-btn--sm" href="https://wa.me/917892255078?text={{ 'Hi Meru Gifting, I want a quote for ' | append: product.title | append: ' (' | append: shop.url | append: product.url | append: ')' | url_encode }}" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%- if d.guides.size > 0 -%}
+    <div class="mgl-related mgp-guides"><span>Related guides:</span>{%- for r in d.guides -%}<a href="{{ r.url }}">{{ r.t }}</a>{%- endfor -%}</div>
+  {%- endif -%}
+  <p class="mgc-upd">Information updated {{ d.updated | date: '%-d %b %Y' }} by the Meru Gifting team, Bengaluru.</p>
+</div>
+{%- if d.faq.size > 0 -%}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","@id":{{ request.origin | append: product.url | append: '#faq' | json }},"mainEntity":[{%- for f in d.faq -%}{"@type":"Question","name":{{ f.q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ f.a | strip_html | json }}}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]}
+</script>
+{%- endif -%}
+{%- endif -%}
+{%- render 'mg-aeo-faq-css' -%}
+<style>
+  .mgp { padding-block: clamp(1.5rem, 3vw, 2.5rem); }
+  .mgp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 3vw, 2rem); align-items: start; }
+  .mgp-col { display: grid; gap: 1rem; }
+  .mgp-k { margin: 0 0 .35rem; color: var(--mg-gold); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; }
+  .mgp-k--sub { margin-top: .9rem; }
+  .mgp-answer { border: 1px solid var(--mg-line-gold); background: linear-gradient(135deg, rgba(201,162,39,.10), rgba(201,162,39,.02)); border-radius: 16px; padding: 1.1rem 1.25rem; }
+  .mgp-answer__t { margin: 0; color: #f0eadc; line-height: 1.65; font-size: .97rem; }
+  .mgp-chips { margin-top: .2rem; }
+  .mgc-chips { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .45rem; }
+  .mgc-chips li { font-size: .8rem; color: var(--mg-gold-soft); border: 1px solid var(--mg-line-gold); border-radius: 999px; padding: .25rem .7rem; background: rgba(11,11,11,.5); }
+  .mgp-h2 { font-family: var(--mg-serif); color: var(--mg-gold-soft); font-size: clamp(1.15rem, 2vw, 1.4rem); margin: 0 0 .7rem; letter-spacing: 0; }
+  .mgp-facts table { width: 100%; border-collapse: collapse; border: 1px solid var(--mg-line); border-radius: 14px; overflow: hidden; background: var(--mg-surface); font-size: .9rem; }
+  .mgp-facts th, .mgp-facts td { text-align: left; padding: .65rem .9rem; border-bottom: 1px solid var(--mg-line); vertical-align: top; line-height: 1.5; }
+  .mgp-facts th { color: var(--mg-muted); font-weight: 600; width: 38%; }
+  .mgp-facts td { color: #f0eadc; }
+  .mgp-facts tr:last-child > * { border-bottom: 0; }
+  .mgp-faq { max-width: none; }
+  .mgp-steps { border: 1px solid var(--mg-line); border-radius: 16px; background: var(--mg-surface); padding: 1.1rem 1.25rem; }
+  .mgp-steps ol { margin: .2rem 0 1rem; padding-left: 1.2rem; display: grid; gap: .35rem; color: #d9d1bf; font-size: .92rem; line-height: 1.5; }
+  .mgp-steps b { color: #faf7f0; }
+  .mgp-cta { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .mgp-guides { margin-top: 1.25rem; align-items: center; }
+  .mgp-guides span { color: var(--mg-muted); font-size: .85rem; margin-right: .2rem; }
+  .mgl-related { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .mgl-related a { text-decoration: none; border: 1px solid var(--mg-line-gold); color: var(--mg-gold-soft); border-radius: 999px; padding: .4rem .9rem; font-size: .84rem; font-weight: 600; }
+  .mgl-related a:hover { background: rgba(201,162,39,.12); }
+  .mgc-upd { color: var(--mg-muted); font-size: .78rem; margin: 1rem 0 0; }
+  @media (max-width: 849px) { .mgp-grid { grid-template-columns: 1fr; } }
+</style>
+{% schema %}
+{ "name": "MG AEO product", "settings": [], "presets": [{ "name": "MG AEO product" }] }
+{% endschema %}

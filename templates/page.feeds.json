@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "mg-feeds",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

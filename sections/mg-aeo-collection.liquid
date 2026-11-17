@@ -1,0 +1,115 @@
+{%- comment -%}
+  AEO content for collection pages, from collection.metafields.mgaeo.data (JSON, written by aeo-site/push_collections.py).
+  part=top: short answer + highlight chips above the grid (keeps shopping first).
+  part=bottom: buying guide, comparison table, FAQ (+ FAQPage schema), related guides.
+{%- endcomment -%}
+{%- assign d = collection.metafields.mgaeo.data.value -%}
+{%- if d != blank -%}
+{%- if section.settings.part == 'top' -%}
+  <div class="mg-wrap mgc-top">
+    <div class="mgc-answer">
+      <p class="mgc-answer__k">In short</p>
+      <p class="mgc-answer__t">{{ d.answer }}</p>
+      {%- if d.highlights.size > 0 -%}
+        <ul class="mgc-chips">{%- for h in d.highlights -%}<li>{{ h }}</li>{%- endfor -%}</ul>
+      {%- endif -%}
+      <div class="mgc-answer__cta">
+        <a class="mg-btn mg-btn--gold mg-btn--sm" href="/pages/bulk-enquiry">Bulk quote in 1 day</a>
+        <a class="mg-link" href="#mgc-guide">Buying guide ↓</a>
+      </div>
+    </div>
+  </div>
+{%- else -%}
+  <div class="mg-wrap mgc-bottom" id="mgc-guide">
+    <div class="mgc-guide">
+      {%- for g in d.guide -%}
+        <section class="mgc-card">
+          <h2>{{ g.h2 }}</h2>
+          <div class="mgc-rte">{{ g.body }}</div>
+        </section>
+      {%- endfor -%}
+    </div>
+
+    {%- if d.compare.rows.size > 0 -%}
+      <section class="mgc-sec">
+        <h2 class="mgc-h2">{{ d.compare.h2 }}</h2>
+        <div class="mgl-table" tabindex="0" role="region" aria-label="{{ d.compare.h2 | escape }}">
+          <table>
+            <thead><tr>{%- for c in d.compare.cols -%}<th scope="col">{{ c }}</th>{%- endfor -%}</tr></thead>
+            <tbody>{%- for r in d.compare.rows -%}<tr>{%- for c in r -%}{%- if forloop.first -%}<th scope="row">{{ c }}</th>{%- else -%}<td>{{ c }}</td>{%- endif -%}{%- endfor -%}</tr>{%- endfor -%}</tbody>
+          </table>
+        </div>
+      </section>
+    {%- endif -%}
+
+    {%- if d.faq.size > 0 -%}
+      <section class="mgc-sec" aria-labelledby="mgc-faq-h">
+        <h2 class="mgc-h2" id="mgc-faq-h">{{ collection.title | split: ':' | first }}: FAQs</h2>
+        <div class="mg-faq">
+          {%- for f in d.faq -%}<details{% if forloop.first %} open{% endif %}><summary>{{ f.q }}</summary><div class="mg-faq__a">{{ f.a }}</div></details>{%- endfor -%}
+        </div>
+      </section>
+    {%- endif -%}
+
+    {%- if d.related.size > 0 -%}
+      <section class="mgc-sec">
+        <h2 class="mgc-h2">Related guides</h2>
+        <div class="mgl-related">{%- for r in d.related -%}<a href="{{ r.url }}">{{ r.t }} <span aria-hidden="true">→</span></a>{%- endfor -%}</div>
+      </section>
+    {%- endif -%}
+    <p class="mgc-upd">Updated {{ d.updated | default: collection.updated_at | date: '%-d %b %Y' }} by the Meru Gifting team, Bengaluru.</p>
+  </div>
+
+  {%- if d.faq.size > 0 -%}
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[
+    {"@type":"CollectionPage","@id":{{ request.origin | append: collection.url | append: '#page' | json }},"url":{{ request.origin | append: collection.url | json }},"name":{{ collection.title | json }},"description":{{ d.answer | json }},"inLanguage":"en-IN","dateModified":{{ d.updated | default: collection.updated_at | date: '%Y-%m-%d' | json }},"publisher":{"@id":{{ request.origin | append: '/#organization' | json }}},
+     "mainEntity":{"@type":"ItemList","numberOfItems":{{ collection.products_count }},"itemListElement":[{%- for p in collection.products limit: 10 -%}{"@type":"ListItem","position":{{ forloop.index }},"url":{{ request.origin | append: p.url | json }},"name":{{ p.title | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]}},
+    {"@type":"FAQPage","mainEntity":[{%- for f in d.faq -%}{"@type":"Question","name":{{ f.q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ f.a | strip_html | json }}}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]}
+  ]}
+  </script>
+  {%- endif -%}
+{%- endif -%}
+{%- endif -%}
+
+{%- render 'mg-aeo-faq-css' -%}
+<style>
+  .mgc-top { padding-block: .5rem 1.25rem; }
+  .mgc-answer { border: 1px solid var(--mg-line-gold); background: linear-gradient(135deg, rgba(201,162,39,.10), rgba(201,162,39,.02)); border-radius: 16px; padding: 1rem 1.25rem; }
+  .mgc-answer__k { margin: 0 0 .3rem; color: var(--mg-gold); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; }
+  .mgc-answer__t { margin: 0; color: #f0eadc; line-height: 1.65; font-size: .98rem; max-width: 70rem; }
+  .mgc-chips { list-style: none; padding: 0; margin: .8rem 0 0; display: flex; flex-wrap: wrap; gap: .45rem; }
+  .mgc-chips li { font-size: .8rem; color: var(--mg-gold-soft); border: 1px solid var(--mg-line-gold); border-radius: 999px; padding: .25rem .7rem; background: rgba(11,11,11,.5); }
+  .mgc-answer__cta { display: flex; align-items: center; gap: 1rem; margin-top: .9rem; flex-wrap: wrap; }
+  .mgc-bottom { padding-block: clamp(2rem, 4vw, 3.5rem); }
+  .mgc-guide { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+  .mgc-card { border: 1px solid var(--mg-line); border-radius: 16px; background: var(--mg-surface); padding: 1.2rem 1.3rem; }
+  .mgc-card h2, .mgc-h2 { font-family: var(--mg-serif); color: var(--mg-gold-soft); font-size: clamp(1.15rem, 2vw, 1.45rem); line-height: 1.25; margin: 0 0 .6rem; letter-spacing: 0; }
+  .mgc-h2 { font-size: clamp(1.3rem, 2.4vw, 1.75rem); margin-bottom: .9rem; }
+  .mgc-rte { color: #d9d1bf; line-height: 1.7; font-size: .94rem; }
+  .mgc-rte p { margin: 0 0 .7rem; } .mgc-rte ul { padding-left: 1.1rem; margin: 0; display: grid; gap: .3rem; }
+  .mgc-rte a { color: var(--mg-gold-soft); }
+  .mgc-sec { margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+  .mgc-sec .mg-faq { max-width: none; }
+  .mgc-upd { color: var(--mg-muted); font-size: .8rem; margin: 0; }
+  .mgl-table { overflow-x: auto; border: 1px solid var(--mg-line); border-radius: 14px; background: var(--mg-surface); }
+  .mgl-table table { width: 100%; border-collapse: collapse; font-size: .9rem; min-width: 520px; }
+  .mgl-table th, .mgl-table td { text-align: left; padding: .7rem .9rem; border-bottom: 1px solid var(--mg-line); vertical-align: top; line-height: 1.5; color: #d9d1bf; }
+  .mgl-table thead th { color: var(--mg-gold); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; background: #15120c; }
+  .mgl-table tbody th { color: #faf7f0; font-weight: 600; }
+  .mgl-table tbody tr:last-child > * { border-bottom: 0; }
+  .mgl-related { display: flex; flex-wrap: wrap; gap: .55rem; }
+  .mgl-related a { text-decoration: none; border: 1px solid var(--mg-line-gold); color: var(--mg-gold-soft); border-radius: 999px; padding: .5rem 1rem; font-size: .88rem; font-weight: 600; }
+  .mgl-related a:hover { background: rgba(201,162,39,.12); }
+  @media (max-width: 749px) { .mgc-guide { grid-template-columns: 1fr; } }
+</style>
+
+{% schema %}
+{
+  "name": "MG AEO collection",
+  "settings": [
+    { "type": "select", "id": "part", "label": "Part", "default": "bottom", "options": [ { "value": "top", "label": "Top: short answer" }, { "value": "bottom", "label": "Bottom: guide, table, FAQ" } ] }
+  ],
+  "presets": [{ "name": "MG AEO collection" }]
+}
+{% endschema %}

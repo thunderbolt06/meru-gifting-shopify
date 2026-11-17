@@ -472,10 +472,15 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "mg_aeo": {
+      "type": "mg-aeo-product",
+      "settings": {}
     }
   },
   "order": [
     "main",
+    "mg_aeo",
     "product_recommendations_qggXJq"
   ]
 }

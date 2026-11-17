@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "mg-aeo-landing",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
