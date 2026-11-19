@@ -1,0 +1,33 @@
+{%- doc -%}
+  Google Ads click conversions for WhatsApp and phone links, site-wide.
+  The Google tag itself is loaded by the Google & YouTube app (GTM-5RGSWXK4, Ads conversion ID AW-18576436125).
+  Paste each conversion label from Google Ads (the part after "AW-18576436125/") below.
+  With a label left blank, that click type is not tracked.
+{%- enddoc -%}
+{%- liquid
+  assign ads_id = 'AW-18576436125'
+  assign wa_label = ''
+  assign tel_label = ''
+-%}
+{%- if wa_label != blank or tel_label != blank -%}
+<script>
+  (function () {
+    var SEND = { wa: {{ wa_label | json }}, tel: {{ tel_label | json }} }, ID = {{ ads_id | json }};
+    function fire(kind, href) {
+      if (!SEND[kind]) return;
+      var args = ['event', 'conversion', { send_to: ID + '/' + SEND[kind], event_callback: function () {} }];
+      if (typeof window.gtag === 'function') { window.gtag.apply(window, args); return; }
+      window.dataLayer = window.dataLayer || [];
+      (function () { window.dataLayer.push(arguments); }).apply(null, args);
+    }
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (!a) return;
+      var href = a.getAttribute('href') || '';
+      if (/^tel:/i.test(href)) fire('tel', href);
+      /* Chat with us only: wa.me/<number> or api.whatsapp.com/send?phone=. Plain share links (no number) are skipped. */
+      else if (/wa\.me\/\d|api\.whatsapp\.com\/send\?[^#]*phone=\d|whatsapp:\/\/send\?[^#]*phone=\d/i.test(href)) fire('wa', href);
+    }, true);
+  })();
+</script>
+{%- endif -%}
