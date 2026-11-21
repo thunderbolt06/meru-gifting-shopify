@@ -1,0 +1,240 @@
+{%- comment -%}
+  Meru Gifting WhatsApp enquiry form (port of the merutrophy.in one).
+
+  Every WhatsApp chat link on the site (wa.me / api.whatsapp.com / whatsapp://) opens
+  this form first. Only the contact number is required; name, email, quantity, time in
+  hand and description are optional. On submit WhatsApp opens with the details as the
+  first message, and the lead is saved as a Shopify customer (tag whatsapp-lead) by the
+  Supabase function wa-lead (code in merutrophy/wa-lead), sent with sendBeacon so
+  WhatsApp never waits for it.
+
+  Other scripts can open it too:
+    window.mgWaForm.open({ phone: '917892255078', text: 'Opening line', qty: 100, buildMessage: fn })
+{%- endcomment -%}
+
+<div class="mgwa" id="mgwa" hidden>
+  <div class="mgwa__backdrop" data-mgwa-close></div>
+  <div class="mgwa__dialog" role="dialog" aria-modal="true" aria-labelledby="mgwa-title">
+    <button type="button" class="mgwa__x" data-mgwa-close aria-label="Close">&times;</button>
+    <div class="mgwa__head">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="28" height="28" fill="#25D366" aria-hidden="true"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.668 4.61 1.832 6.502L4 29l7.701-1.814A11.94 11.94 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm0 22a9.95 9.95 0 01-5.078-1.393l-.364-.217-4.573 1.077 1.099-4.461-.237-.376A9.953 9.953 0 016 15c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10zm5.422-7.355c-.297-.148-1.757-.867-2.03-.967-.272-.099-.47-.148-.668.148-.198.297-.767.967-.94 1.166-.173.198-.347.223-.644.074-.297-.148-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.457.13-.605.133-.133.297-.347.446-.52.148-.173.198-.297.297-.495.099-.198.05-.372-.025-.52-.074-.148-.668-1.611-.915-2.207-.241-.579-.486-.5-.668-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479s1.065 2.876 1.213 3.074c.148.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.227 1.36.195 1.872.118.571-.085 1.757-.718 2.006-1.413.248-.694.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+      <div>
+        <h2 class="mgwa__title" id="mgwa-title">Chat with us on WhatsApp</h2>
+        <p class="mgwa__sub">A few details so we can share options and a quote faster.</p>
+      </div>
+    </div>
+    <form class="mgwa__form" id="mgwa-form" novalidate>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+      <label class="mgwa__field">
+        <span>Name <em>(optional)</em></span>
+        <input type="text" name="name" autocomplete="name" maxlength="80" placeholder="Your name">
+      </label>
+      <label class="mgwa__field">
+        <span>Contact number <b aria-hidden="true">*</b></span>
+        <input type="tel" name="phone" autocomplete="tel" inputmode="tel" required maxlength="20" placeholder="10-digit mobile number">
+      </label>
+      <label class="mgwa__field">
+        <span>Email <em>(optional)</em></span>
+        <input type="email" name="email" autocomplete="email" inputmode="email" maxlength="120" placeholder="you@company.com">
+      </label>
+      <div class="mgwa__row">
+        <label class="mgwa__field">
+          <span>Quantity <em>(optional)</em></span>
+          <input type="number" name="qty" inputmode="numeric" min="1" max="100000" step="1" placeholder="e.g. 100">
+        </label>
+        <label class="mgwa__field">
+          <span>Time in hand <em>(optional)</em></span>
+          <select name="time">
+            <option value="" selected>Select</option>
+            <option>Within 2 days (urgent)</option>
+            <option>3 to 7 days</option>
+            <option>1 to 2 weeks</option>
+            <option>More than 2 weeks</option>
+            <option>Not sure yet</option>
+          </select>
+        </label>
+      </div>
+      <label class="mgwa__field">
+        <span>Description <em>(optional)</em></span>
+        <textarea name="desc" rows="3" maxlength="1000" placeholder="What do you need? e.g. occasion, products, logo branding, budget per gift"></textarea>
+      </label>
+      <p class="mgwa__error" id="mgwa-error" role="alert" hidden></p>
+      <button type="submit" class="mgwa__submit">Continue to WhatsApp</button>
+    </form>
+  </div>
+</div>
+
+<style>
+  .mgwa[hidden] { display: none !important; }
+  .mgwa { position: fixed; inset: 0; z-index: 100000; display: flex; align-items: center; justify-content: center; padding: 16px; font-family: var(--font-body--family, Montserrat, system-ui, sans-serif); }
+  .mgwa__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.7); }
+  .mgwa__dialog { position: relative; width: 100%; max-width: 440px; max-height: calc(100vh - 32px); overflow-y: auto; background: #141210; color: #faf7f0; border: 1px solid rgba(201,162,39,.35); border-radius: 14px; padding: 24px 20px 20px; box-shadow: 0 24px 70px rgba(0,0,0,.6); }
+  .mgwa__x { position: absolute; top: 8px; right: 10px; width: 36px; height: 36px; border: 0; background: transparent; font-size: 28px; line-height: 1; color: #a8a090; cursor: pointer; border-radius: 50%; }
+  .mgwa__x:hover { background: #1b1814; color: #faf7f0; }
+  .mgwa__head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 18px; padding-right: 28px; }
+  .mgwa__title { margin: 0; font-size: 19px; line-height: 1.3; font-weight: 700; color: #faf7f0; letter-spacing: 0; font-family: inherit; }
+  .mgwa__sub { margin: 4px 0 0; font-size: 14px; line-height: 1.4; color: #a8a090; }
+  .mgwa__form { display: flex; flex-direction: column; gap: 12px; }
+  .mgwa__row { display: grid; grid-template-columns: 1fr 1.3fr; gap: 12px; }
+  .mgwa__field { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 600; color: #e9e3d6; letter-spacing: 0; }
+  .mgwa__field em { font-style: normal; font-weight: 400; color: #a8a090; }
+  .mgwa__field b { color: #f3c969; font-weight: 600; }
+  .mgwa__field textarea { width: 100%; box-sizing: border-box; min-height: 84px; padding: 10px 12px; font-size: 16px; line-height: 1.4; font-family: inherit; color: #faf7f0; background: #0b0b0b; border: 1px solid #2e2920; border-radius: 10px; outline: none; resize: vertical; }
+  .mgwa__field input, .mgwa__field select { width: 100%; box-sizing: border-box; height: 46px; padding: 0 12px; font-size: 16px; font-family: inherit; color: #faf7f0; background: #0b0b0b; border: 1px solid #2e2920; border-radius: 10px; outline: none; -webkit-appearance: none; appearance: none; }
+  .mgwa__field input::placeholder, .mgwa__field textarea::placeholder { color: #6f6858; }
+  .mgwa__field select { background-image: linear-gradient(45deg, transparent 50%, #c9a227 50%), linear-gradient(135deg, #c9a227 50%, transparent 50%); background-position: calc(100% - 18px) 20px, calc(100% - 13px) 20px; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 30px; }
+  .mgwa__field select option { background: #141210; color: #faf7f0; }
+  .mgwa__field input:focus, .mgwa__field select:focus, .mgwa__field textarea:focus { border-color: #c9a227; box-shadow: 0 0 0 3px rgba(201,162,39,.25); }
+  .mgwa__field .is-invalid { border-color: #ff6b5e; }
+  .mgwa__error { margin: 0; font-size: 13px; color: #ff8a7f; }
+  .mgwa__submit { margin-top: 4px; height: 50px; border: 0; border-radius: 25px; background: linear-gradient(180deg, #f3c969, #c9a227); color: #0b0b0b; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; letter-spacing: .2px; }
+  .mgwa__submit:hover { filter: brightness(1.06); }
+  @media (max-width: 380px) { .mgwa__row { grid-template-columns: 1fr; } }
+  body.mgwa-open { overflow: hidden; }
+</style>
+
+<script>
+  (function () {
+    var root = document.getElementById('mgwa');
+    var form = document.getElementById('mgwa-form');
+    var errEl = document.getElementById('mgwa-error');
+    if (!root || !form) return;
+    var DEFAULT_PHONE = '917892255078';
+    var LEAD_URL = 'https://zfupgqfkkspxyybdxted.supabase.co/functions/v1/wa-lead';
+    var F = { name: form.querySelector('[name=name]'), phone: form.querySelector('[name=phone]'), qty: form.querySelector('[name=qty]'), time: form.querySelector('[name=time]'), desc: form.querySelector('[name=desc]'), email: form.querySelector('[name=email]') };
+    var current = null;
+    var lastFocus = null;
+
+    function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+    function parseLink(href) {
+      var phone = '', text = '';
+      try {
+        var u = new URL(href, window.location.href);
+        if (/wa\.me$/i.test(u.hostname)) phone = u.pathname.replace(/\D/g, '');
+        phone = phone || (u.searchParams.get('phone') || '').replace(/\D/g, '');
+        text = u.searchParams.get('text') || '';
+      } catch (e) {
+        var m = String(href).match(/phone=(\d+)/); if (m) phone = m[1];
+      }
+      return { phone: phone || DEFAULT_PHONE, text: text };
+    }
+
+    function opener(text) {
+      var t = (text || '').trim().replace(/\.{2,}$/, '').trim();
+      if (!t || /^h(i|ello|ey)[\s!.,]*$/i.test(t)) return 'Hi Meru Gifting, I would like a quote for bulk gifting.';
+      return t;
+    }
+
+    // Fire-and-forget: never delay opening WhatsApp on this.
+    function saveLead(data) {
+      try {
+        var json = JSON.stringify(data);
+        if (navigator.sendBeacon && navigator.sendBeacon(LEAD_URL, new Blob([json], { type: 'text/plain' }))) return;
+        fetch(LEAD_URL, { method: 'POST', body: json, headers: { 'Content-Type': 'text/plain' }, keepalive: true, mode: 'cors' }).catch(function () {});
+      } catch (e) {}
+    }
+
+    function pageLine() {
+      return 'Page: ' + window.location.origin + window.location.pathname;
+    }
+
+    function open(opts) {
+      current = opts || {};
+      lastFocus = document.activeElement;
+      errEl.hidden = true;
+      form.querySelectorAll('.is-invalid').forEach(function (el) { el.classList.remove('is-invalid'); });
+      if (!F.name.value) F.name.value = store('mgwa_name') || '';
+      if (!F.phone.value) F.phone.value = store('mgwa_phone') || '';
+      if (!F.email.value) F.email.value = store('mgwa_email') || '';
+      F.qty.value = current.qty ? String(current.qty) : '';
+      root.hidden = false;
+      document.body.classList.add('mgwa-open');
+      var first = !F.phone.value ? F.phone : (!F.name.value ? F.name : F.qty);
+      setTimeout(function () { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }, 30);
+    }
+
+    function close() {
+      root.hidden = true;
+      document.body.classList.remove('mgwa-open');
+      current = null;
+      if (lastFocus && lastFocus.focus) { try { lastFocus.focus({ preventScroll: true }); } catch (e) {} }
+    }
+
+    function fail(msg, el) {
+      errEl.textContent = msg; errEl.hidden = false;
+      if (el) { el.classList.add('is-invalid'); el.focus(); }
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      form.querySelectorAll('.is-invalid').forEach(function (el) { el.classList.remove('is-invalid'); });
+      var name = F.name.value.trim();
+      var phone = F.phone.value.trim();
+      var qty = F.qty.value.trim();
+      var time = F.time.value;
+      var desc = F.desc.value.trim();
+      var email = F.email.value.trim();
+      if (phone.replace(/\D/g, '').length < 10) return fail('Please enter a valid contact number.', F.phone);
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return fail('Please check the email address, or leave it blank.', F.email);
+      if (name) store('mgwa_name', name);
+      if (email) store('mgwa_email', email);
+      store('mgwa_phone', phone);
+
+      // Only the contact number is required; blank optional fields are left out of the message.
+      var lines = [];
+      if (name) lines.push('Name: ' + name);
+      lines.push('Contact number: ' + phone);
+      if (email) lines.push('Email: ' + email);
+      if (qty) lines.push('Quantity: ' + qty);
+      if (time) lines.push('Time in hand: ' + time);
+      if (desc) lines.push('Description: ' + desc);
+      var details = { name: name, phone: phone, email: email, qty: qty, time: time, desc: desc, lines: lines };
+      var c = current || {};
+      var message;
+      if (typeof c.buildMessage === 'function') {
+        message = c.buildMessage(details);
+      } else {
+        message = [
+          opener(c.text),
+          ''
+        ].concat(lines).concat(opener(c.text).indexOf(window.location.pathname) > -1 && window.location.pathname !== '/' ? [] : ['', pageLine()]).join('\n');
+      }
+      var waPhone = c.phone || DEFAULT_PHONE;
+      var url = 'https://wa.me/' + waPhone + '?text=' + encodeURIComponent(message);
+      saveLead({
+        name: name, phone: phone, email: email, qty: qty, time: time, desc: desc,
+        page: window.location.origin + window.location.pathname,
+        source: c.source || 'link', wa: waPhone,
+        cart: c.source === 'cart' ? message : '',
+        website: (form.querySelector('[name=website]') || {}).value || ''
+      });
+      var evProps = { source: c.source || 'link', has_name: !!name, has_email: !!email, has_desc: !!desc, quantity: parseInt(qty, 10) || 0, time_in_hand: time || 'not given', wa_number: waPhone };
+      try { if (window.posthog && typeof window.posthog.capture === 'function') window.posthog.capture('wa_form_submit', evProps, { send_instantly: true }); } catch (err) {}
+      if (window.gtag) window.gtag('event', 'whatsapp_form_submit', { event_category: 'whatsapp', event_label: c.source || window.location.pathname, quantity: evProps.quantity, time_in_hand: evProps.time_in_hand });
+      close();
+      // No 'noopener' feature here: with it window.open always returns null and the
+      // fallback would also navigate this tab away.
+      var w = window.open(url, '_blank');
+      if (w) { try { w.opener = null; } catch (err) {} } else { window.location.href = url; }
+    });
+
+    root.addEventListener('click', function (e) { if (e.target.closest('[data-mgwa-close]')) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !root.hidden) close(); });
+
+    // Every WhatsApp link on the page opens the form first.
+    document.addEventListener('click', function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a || root.contains(a)) return;
+      var href = a.getAttribute('href') || '';
+      // Chat links with a number only; plain share links (wa.me/?text=...) are left alone.
+      if (!/wa\.me\/\+?\d|(api|web)\.whatsapp\.com\/send\?[^#]*phone=\+?\d|^whatsapp:\/\/send\?[^#]*phone=\+?\d/i.test(href)) return;
+      e.preventDefault();
+      var info = parseLink(href);
+      open({ phone: info.phone, text: info.text, source: a.getAttribute('data-wa-source') || 'link' });
+    }, true);
+
+    window.mgWaForm = { open: open, close: close };
+  })();
+</script>
