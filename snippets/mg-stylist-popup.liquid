@@ -1,47 +1,223 @@
 {%- comment -%}
-  "Connect with a Product Stylist" WhatsApp popup.
-  Appears 30s after page load, once per browser session. Closing it hides it for the rest of the session.
+  WhatsApp chat teaser (v2). A chat-style bubble above the floating WhatsApp button, not a blocking modal.
+
+  When it opens (first match wins, once per session):
+  - 50% scroll depth after 8s on the page
+  - product page: 20s on the page
+  - 2nd+ page view this session: 12s on the page
+  - desktop exit intent (cursor leaves through the top) after 6s
+  - fallback: 45s on the page
+  Never opens on the bulk enquiry / contact pages, while a form field is focused, while a drawer or dialog is open,
+  after the visitor has clicked any WhatsApp link this session, or within 3 days of closing it.
+
+  PostHog events: wa_popup_shown, wa_popup_clicked, wa_popup_callback_clicked, wa_popup_dismissed.
+  Debug: add ?mg_wa_popup=1 to any URL to open it at once and ignore the rules above.
 {%- endcomment -%}
-{%- unless request.design_mode -%}
-{%- capture mg_stylist_msg -%}Hi Meru Gifting, I'd like help from a Product Stylist to pick the right gift.{% if template.name == 'product' %} I'm looking at "{{ product.title }}": {{ shop.url }}{{ product.url }}{% endif %}{%- endcapture -%}
+{%- liquid
+  assign mg_wa_skip = false
+  if request.design_mode
+    assign mg_wa_skip = true
+  elsif template.name == 'page'
+    if page.handle == 'bulk-enquiry' or page.handle == 'contact-us'
+      assign mg_wa_skip = true
+    endif
+  elsif template.name == 'cart' or template.name == 'customers/login' or template.name == 'customers/register' or template.name == 'password'
+    assign mg_wa_skip = true
+  endif
+
+  assign mg_wa_page = 'other'
+  if template.name == 'index'
+    assign mg_wa_page = 'home'
+  elsif template.name == 'product'
+    assign mg_wa_page = 'product'
+  elsif template.name == 'collection'
+    assign mg_wa_page = 'collection'
+  elsif template.name == 'article' or template.name == 'blog'
+    assign mg_wa_page = 'blog'
+  elsif template.name == 'page'
+    assign mg_wa_page = 'page'
+  endif
+-%}
+{%- unless mg_wa_skip -%}
+{%- capture mg_wa_msg -%}Hi Meru Gifting, I'm looking for corporate gifts.{% if template.name == 'product' %}
+Product: {{ product.title }} ({{ shop.url }}{{ product.url }}){% elsif template.name == 'collection' %}
+Interested in: {{ collection.title }}{% endif %}
+Quantity:
+Budget per gift: ₹
+Needed by: {%- endcapture -%}
 <style>
-  .mg-stylist { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(0,0,0,.6); opacity: 0; pointer-events: none; visibility: hidden; transition: opacity .3s ease, visibility 0s linear .3s; }
-  .mg-stylist__card { position: relative; width: min(22rem, 100%); background: #141210; color: #faf7f0; border: 1px solid rgba(201, 162, 39, .45); border-radius: 14px; box-shadow: 0 18px 50px rgba(0,0,0,.5); padding: 1.6rem 1.4rem 1.4rem; text-align: center; transform: scale(.96); transition: transform .3s ease; }
-  .mg-stylist.is-open .mg-stylist__card { transform: none; }
-  .mg-stylist.is-open { opacity: 1; pointer-events: auto; visibility: visible; transition: opacity .3s ease; }
-  .mg-stylist__close { position: absolute; top: .5rem; right: .5rem; width: 2rem; height: 2rem; border: 0; border-radius: 50%; background: transparent; color: #a8a090; font-size: 1.35rem; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .mg-stylist__close:hover { color: #faf7f0; background: rgba(255,255,255,.06); }
-  .mg-stylist__title { margin: 0; padding: 0 1.5rem; font-size: 1.1rem; font-weight: 700; line-height: 1.25; color: #faf7f0; }
-  .mg-stylist__text { margin: .4rem 0 1rem; font-size: .92rem; line-height: 1.5; color: #a8a090; }
-  .mg-stylist__btn { display: flex; align-items: center; justify-content: center; gap: .5rem; padding: .8rem 1rem; border-radius: 999px; background: #25D366; color: #fff !important; font-weight: 700; font-size: .95rem; text-decoration: none; }
-  .mg-stylist__btn svg { width: 1.15rem; height: 1.15rem; fill: currentColor; }
-  .mg-stylist__btn:focus-visible, .mg-stylist__close:focus-visible { outline: 2px solid #c9a227; outline-offset: 2px; }
-  @media (prefers-reduced-motion: reduce) { .mg-stylist, .mg-stylist.is-open, .mg-stylist__card { transition: none; transform: none; } }
-  @media print { .mg-stylist { display: none; } }
+  .mg-wapop { position: fixed; z-index: 61; right: max(1.25rem, env(safe-area-inset-right)); bottom: calc(max(1.25rem, calc(env(safe-area-inset-bottom) + 1rem)) + 4.4rem); width: min(21.5rem, calc(100vw - 2rem)); opacity: 0; visibility: hidden; transform: translateY(12px) scale(.97); transform-origin: bottom right; transition: opacity .3s ease, transform .3s ease, visibility 0s linear .3s; font-family: inherit; }
+  .mg-wapop.is-open { opacity: 1; visibility: visible; transform: none; transition: opacity .3s ease, transform .35s cubic-bezier(.2,.9,.3,1.2); }
+  .mg-wapop__card { position: relative; background: #141210; color: #faf7f0; border: 1px solid rgba(201,162,39,.5); border-radius: 16px; box-shadow: 0 18px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.4); overflow: hidden; }
+  .mg-wapop__card::after { content: ""; position: absolute; right: 1.35rem; bottom: -7px; width: 14px; height: 14px; background: #141210; border-right: 1px solid rgba(201,162,39,.5); border-bottom: 1px solid rgba(201,162,39,.5); transform: rotate(45deg); }
+  .mg-wapop__head { display: flex; align-items: center; gap: .7rem; padding: .85rem 2.6rem .75rem .9rem; background: linear-gradient(180deg, rgba(201,162,39,.14), rgba(201,162,39,0)); border-bottom: 1px solid rgba(255,255,255,.06); }
+  .mg-wapop__avatar { position: relative; flex: 0 0 auto; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: #0f0e0c; border: 1px solid rgba(201,162,39,.6); display: flex; align-items: center; justify-content: center; }
+  .mg-wapop__avatar img { width: 2.1rem; height: 2.1rem; object-fit: contain; }
+  .mg-wapop__dot { position: absolute; right: -1px; bottom: 1px; width: .7rem; height: .7rem; border-radius: 50%; background: #25D366; border: 2px solid #141210; }
+  .mg-wapop.is-away .mg-wapop__dot { background: #a8a090; }
+  .mg-wapop__name { margin: 0; font-size: .95rem; font-weight: 700; line-height: 1.2; color: #faf7f0; }
+  .mg-wapop__status { margin: .1rem 0 0; font-size: .74rem; line-height: 1.3; color: #a8a090; }
+  .mg-wapop__close { position: absolute; top: .55rem; right: .55rem; width: 2rem; height: 2rem; border: 0; border-radius: 50%; background: transparent; color: #a8a090; font-size: 1.3rem; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .mg-wapop__close:hover { color: #faf7f0; background: rgba(255,255,255,.07); }
+  .mg-wapop__body { padding: .9rem .9rem 1rem; }
+  .mg-wapop__bubble { position: relative; margin: 0 0 .7rem; padding: .7rem .85rem; background: #23201b; border-radius: 4px 14px 14px 14px; font-size: .9rem; line-height: 1.5; color: #f1ece1; min-height: 2.6rem; }
+  .mg-wapop__bubble strong { color: #e3c25a; font-weight: 700; }
+  .mg-wapop__typing { display: none; gap: .3rem; align-items: center; height: 1.2rem; }
+  .mg-wapop__typing span { width: .42rem; height: .42rem; border-radius: 50%; background: #a8a090; animation: mgWaType 1s infinite ease-in-out; }
+  .mg-wapop__typing span:nth-child(2) { animation-delay: .15s; }
+  .mg-wapop__typing span:nth-child(3) { animation-delay: .3s; }
+  .mg-wapop.is-typing .mg-wapop__typing { display: flex; }
+  .mg-wapop.is-typing .mg-wapop__text, .mg-wapop.is-typing .mg-wapop__after { display: none; }
+  .mg-wapop__after { animation: mgWaIn .35s ease both; }
+  @keyframes mgWaType { 0%, 80%, 100% { opacity: .35; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+  @keyframes mgWaIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .mg-wapop__proof { display: flex; flex-wrap: wrap; gap: .3rem; margin: 0 0 .85rem; padding: 0; list-style: none; }
+  .mg-wapop__proof li { font-size: .72rem; line-height: 1; padding: .38rem .55rem; border-radius: 999px; border: 1px solid rgba(201,162,39,.35); color: #e3c25a; background: rgba(201,162,39,.07); white-space: nowrap; }
+  .mg-wapop__btn { display: flex; align-items: center; justify-content: center; gap: .5rem; padding: .8rem 1rem; border-radius: 999px; background: #25D366; color: #fff !important; font-weight: 700; font-size: .95rem; text-decoration: none !important; box-shadow: 0 6px 18px rgba(37,211,102,.28); transition: transform .15s ease, box-shadow .15s ease; }
+  .mg-wapop__btn:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(37,211,102,.38); }
+  .mg-wapop__btn svg { width: 1.15rem; height: 1.15rem; fill: currentColor; }
+  .mg-wapop__desk { display: none; align-items: center; gap: .75rem; margin-top: .8rem; padding-top: .8rem; border-top: 1px solid rgba(255,255,255,.07); }
+  .mg-wapop__qr { flex: 0 0 auto; width: 4.6rem; height: 4.6rem; padding: .25rem; border-radius: 8px; background: #fff; }
+  .mg-wapop__qr img { display: block; width: 100%; height: 100%; }
+  .mg-wapop__desk p { margin: 0; font-size: .78rem; line-height: 1.45; color: #a8a090; }
+  .mg-wapop__desk b { display: block; color: #faf7f0; font-size: .82rem; margin-bottom: .1rem; }
+  .mg-wapop__alt { display: block; margin-top: .7rem; text-align: center; font-size: .78rem; color: #a8a090 !important; text-decoration: underline; text-underline-offset: 3px; }
+  .mg-wapop__alt:hover { color: #faf7f0 !important; }
+  .mg-wapop__btn:focus-visible, .mg-wapop__close:focus-visible, .mg-wapop__alt:focus-visible { outline: 2px solid #c9a227; outline-offset: 2px; }
+  @media (hover: hover) and (pointer: fine) and (min-width: 750px) { .mg-wapop__desk { display: flex; } }
+  body:has(dialog[open]) .mg-wapop { display: none; }
+  @media (prefers-reduced-motion: reduce) { .mg-wapop, .mg-wapop.is-open { transition: none; transform: none; } .mg-wapop__typing span, .mg-wapop__after { animation: none; } .mg-wapop__btn { transition: none; } }
+  @media print { .mg-wapop { display: none; } }
 </style>
-<div class="mg-stylist" id="MgStylist" role="dialog" aria-modal="true" aria-labelledby="MgStylistTitle" aria-hidden="true">
-  <div class="mg-stylist__card">
-  <button type="button" class="mg-stylist__close" aria-label="Close" data-mg-stylist-close>&times;</button>
-  <p class="mg-stylist__title" id="MgStylistTitle">Need help choosing a gift?</p>
-  <p class="mg-stylist__text">Talk to our Product Stylist on WhatsApp.</p>
-  <a class="mg-stylist__btn" href="https://wa.me/917892255078?text={{ mg_stylist_msg | url_encode }}" target="_blank" rel="noopener" data-mg-stylist-cta><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 1.9 17.7L.3 23.7l6.2-1.6a11.8 11.8 0 0 0 5.6 1.4c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.4-8.2Zm-8.4 18.1c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.8 9.8 0 1 1 8.3 4.6Z"/></svg>Chat on WhatsApp</a>
+<div class="mg-wapop" id="MgWaPop" role="region" aria-label="Chat with Meru Gifting on WhatsApp" aria-hidden="true" data-page="{{ mg_wa_page }}">
+  <div class="mg-wapop__card">
+    <div class="mg-wapop__head">
+      <div class="mg-wapop__avatar"><img src="{{ 'mg-logo-mark.png' | asset_img_url: '120x' }}" alt="" width="30" height="30" loading="lazy"><span class="mg-wapop__dot"></span></div>
+      <div>
+        <p class="mg-wapop__name">Meru Gifting team</p>
+        <p class="mg-wapop__status" data-mg-wapop-status>Mon to Sat, 9 AM to 7 PM</p>
+      </div>
+    </div>
+    <button type="button" class="mg-wapop__close" aria-label="Close" data-mg-wapop-close>&times;</button>
+    <div class="mg-wapop__body">
+      <div class="mg-wapop__bubble" aria-live="polite">
+        <div class="mg-wapop__typing" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="mg-wapop__text">
+          {%- if template.name == 'product' -%}
+            Like the <strong>{{ product.title | split: ' – ' | first | truncate: 48 }}</strong>? Tell us your quantity and we'll send a <strong>bulk price with your logo</strong> on WhatsApp.
+          {%- elsif template.name == 'collection' -%}
+            Shortlisting <strong>{{ collection.title | truncate: 40 }}</strong>? Share your budget and quantity, and we'll send the <strong>best picks with your logo</strong>.
+          {%- else -%}
+            Hi! Gifting for your <strong>team or clients</strong>? Share your budget and quantity, and we'll send <strong>curated options with your logo</strong>.
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="mg-wapop__after">
+        <ul class="mg-wapop__proof">
+          <li>150+ brands since 2012</li>
+          <li>From 10 pieces</li>
+          <li>Pan-India delivery</li>
+        </ul>
+        <a class="mg-wapop__btn" href="https://wa.me/917892255078?text={{ mg_wa_msg | url_encode }}" target="_blank" rel="noopener" data-mg-wapop-cta><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 1.9 17.7L.3 23.7l6.2-1.6a11.8 11.8 0 0 0 5.6 1.4c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.4-8.2Zm-8.4 18.1c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.8 9.8 0 1 1 8.3 4.6Z"/></svg>Get options on WhatsApp</a>
+        <div class="mg-wapop__desk">
+          <div class="mg-wapop__qr"><img src="{{ 'mg-wa-qr.svg' | asset_url }}" alt="QR code to chat with Meru Gifting on WhatsApp" width="66" height="66" loading="lazy"></div>
+          <p><b>On a computer?</b>Scan with your phone camera to chat on WhatsApp.</p>
+        </div>
+        <a class="mg-wapop__alt" href="/pages/bulk-enquiry" data-mg-wapop-alt>Prefer email or a call-back? Send an enquiry</a>
+      </div>
+    </div>
   </div>
 </div>
 <script>
   (function () {
-    var KEY = 'mgStylistSeen';
-    var el = document.getElementById('MgStylist');
+    var el = document.getElementById('MgWaPop');
     if (!el) return;
-    var seen = false;
-    try { seen = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
-    if (seen) return;
-    function mark() { try { sessionStorage.setItem(KEY, '1'); } catch (e) {} }
-    function close() { el.classList.remove('is-open'); el.setAttribute('aria-hidden', 'true'); mark(); }
-    el.querySelector('[data-mg-stylist-close]').addEventListener('click', close);
-    el.querySelector('[data-mg-stylist-cta]').addEventListener('click', function () { setTimeout(close, 300); });
-    el.addEventListener('click', function (e) { if (e.target === el) close(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && el.classList.contains('is-open')) close(); });
-    setTimeout(function () { el.classList.add('is-open'); el.setAttribute('aria-hidden', 'false'); mark(); }, 30000);
+    var SEEN = 'mgStylistSeen', CLICKED = 'mgWaClicked', DISMISSED = 'mgWaPopDismissed', VIEWS = 'mgWaPageViews';
+    var DISMISS_DAYS = 3;
+    var page = el.getAttribute('data-page');
+    var force = /[?&]mg_wa_popup=1\b/.test(location.search);
+    function ss(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) { return null; } }
+    function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+    function track(name, props) {
+      try {
+        props = props || {};
+        props.page_type = page; props.popup_version = 'v2';
+        if (window.posthog && typeof window.posthog.capture === 'function') window.posthog.capture(name, props);
+      } catch (e) {}
+    }
+
+    /* Online status from India time (Mon to Sat, 9 AM to 7 PM IST). */
+    (function () {
+      var now = new Date(), ist = new Date(now.getTime() + (now.getTimezoneOffset() + 330) * 60000);
+      var day = ist.getDay(), h = ist.getHours();
+      var open = day !== 0 && h >= 9 && h < 19;
+      var st = el.querySelector('[data-mg-wapop-status]');
+      if (open) { st.textContent = 'Online now'; }
+      else { el.classList.add('is-away'); st.textContent = 'Away · replies from 9 AM, Mon to Sat'; }
+    })();
+
+    /* Remember any WhatsApp click on the site (floating button, product page, etc.) so the teaser stays away. */
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (a && /wa\.me\/\d|api\.whatsapp\.com\/send|whatsapp:\/\/send/i.test(a.getAttribute('href') || '')) ss(CLICKED, '1');
+    }, true);
+
+    var views = parseInt(ss(VIEWS) || '0', 10) + 1;
+    ss(VIEWS, String(views));
+
+    if (!force) {
+      if (ss(SEEN) === '1' || ss(CLICKED) === '1') return;
+      var d = parseInt(ls(DISMISSED) || '0', 10);
+      if (d && Date.now() - d < DISMISS_DAYS * 864e5) return;
+    }
+
+    var shown = false, start = Date.now(), timers = [];
+    function busy() {
+      var a = document.activeElement;
+      if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable)) return true;
+      if (document.querySelector('dialog[open]')) return true;
+      return false;
+    }
+    function cleanup() {
+      timers.forEach(clearTimeout);
+      window.removeEventListener('scroll', onScroll, true);
+      document.removeEventListener('mouseout', onExit);
+    }
+    function open(trigger) {
+      if (shown) return;
+      if (!force && (ss(CLICKED) === '1' || busy())) { timers.push(setTimeout(function () { open(trigger); }, 4000)); return; }
+      shown = true; cleanup(); ss(SEEN, '1');
+      el.classList.add('is-typing');
+      el.classList.add('is-open'); el.setAttribute('aria-hidden', 'false');
+      setTimeout(function () { el.classList.remove('is-typing'); }, 1100);
+      track('wa_popup_shown', { trigger: trigger, seconds_on_page: Math.round((Date.now() - start) / 1000), page_views: views });
+    }
+    function close(method) {
+      el.classList.remove('is-open'); el.setAttribute('aria-hidden', 'true');
+      if (method) { ls(DISMISSED, String(Date.now())); track('wa_popup_dismissed', { method: method }); }
+    }
+
+    function scrollPct() {
+      var sc = document.querySelector('.page-wrapper');
+      var docEl = document.documentElement;
+      var top = Math.max(window.scrollY || 0, sc ? sc.scrollTop : 0);
+      var h = Math.max(docEl.scrollHeight, sc ? sc.scrollHeight : 0) - window.innerHeight;
+      return h > 0 ? top / h : 0;
+    }
+    function onScroll() { if (Date.now() - start >= 8000 && scrollPct() >= 0.5) open('scroll_50'); }
+    function onExit(e) { if (!e.relatedTarget && e.clientY <= 0 && Date.now() - start >= 6000) open('exit_intent'); }
+
+    el.querySelector('[data-mg-wapop-close]').addEventListener('click', function () { close('close_button'); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && el.classList.contains('is-open')) close('escape'); });
+    el.querySelector('[data-mg-wapop-cta]').addEventListener('click', function () { ss(CLICKED, '1'); track('wa_popup_clicked', { target: 'whatsapp' }); setTimeout(function () { close(); }, 400); });
+    el.querySelector('[data-mg-wapop-alt]').addEventListener('click', function () { track('wa_popup_callback_clicked', { target: 'bulk_enquiry' }); });
+
+    if (force) { timers.push(setTimeout(function () { open('debug'); }, 600)); return; }
+    window.addEventListener('scroll', onScroll, { passive: true, capture: true });
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) document.addEventListener('mouseout', onExit);
+    if (page === 'product') timers.push(setTimeout(function () { open('product_20s'); }, 20000));
+    if (views >= 2) timers.push(setTimeout(function () { open('repeat_view_12s'); }, 12000));
+    timers.push(setTimeout(function () { open('fallback_45s'); }, 45000));
   })();
 </script>
 {%- endunless -%}
