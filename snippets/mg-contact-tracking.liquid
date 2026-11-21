@@ -1,0 +1,144 @@
+{%- doc -%}
+  Site-wide PostHog tracking for every contact button (WhatsApp, phone, email, bulk enquiry, contact page,
+  catalogue PDFs, maps, social, product Share/Copy) plus enquiry form submits.
+
+  Events
+  - contact_click: one per click. Key props: channel, is_lead_cta, placement, cta_text, page_type, product_title.
+  - enquiry_form_submitted: the contact form was submitted (before Shopify's redirect).
+  - enquiry_form_success: page loaded with ?contact_posted=true (Shopify accepted the form).
+
+  WhatsApp detection uses the same regex as mg-ads-conversions so PostHog and Google Ads counts line up.
+  Placement is read from the nearest known container (see PLACES); unknown containers fall back to
+  the nearest mg-* class prefix, then "page_content". No form field values are sent except "How did you hear about us".
+  Popup impressions/dismissals are tracked separately by mg-stylist-popup (wa_popup_* events).
+{%- enddoc -%}
+{%- unless request.design_mode -%}
+<script>
+  (function () {
+    var ph = function () { return window.posthog && typeof window.posthog.capture === 'function' ? window.posthog : null; };
+    var role = (window.Shopify && Shopify.theme && Shopify.theme.role) || 'main';
+    var CTX = {
+      page_type: {{ template.name | json }},
+      template_suffix: {{ template.suffix | default: '' | json }},
+      page_handle: {{ page.handle | default: '' | json }},
+      collection_handle: {{ collection.handle | default: '' | json }},
+      is_preview: role !== 'main'
+    };
+    {%- if template.name == 'product' and product %}
+    var PRODUCT = {
+      product_handle: {{ product.handle | json }},
+      product_title: {{ product.title | json }},
+      product_type: {{ product.type | json }},
+      product_price: {{ product.price | divided_by: 100.0 | json }}
+    };
+    {%- else %}
+    var PRODUCT = null;
+    {%- endif %}
+
+    /* Super properties so every event (pageviews too) can be filtered by page type and preview. */
+    try { if (ph()) ph().register({ page_type: CTX.page_type, is_preview: CTX.is_preview }); } catch (e) {}
+
+    /* Most specific first. Popup selectors cover both the current popup and the v2 teaser. */
+    var PLACES = [
+      ['#MgStylist, .mg-stylist, .mg-wapop, [data-mg-wapop-cta], [data-mg-wapop-alt], [data-mg-stylist-cta]', 'popup'],
+      ['.mg-wa-float', 'floating_whatsapp'],
+      ['.mg-pwa, .mg-share', 'product_buttons'],
+      ['.mg-topbar', 'header_topbar'],
+      ['.mg-cats', 'header_category_strip'],
+      ['header, .header, .header-section', 'header'],
+      ['.mg-footer, footer', 'footer'],
+      ['.mg-read__side, .mg-side-cta', 'article_sidebar'],
+      ['.mg-author', 'article_author'],
+      ['.mg-video', 'article_budget_tool'],
+      ['.mgt', 'guide_tool'],
+      ['.mg-enq', 'enquiry_section'],
+      ['.mg-contact', 'contact_section'],
+      ['.mgx, .mg-cover, [class*="mg-hero"], [class*="mgx-hero"], [class*="mgd-hero"], [class*="mgp-hero"]', 'hero'],
+      ['[class*="mgx-cta"], [class*="mg-ctas"], [class*="mg-ctap"], [class*="mgx-split"], [class*="mgp-cta"], [class*="mgp-band"]', 'cta_band'],
+      ['[class*="mgp-contact"], [class*="mgx-contact"]', 'contact_section'],
+      ['.mghw', 'how_it_works'],
+      ['.mgcs', 'case_studies'],
+      ['.mgcat', 'catalog_section'],
+      ['.mgf', 'feeds_hub'],
+      ['.mglp', 'landing_page_section'],
+      ['[class*="mg-faq"], [class*="mgp-faq"]', 'faq'],
+      ['.rte, .product__description, .text-block', 'page_content']
+    ];
+    function placement(el) {
+      for (var i = 0; i < PLACES.length; i++) { if (el.closest(PLACES[i][0])) return PLACES[i][1]; }
+      var n = el.parentElement;
+      while (n && n !== document.body) {
+        var cls = (typeof n.className === 'string' ? n.className : '').split(/\s+/);
+        for (var j = 0; j < cls.length; j++) {
+          var c = cls[j].split('__')[0];
+          if (/^mg/.test(c) && !/^mg-(btn|link|rv|wrap|head|ui)\b/.test(c)) return 'section:' + c;
+        }
+        n = n.parentElement;
+      }
+      return 'page_content';
+    }
+
+    var WA = /wa\.me\/\d|api\.whatsapp\.com\/send\?[^#]*phone=\d|whatsapp:\/\/send\?[^#]*phone=\d/i;
+    function classify(href) {
+      if (/^tel:/i.test(href)) return 'phone';
+      if (/^mailto:/i.test(href)) return 'email';
+      if (WA.test(href)) return 'whatsapp';
+      if (/wa\.me\/?(\?|$)|api\.whatsapp\.com\/send|whatsapp:\/\//i.test(href)) return 'whatsapp_share';
+      if (/\/pages\/bulk-enquiry|#mge\b|#MgEnquiry/i.test(href)) return 'bulk_enquiry';
+      if (/\/pages\/contact/i.test(href)) return 'contact_page';
+      if (/\/pages\/corporate-gift-catalogue|\.pdf(\?|#|$)/i.test(href)) return 'catalogue';
+      if (/maps\.app\.goo\.gl|google\.[a-z.]+\/maps|goo\.gl\/maps/i.test(href)) return 'maps';
+      if (/instagram\.com|linkedin\.com|facebook\.com|youtube\.com|x\.com\/|twitter\.com/i.test(href)) return 'social';
+      return null;
+    }
+    var LEAD = { whatsapp: 1, phone: 1, email: 1, bulk_enquiry: 1, contact_page: 1 };
+
+    function text(el) { return (el.innerText || el.textContent || el.getAttribute('aria-label') || '').replace(/\s+/g, ' ').trim().slice(0, 80); }
+    function send(event, props, instant) {
+      var p = ph(); if (!p) return;
+      var all = {}, k;
+      for (k in CTX) all[k] = CTX[k];
+      if (PRODUCT) for (k in PRODUCT) all[k] = PRODUCT[k];
+      for (k in props) all[k] = props[k];
+      try { p.capture(event, all, instant ? { send_instantly: true } : undefined); } catch (e) {}
+    }
+
+    document.addEventListener('click', function (e) {
+      var t = e.target && e.target.closest ? e.target : null;
+      if (!t) return;
+      var btn = t.closest('.mg-share__btn');
+      if (btn) {
+        var act = btn.getAttribute('data-act') === 'copy' ? 'copy' : 'share';
+        send('contact_click', { channel: act, is_lead_cta: false, placement: placement(btn), cta_text: text(btn) });
+        return;
+      }
+      var a = t.closest('a[href]');
+      if (!a) return;
+      var raw = a.getAttribute('href') || '', href = a.href || raw;
+      var ch = classify(raw) || classify(href);
+      if (!ch) return;
+      var props = { channel: ch, is_lead_cta: !!LEAD[ch], placement: placement(a), cta_text: text(a), link_target: href.split('?')[0].slice(0, 200) };
+      if (ch === 'whatsapp' || ch === 'whatsapp_share') {
+        var msg = '';
+        try { msg = new URL(href).searchParams.get('text') || ''; } catch (err) {}
+        props.has_prefill = !!msg;
+        if (msg) props.wa_prefill = msg.slice(0, 200);
+      }
+      send('contact_click', props, true);
+    }, true);
+
+    /* Enquiry forms (Shopify contact forms). Only the attribution answer is sent, never name/email/phone. */
+    document.addEventListener('submit', function (e) {
+      var f = e.target;
+      if (!f || !f.querySelector || !f.querySelector('input[name="form_type"][value="contact"]')) return;
+      var how = f.querySelector('select[name="contact[How did you hear about us]"]');
+      send('enquiry_form_submitted', { form_id: f.id || '', placement: placement(f), how_heard: how ? how.value : '' }, true);
+    }, true);
+    if (/[?&]contact_posted=true\b/.test(location.search)) {
+      var fired = false;
+      try { fired = sessionStorage.getItem('mgEnqOk:' + location.pathname) === '1'; sessionStorage.setItem('mgEnqOk:' + location.pathname, '1'); } catch (e) {}
+      if (!fired) send('enquiry_form_success', { form_page: location.pathname });
+    }
+  })();
+</script>
+{%- endunless -%}
