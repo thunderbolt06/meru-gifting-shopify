@@ -1,14 +1,7 @@
 {%- comment -%}
-  WhatsApp chat teaser (v2). A chat-style bubble above the floating WhatsApp button, not a blocking modal.
-
-  When it opens (first match wins, once per session):
-  - 50% scroll depth after 8s on the page
-  - product page: 20s on the page
-  - 2nd+ page view this session: 12s on the page
-  - desktop exit intent (cursor leaves through the top) after 6s
-  - fallback: 45s on the page
-  Never opens on the bulk enquiry / contact pages, while a form field is focused, while a drawer or dialog is open,
-  after the visitor has clicked any WhatsApp link this session, or within 3 days of closing it.
+  WhatsApp bulk enquiry popup. Centred card with a dim backdrop, opens 15s after page load (once per session).
+  Never opens on the bulk enquiry / contact pages, while a form field is focused or a drawer/dialog is open
+  (it waits until free), after the visitor has clicked any WhatsApp link this session, or within 3 days of closing it.
 
   PostHog events: wa_popup_shown, wa_popup_clicked, wa_popup_dismissed.
   Debug: add ?mg_wa_popup=1 to any URL to open it at once and ignore the rules above.
@@ -41,10 +34,10 @@
 {%- unless mg_wa_skip -%}
 {%- capture mg_wa_msg -%}Hi Meru Gifting, I'm looking for bulk gifting options.{%- endcapture -%}
 <style>
-  .mg-wapop { position: fixed; z-index: 61; right: max(1.25rem, env(safe-area-inset-right)); bottom: calc(max(1.25rem, calc(env(safe-area-inset-bottom) + 1rem)) + 4.4rem); width: min(21.5rem, calc(100vw - 2rem)); opacity: 0; visibility: hidden; transform: translateY(12px) scale(.97); transform-origin: bottom right; transition: opacity .3s ease, transform .3s ease, visibility 0s linear .3s; font-family: inherit; }
-  .mg-wapop.is-open { opacity: 1; visibility: visible; transform: none; transition: opacity .3s ease, transform .35s cubic-bezier(.2,.9,.3,1.2); }
-  .mg-wapop__card { position: relative; background: #141210; color: #faf7f0; border: 1px solid rgba(201,162,39,.5); border-radius: 16px; box-shadow: 0 18px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.4); overflow: hidden; }
-  .mg-wapop__card::after { content: ""; position: absolute; right: 1.35rem; bottom: -7px; width: 14px; height: 14px; background: #141210; border-right: 1px solid rgba(201,162,39,.5); border-bottom: 1px solid rgba(201,162,39,.5); transform: rotate(45deg); }
+  .mg-wapop { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(0,0,0,.6); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .3s ease, visibility 0s linear .3s; font-family: inherit; }
+  .mg-wapop.is-open { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity .3s ease; }
+  .mg-wapop__card { position: relative; width: min(22rem, 100%); background: #141210; color: #faf7f0; border: 1px solid rgba(201,162,39,.5); border-radius: 16px; box-shadow: 0 18px 50px rgba(0,0,0,.55); overflow: hidden; transform: translateY(10px) scale(.96); transition: transform .35s cubic-bezier(.2,.9,.3,1.2); }
+  .mg-wapop.is-open .mg-wapop__card { transform: none; }
   .mg-wapop__head { display: flex; align-items: center; gap: .7rem; padding: .85rem 2.6rem .75rem .9rem; background: linear-gradient(180deg, rgba(201,162,39,.14), rgba(201,162,39,0)); border-bottom: 1px solid rgba(255,255,255,.06); }
   .mg-wapop__avatar { position: relative; flex: 0 0 auto; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: #0f0e0c; border: 1px solid rgba(201,162,39,.6); display: flex; align-items: center; justify-content: center; }
   .mg-wapop__avatar img { width: 2.1rem; height: 2.1rem; object-fit: contain; }
@@ -55,7 +48,7 @@
   .mg-wapop__close { position: absolute; top: .55rem; right: .55rem; width: 2rem; height: 2rem; border: 0; border-radius: 50%; background: transparent; color: #a8a090; font-size: 1.3rem; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .mg-wapop__close:hover { color: #faf7f0; background: rgba(255,255,255,.07); }
   .mg-wapop__body { padding: .9rem .9rem 1rem; }
-  .mg-wapop__bubble { position: relative; margin: 0 0 .85rem; padding: .7rem .85rem; background: #23201b; border-radius: 4px 14px 14px 14px; font-size: .9rem; line-height: 1.5; color: #f1ece1; min-height: 2.6rem; }
+  .mg-wapop__bubble { position: relative; margin: 0 0 .85rem; padding: .7rem .85rem; background: #23201b; border-radius: 4px 14px 14px 14px; font-size: .95rem; line-height: 1.5; color: #f1ece1; min-height: 2.6rem; }
   .mg-wapop__bubble strong { color: #e3c25a; font-weight: 700; }
   .mg-wapop__typing { display: none; gap: .3rem; align-items: center; height: 1.2rem; }
   .mg-wapop__typing span { width: .42rem; height: .42rem; border-radius: 50%; background: #a8a090; animation: mgWaType 1s infinite ease-in-out; }
@@ -71,15 +64,15 @@
   .mg-wapop__btn svg { width: 1.15rem; height: 1.15rem; fill: currentColor; }
   .mg-wapop__btn:focus-visible, .mg-wapop__close:focus-visible { outline: 2px solid #c9a227; outline-offset: 2px; }
   body:has(dialog[open]) .mg-wapop { display: none; }
-  @media (prefers-reduced-motion: reduce) { .mg-wapop, .mg-wapop.is-open { transition: none; transform: none; } .mg-wapop__typing span, .mg-wapop__after { animation: none; } .mg-wapop__btn { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .mg-wapop, .mg-wapop.is-open, .mg-wapop__card { transition: none; transform: none; } .mg-wapop__typing span, .mg-wapop__after { animation: none; } .mg-wapop__btn { transition: none; } }
   @media print { .mg-wapop { display: none; } }
 </style>
-<div class="mg-wapop" id="MgWaPop" role="region" aria-label="Chat with Meru Gifting on WhatsApp" aria-hidden="true" data-page="{{ mg_wa_page }}">
+<div class="mg-wapop" id="MgWaPop" role="dialog" aria-modal="true" aria-labelledby="MgWaPopName" aria-hidden="true" data-page="{{ mg_wa_page }}">
   <div class="mg-wapop__card">
     <div class="mg-wapop__head">
       <div class="mg-wapop__avatar"><img src="{{ 'mg-logo-mark.png' | asset_img_url: '120x' }}" alt="" width="30" height="30" loading="lazy"><span class="mg-wapop__dot"></span></div>
       <div>
-        <p class="mg-wapop__name">Meru Gifting team</p>
+        <p class="mg-wapop__name" id="MgWaPopName">Meru Gifting team</p>
         <p class="mg-wapop__status" data-mg-wapop-status>Mon to Sat, 9 AM to 7 PM</p>
       </div>
     </div>
@@ -89,11 +82,9 @@
         <div class="mg-wapop__typing" aria-hidden="true"><span></span><span></span><span></span></div>
         <div class="mg-wapop__text">
           {%- if template.name == 'product' -%}
-            Like the <strong>{{ product.title | split: ' – ' | first | truncate: 48 }}</strong>? Tell us your quantity and we'll send a <strong>bulk price with your logo</strong> on WhatsApp.
-          {%- elsif template.name == 'collection' -%}
-            Shortlisting <strong>{{ collection.title | truncate: 40 }}</strong>? Share your budget and quantity, and we'll send the <strong>best picks with your logo</strong>.
+            Need this gift <strong>in bulk</strong>? We're happy to help.
           {%- else -%}
-            Hi! Gifting for your <strong>team or clients</strong>? Share your budget and quantity, and we'll send <strong>curated options with your logo</strong>.
+            Need gifts <strong>in bulk</strong> for your team or clients? We're happy to help.
           {%- endif -%}
         </div>
       </div>
@@ -107,8 +98,8 @@
   (function () {
     var el = document.getElementById('MgWaPop');
     if (!el) return;
-    var SEEN = 'mgStylistSeen', CLICKED = 'mgWaClicked', DISMISSED = 'mgWaPopDismissed', VIEWS = 'mgWaPageViews';
-    var DISMISS_DAYS = 3;
+    var SEEN = 'mgStylistSeen', CLICKED = 'mgWaClicked', DISMISSED = 'mgWaPopDismissed';
+    var DELAY = 15000, DISMISS_DAYS = 3;
     var page = el.getAttribute('data-page');
     var force = /[?&]mg_wa_popup=1\b/.test(location.search);
     function ss(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) { return null; } }
@@ -116,7 +107,7 @@
     function track(name, props) {
       try {
         props = props || {};
-        props.page_type = page; props.popup_version = 'v2';
+        props.page_type = page; props.popup_version = 'v3';
         if (window.posthog && typeof window.posthog.capture === 'function') window.posthog.capture(name, props);
       } catch (e) {}
     }
@@ -125,20 +116,16 @@
     (function () {
       var now = new Date(), ist = new Date(now.getTime() + (now.getTimezoneOffset() + 330) * 60000);
       var day = ist.getDay(), h = ist.getHours();
-      var open = day !== 0 && h >= 9 && h < 19;
       var st = el.querySelector('[data-mg-wapop-status]');
-      if (open) { st.textContent = 'Online now'; }
+      if (day !== 0 && h >= 9 && h < 19) { st.textContent = 'Online now'; }
       else { el.classList.add('is-away'); st.textContent = 'Away · replies from 9 AM, Mon to Sat'; }
     })();
 
-    /* Remember any WhatsApp click on the site (floating button, product page, etc.) so the teaser stays away. */
+    /* Remember any WhatsApp click on the site (floating button, product page, etc.) so the popup stays away. */
     document.addEventListener('click', function (e) {
       var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
       if (a && /wa\.me\/\d|api\.whatsapp\.com\/send|whatsapp:\/\/send/i.test(a.getAttribute('href') || '')) ss(CLICKED, '1');
     }, true);
-
-    var views = parseInt(ss(VIEWS) || '0', 10) + 1;
-    ss(VIEWS, String(views));
 
     if (!force) {
       if (ss(SEEN) === '1' || ss(CLICKED) === '1') return;
@@ -146,52 +133,32 @@
       if (d && Date.now() - d < DISMISS_DAYS * 864e5) return;
     }
 
-    var shown = false, start = Date.now(), timers = [];
+    var shown = false, start = Date.now();
     function busy() {
       var a = document.activeElement;
       if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable)) return true;
-      if (document.querySelector('dialog[open]')) return true;
-      return false;
+      return !!document.querySelector('dialog[open]');
     }
-    function cleanup() {
-      timers.forEach(clearTimeout);
-      window.removeEventListener('scroll', onScroll, true);
-      document.removeEventListener('mouseout', onExit);
-    }
-    function open(trigger) {
+    function open() {
       if (shown) return;
-      if (!force && (ss(CLICKED) === '1' || busy())) { timers.push(setTimeout(function () { open(trigger); }, 4000)); return; }
-      shown = true; cleanup(); ss(SEEN, '1');
-      el.classList.add('is-typing');
-      el.classList.add('is-open'); el.setAttribute('aria-hidden', 'false');
+      if (!force && ss(CLICKED) === '1') return;
+      if (!force && busy()) { setTimeout(open, 4000); return; }
+      shown = true; ss(SEEN, '1');
+      el.classList.add('is-typing', 'is-open'); el.setAttribute('aria-hidden', 'false');
       setTimeout(function () { el.classList.remove('is-typing'); }, 1100);
-      track('wa_popup_shown', { trigger: trigger, seconds_on_page: Math.round((Date.now() - start) / 1000), page_views: views });
+      track('wa_popup_shown', { trigger: force ? 'debug' : 'timer_15s', seconds_on_page: Math.round((Date.now() - start) / 1000) });
     }
     function close(method) {
       el.classList.remove('is-open'); el.setAttribute('aria-hidden', 'true');
       if (method) { ls(DISMISSED, String(Date.now())); track('wa_popup_dismissed', { method: method }); }
     }
 
-    function scrollPct() {
-      var sc = document.querySelector('.page-wrapper');
-      var docEl = document.documentElement;
-      var top = Math.max(window.scrollY || 0, sc ? sc.scrollTop : 0);
-      var h = Math.max(docEl.scrollHeight, sc ? sc.scrollHeight : 0) - window.innerHeight;
-      return h > 0 ? top / h : 0;
-    }
-    function onScroll() { if (Date.now() - start >= 8000 && scrollPct() >= 0.5) open('scroll_50'); }
-    function onExit(e) { if (!e.relatedTarget && e.clientY <= 0 && Date.now() - start >= 6000) open('exit_intent'); }
-
     el.querySelector('[data-mg-wapop-close]').addEventListener('click', function () { close('close_button'); });
+    el.addEventListener('click', function (e) { if (e.target === el) close('backdrop'); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && el.classList.contains('is-open')) close('escape'); });
     el.querySelector('[data-mg-wapop-cta]').addEventListener('click', function () { ss(CLICKED, '1'); track('wa_popup_clicked', { target: 'whatsapp' }); setTimeout(function () { close(); }, 400); });
 
-    if (force) { timers.push(setTimeout(function () { open('debug'); }, 600)); return; }
-    window.addEventListener('scroll', onScroll, { passive: true, capture: true });
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) document.addEventListener('mouseout', onExit);
-    if (page === 'product') timers.push(setTimeout(function () { open('product_20s'); }, 20000));
-    if (views >= 2) timers.push(setTimeout(function () { open('repeat_view_12s'); }, 12000));
-    timers.push(setTimeout(function () { open('fallback_45s'); }, 45000));
+    setTimeout(open, force ? 600 : DELAY);
   })();
 </script>
 {%- endunless -%}
