@@ -1,0 +1,74 @@
+{%- doc -%}
+  Home page: 4 muted, looping, portrait (3:4) unboxing videos right after the hero.
+  No controls. Videos load and play only while on screen.
+  Files: assets/mg-vid-<key>.mp4 (720x960, 30s, no audio) + mg-vid-<key>.jpg poster.
+{%- enddoc -%}
+{%- assign vids = 'bits,homerun,diwali,hamper' | split: ',' -%}
+{%- assign alts = 'BITS Pilani branded bottle, tumbler and pen gift set|Homerun jute bag welcome kit for employees|Bounteous Diwali hamper with brass and dry fruits|Festive hamper with IRIS reed diffuser and candles' | split: '|' -%}
+<section class="mg-vgrid mg-wrap mg-sec" aria-label="Recent corporate gifting orders">
+  <div class="mg-head">
+    <p class="mg-head__eyebrow">From our studio</p>
+    <h2 class="mg-head__title">Real orders, packed by us</h2>
+  </div>
+  <div class="mg-vgrid__grid">
+    {%- for k in vids -%}
+      <div class="mg-vgrid__item">
+        <video
+          class="mg-vgrid__video"
+          data-src="{{ 'mg-vid-' | append: k | append: '.mp4' | asset_url }}"
+          poster="{{ 'mg-vid-' | append: k | append: '.jpg' | asset_url }}"
+          muted
+          loop
+          playsinline
+          autoplay
+          preload="none"
+          disablepictureinpicture
+          disableremoteplayback
+          controlslist="nodownload nofullscreen noremoteplayback"
+          aria-label="{{ alts[forloop.index0] | escape }}"
+          width="720"
+          height="960"
+        ></video>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+<style>
+  .mg-vgrid__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(.6rem, 1.4vw, 1.1rem); }
+  .mg-vgrid__item { position: relative; aspect-ratio: 3 / 4; overflow: hidden; border-radius: var(--mg-radius, 14px); border: 1px solid var(--mg-line-gold, rgba(201,162,39,.35)); background: var(--mg-surface, #141210); }
+  .mg-vgrid__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+  .mg-vgrid__video::-webkit-media-controls,
+  .mg-vgrid__video::-webkit-media-controls-panel,
+  .mg-vgrid__video::-webkit-media-controls-start-playback-button,
+  .mg-vgrid__video::-webkit-media-controls-overlay-play-button { display: none !important; -webkit-appearance: none; opacity: 0; }
+  @media (max-width: 749px) {
+    .mg-vgrid__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+<script>
+  (function () {
+    var vids = document.querySelectorAll('.mg-vgrid__video');
+    if (!vids.length) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function load(v) {
+      if (!v.src && v.dataset.src) { v.src = v.dataset.src; v.load(); }
+    }
+    function play(v) {
+      v.muted = true;
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {});
+    }
+    if (reduce) return; /* keep the poster only */
+    if (!('IntersectionObserver' in window)) {
+      vids.forEach(function (v) { load(v); play(v); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) { load(v); play(v); } else if (v.src) { v.pause(); }
+      });
+    }, { rootMargin: '200px 0px' });
+    vids.forEach(function (v) { io.observe(v); });
+  })();
+</script>

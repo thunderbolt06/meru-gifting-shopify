@@ -18,6 +18,15 @@
         "padding-block-end": 0
       }
     },
+    "mg_videos": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'mg-video-grid' %}",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
     "mg_marquee": {
       "type": "custom-liquid",
       "settings": {
@@ -153,6 +162,7 @@
   },
   "order": [
     "mg_hero",
+    "mg_videos",
     "mg_marquee",
     "mg_hampers",
     "mg_solutions",
