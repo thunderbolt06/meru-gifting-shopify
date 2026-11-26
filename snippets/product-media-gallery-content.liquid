@@ -163,7 +163,10 @@
   if block_settings.constrain_to_viewport
     assign product_media_container_class = product_media_container_class | append: ' constrain-height'
   endif
-  if block_settings.aspect_ratio != 'adapt'
+  # MG: honour media_fit 'contain' on fixed ratios too, so odd-shaped photos are scaled down, not cropped
+  if block_settings.aspect_ratio != 'adapt' and block_settings.media_fit == 'contain'
+    assign product_media_container_class = product_media_container_class | append: ' media-fit-contain'
+  elsif block_settings.aspect_ratio != 'adapt'
     assign product_media_container_class = product_media_container_class | append: ' media-fit-cover'
   elsif block_settings.constrain_to_viewport
     assign product_media_container_class = product_media_container_class | append: ' media-fit-' | append: block_settings.media_fit
@@ -279,6 +282,24 @@
     }
   {% endif %}
 
+  {% if block_settings.aspect_ratio != 'adapt' and block_settings.media_fit == 'contain' %}
+    .media-fit-contain {
+      --product-media-fit: contain;
+    }
+
+    .media-fit-contain :is(img, video, iframe, .deferred-media__poster-image) {
+      object-fit: contain;
+      object-position: center center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .media-fit-contain model-viewer {
+      width: 100%;
+      height: 100%;
+    }
+  {% endif %}
+
   {% unless block_settings.aspect_ratio == 'adapt' and block_settings.constrain_to_viewport %}
     .media-fit-cover {
       --product-media-fit: cover;
@@ -330,7 +351,7 @@
   {% endcapture %}
   {% if block_settings.aspect_ratio == 'adapt' and block_settings.constrain_to_viewport == false %}
     {{ view_transition_styles_contain }}
-  {% elsif block_settings.aspect_ratio == 'adapt' and block_settings.constrain_to_viewport == true and block_settings.media_fit == 'contain' %}
+  {% elsif block_settings.media_fit == 'contain' %}
     {{ view_transition_styles_contain }}
   {% else %}
     {{ view_transition_styles_cover }}
